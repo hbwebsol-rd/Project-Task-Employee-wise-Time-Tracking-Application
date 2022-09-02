@@ -3,6 +3,7 @@ const port = process.env.PORT || 3002;
 const mongoose = require('mongoose');
 const db = require('config').get('ATLAS_URI');
 const app = express();
+const path = require('path');
 
 app
     .use(express.json())
@@ -15,9 +16,9 @@ app
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "client", "build")));
-    app.get('/*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-    });
+//     app.get('/*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+//     });
 } else {
     app.get("/", (req, res) => res.send(`Worklog is running on port: ${port}`));
 };
