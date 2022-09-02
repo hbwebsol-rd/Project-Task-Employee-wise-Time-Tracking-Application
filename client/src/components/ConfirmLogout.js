@@ -18,7 +18,7 @@ const ConfirmLogout = ({ open, setOpen, classes }) => {
                     <Typography className={classes.formTitle}>ARE YOU SURE, YOU WANT TO LOGOUT?</Typography>
                     <div>
                         <Button sx={{ color: 'red', border: 'red' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
-                        <Link to='/login' className={classes.dropdownList}>
+                        <Link to='/login' style={{ textDecoration: 'none' }}>
                             <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton}>LOGOUT</Button>
                         </Link>
                     </div>

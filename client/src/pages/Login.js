@@ -54,7 +54,7 @@ const Login = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to='/resetpassword' variant="body2" className={classes.dropdownList}>
+                <Link to='/resetpassword' variant="body2">
                   Forgot password?
                 </Link>
               </Grid>

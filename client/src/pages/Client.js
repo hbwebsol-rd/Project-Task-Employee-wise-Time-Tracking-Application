@@ -20,12 +20,16 @@ const CustomTableCell = ({ row, name, onChange }) => {
     return (
         <TableCell align="left" >
             {isEditMode ? (
-                <Input
-                    value={row[name]}
-                    name={name}
-                    onChange={e => onChange(e, row)}
+                <>
+                    {
+                        name === 'id' ? row[name] : <Input
+                            value={row[name]}
+                            name={name}
+                            onChange={e => onChange(e, row)}
 
-                />
+                        />
+                    }
+                </>
             ) : (
                 row[name]
             )}
@@ -33,7 +37,7 @@ const CustomTableCell = ({ row, name, onChange }) => {
     );
 };
 
-function User() {
+function Client() {
     const classes = useStyles();
     const [rows, setRows] = useState([
         createData(' 1', 'Saurabh', 'saurabh@gmail.com'),
@@ -94,7 +98,7 @@ function User() {
             <TableContainer component={Paper} className={classes.tableContainer} >
                 <div className={classes.titleContainer}>
                     <TextField id="standard-basic" label="Search Client" variant="outlined" size='small' />
-                    <Button className={classes.addButton} onClick={() => setOpen(true)}>{<ControlPointIcon fontSize='small' sx={{mr:'10px'}} />}Add Client</Button>
+                    <Button className={classes.addButton} onClick={() => setOpen(true)}>{<ControlPointIcon fontSize='small' sx={{ mr: '10px' }} />}Add Client</Button>
                 </div>
                 <Table aria-label="caption table" className={classes.table}>
                     <TableHead style={{ backgroundColor: '#F5F3FF' }}>
@@ -147,4 +151,4 @@ function User() {
         </div>
     );
 }
-export default User
+export default Client
