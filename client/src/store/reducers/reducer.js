@@ -1,4 +1,4 @@
-import { loggedIn, LOGGED_IN } from "../actions/action"
+import { LOGGED_IN } from "../actions/action"
 const initialState = {
     loggedIn: false,
     role: ''

@@ -39,16 +39,18 @@ const AddProject = ({ open, setOpen, classes }) => {
                     />
                     <LocalizationProvider dateAdapter={AdapterDateFns} >
                         <Stack direction='row' spacing={2}>
-                        <DesktopDatePicker
-                            label="Start Date"
-                            inputFormat="MM/dd/yyyy"
-                            renderInput={(params) => <TextField className={classes.inputSelect} {...params} />}
-                        />
-                        <DesktopDatePicker
-                            label="End Date"
-                            inputFormat="MM/dd/yyyy"
-                            renderInput={(params) => <TextField className={classes.inputSelect} {...params} />}
-                        />
+                            <DesktopDatePicker
+                                label="Start Date"
+                                inputFormat="MM/dd/yyyy"
+                                renderInput={(params) => <TextField {...params} />}
+                                className={classes.inputSelect}
+                            />
+                            <DesktopDatePicker
+                                label="End Date"
+                                inputFormat="MM/dd/yyyy"
+                                renderInput={(params) => <TextField {...params} />}
+                                className={classes.inputSelect}
+                            />
                         </Stack>
                     </LocalizationProvider>
                     <div>

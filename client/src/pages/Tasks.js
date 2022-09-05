@@ -22,16 +22,17 @@ const createData = (projectId, projectName, taskId, taskName, userName, status, 
     isEditMode: false
 });
 
-const StatusType = ({row, name}) =>{
-    if(row[name] === 'Completed'){
-        return <Typography sx={{ width:'110px', py:'2px', frontSize:'2px', backgroundColor:'#67EA52', color:'#ffffff', textAlign:'center', borderRadius:'10px'}}>Completed</Typography>
+const StatusType = ({ row, name }) => {
+    if (row[name] === 'Completed') {
+        return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#67EA52', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>Completed</Typography>
     }
-    if(row[name] === 'Pending'){
-        return <Typography sx={{ width:'110px', py:'2px', frontSize:'2px', backgroundColor:'#FF6767', color:'#ffffff', textAlign:'center', borderRadius:'10px'}}>Pending</Typography>
+    if (row[name] === 'Pending') {
+        return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#FF6767', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>Pending</Typography>
     }
-    if(row[name] === 'In Progress'){
-        return <Typography sx={{ width:'110px', py:'2px', frontSize:'2px', backgroundColor:'#FF9E67', color:'#ffffff', textAlign:'center', borderRadius:'10px'}}>In Progress</Typography>
+    if (row[name] === 'In Progress') {
+        return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#FF9E67', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>In Progress</Typography>
     }
+    return <Typography>{row[name]}</Typography>
 }
 
 const CustomTableCell = ({ row, name, onChange }) => {
@@ -39,22 +40,26 @@ const CustomTableCell = ({ row, name, onChange }) => {
     return (
         <TableCell align="left" >
             {isEditMode ? (
-                <Input
-                    value={row[name]}
-                    name={name}
-                    onChange={e => onChange(e, row)}
+                <>
+                    {
+                        name === 'id' ? row[name] : <Input
+                            value={row[name]}
+                            name={name}
+                            onChange={e => onChange(e, row)}
 
-                />
+                        />
+                    }
+                </>
             ) : (
                 <>
-                { name !== "status" ? row[name] : <StatusType row= {row} name={name} /> }
+                    {name !== "status" ? row[name] : <StatusType row={row} name={name} />}
                 </>
             )}
         </TableCell>
     );
 };
 
-function Projects() {
+function Tasks() {
     const classes = useStyles();
     const [rows, setRows] = useState([
         createData(101, 'Project 1', 1001, 'Header', 'Saurabh', 'Completed', 'Low', 3),
@@ -113,11 +118,11 @@ function Projects() {
     return (
         <div className={classes.pageRoot}>
             <AddTask open={open} setOpen={setOpen} classes={classes} />
-            <TaskPopUp pop ={pop} setPop ={setPop} classes={classes} />
+            <TaskPopUp pop={pop} setPop={setPop} classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer} >
                 <div className={classes.titleContainer}>
                     <TextField id="standard-basic" label="Search Task" variant="outlined" size='small' />
-                    <Button className={classes.addButton} onClick={() => setOpen(true)}>{<ControlPointIcon fontSize='small' sx={{mr:'10px'}} />} Add TASK</Button>
+                    <Button className={classes.addButton} onClick={() => setOpen(true)}>{<ControlPointIcon fontSize='small' sx={{ mr: '10px' }} />} Add TASK</Button>
                 </div>
                 <Table aria-label="caption table" className={classes.table}>
                     <TableHead style={{ backgroundColor: '#F5F3FF' }}>
@@ -186,5 +191,4 @@ function Projects() {
         </div>
     );
 }
-export default Projects
-
+export default Tasks

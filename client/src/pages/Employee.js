@@ -21,12 +21,16 @@ const CustomTableCell = ({ row, name, onChange }) => {
     return (
         <TableCell align="left" >
             {isEditMode ? (
-                <Input
-                    value={row[name]}
-                    name={name}
-                    onChange={e => onChange(e, row)}
+                <>
+                    {
+                        name === 'id' ? row[name] : <Input
+                            value={row[name]}
+                            name={name}
+                            onChange={e => onChange(e, row)}
 
-                />
+                        />
+                    }
+                </>
             ) : (
                 row[name]
             )}
@@ -95,7 +99,7 @@ function Employee() {
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField id="standard-basic" label="Search Employee" variant="outlined" size='small' />
-                    <Button className={classes.addButton} onClick={() => setOpen(true)}>{<ControlPointIcon fontSize='small' sx={{mr:'5px'}} />}Add Employee</Button>
+                    <Button className={classes.addButton} onClick={() => setOpen(true)}>{<ControlPointIcon fontSize='small' sx={{ mr: '5px' }} />}Add Employee</Button>
                 </div>
                 <Table aria-label="caption table">
                     <TableHead style={{ backgroundColor: '#F5F3FF' }}>

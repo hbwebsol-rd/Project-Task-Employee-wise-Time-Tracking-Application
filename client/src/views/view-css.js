@@ -103,6 +103,9 @@ const useStyles = makeStyles({
     headerIcon: {
         fontSize: '35px !important',
         color: '#3525B5',
+        position:'absolute',
+        right:'60px',
+        top:'5px'
     },
     headerIcons: {
         margin: '15px',
@@ -119,9 +122,16 @@ const useStyles = makeStyles({
         justifyContent: 'center',
     },
     dropdownList: {
-        textDecoration: 'none',
-        color: '#3525B5',
+        position:'absolute',
+        top:'40px',
     },
+    dropdownListItem: {
+        margin:'5px 0',
+        textDecoration: 'none',
+        color: 'grey',
+        borderBottom: '1px solid #D3D3D3'
+    },
+
 
 
     sidebarRoot: {
