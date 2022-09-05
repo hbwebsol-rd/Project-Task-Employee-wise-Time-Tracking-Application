@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const db = require('config').get('ATLAS_URI');
 const app = express();
 const path = require('path');
+const cors = require("cors");
 
+app.use(cors());
 app
     .use(express.json())
     .use('/api/user', require('./routes/user.route'))
