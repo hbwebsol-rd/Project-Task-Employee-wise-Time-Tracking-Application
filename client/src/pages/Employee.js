@@ -1,58 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-import { Button, IconButton, Input, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import { TablePagination } from "@material-ui/core";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useStyles } from "../views/view-css";
 import AddEmployee from "../components/AddEmployee";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import { useDispatch, useSelector } from "react-redux";
+import { DeleteData } from "../utils/fetch-sevice";
+import Loading from "../components/Loading";
+import UpdateEmployee from "../components/UpdateEmployee";
+import { GetFetch } from "../store/actions/employeeActions";
 
-const createData = (id, employeeName, designation, mail) => ({
-    id,
-    employeeName,
-    designation,
-    mail,
-    isEditMode: false
-});
-
-const CustomTableCell = ({ row, name, onChange }) => {
-    const { isEditMode } = row;
-    return (
-        <TableCell align="left" >
-            {isEditMode ? (
-                <>
-                    {
-                        name === 'id' ? row[name] : <Input
-                            value={row[name]}
-                            name={name}
-                            onChange={e => onChange(e, row)}
-
-                        />
-                    }
-                </>
-            ) : (
-                row[name]
-            )}
-        </TableCell>
-    );
-};
 
 function Employee() {
     const classes = useStyles();
-    const [rows, setRows] = useState([
-        createData(' 1', 'Saurabh', 'SDE1', 'saurabh@gmail.com'),
-        createData(' 2', 'Taha', 'SDE2', 'taha@gmail.com'),
-        createData(' 3', 'Moiz', 'SDE1', 'moiz@gmail.com'),
-        createData(' 4', 'SSKY', 'SDE3', 'ssky@gmail.com'),
-        createData(' 5', 'Rahul', 'SDE2', 'rahul@gmail.com'),
-    ]);
-    const [previous, setPrevious] = React.useState({});
+    const dispatch = useDispatch();
+    const items = useSelector(state => state.employee.emp)
+    const loading = useSelector(state => state.loading)
+
+    const [rows, setRows] = useState(items);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [open, setOpen] = useState(false);
+    const [updateModal, setUpdateModal] = useState(false)
+    const [updateRow, setUpdateRow] = useState({})
+    useEffect(() => {
+        console.log("employee", items)
+        dispatch(GetFetch('employee'));
+      }, [])
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (event,newPage) => {
         setPage(newPage)
     }
     const handleChangeRowsPerPage = event => {
@@ -60,46 +38,29 @@ function Employee() {
         setPage(0);
     }
 
-    const onToggleEditMode = id => {
-        setRows(() => {
-            return rows.map(row => {
-                if (row.id === id) {
-                    return { ...row, isEditMode: !row.isEditMode };
-                }
-                return row;
-            });
-        });
-    };
-
-    const onChange = (e, row) => {
-        if (!previous[row.id]) {
-            setPrevious(state => ({ ...state, [row.id]: row }));
-        }
-        const value = e.target.value;
-        const name = e.target.name;
-        const { id } = row;
-        const newRows = rows.map(row => {
-            if (row.id === id) {
-                return { ...row, [name]: value };
-            }
-            return row;
-        });
-        setRows(newRows);
-    };
-
-    const handleDelete = index => {
+    const handleDelete = (index, id) => {
         const list = [...rows];
         list.splice(index, 1);
         setRows(list);
+        dispatch(DeleteData(`employee/${id}`))
     };
+
+    const editData = (row) => {
+        setUpdateRow(row);
+        setUpdateModal(true)
+    }
 
     return (
         <div className={classes.pageRoot}>
             <AddEmployee open={open} setOpen={setOpen} classes={classes} />
+            <UpdateEmployee open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField id="standard-basic" label="Search Employee" variant="outlined" size='small' />
-                    <Button className={classes.addButton} onClick={() => setOpen(true)}>{<ControlPointIcon fontSize='small' sx={{ mr: '5px' }} />}Add Employee</Button>
+                    <Button className={classes.addButton} onClick={() => setOpen(true)}>
+                        {<ControlPointIcon fontSize='small' sx={{ mr: '5px' }} />}
+                        Add Employee
+                    </Button>
                 </div>
                 <Table aria-label="caption table">
                     <TableHead style={{ backgroundColor: '#F5F3FF' }}>
@@ -111,34 +72,37 @@ function Employee() {
                             <TableCell align="left" className={classes.tableCell}>ACTION</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {rows
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, i) => (
-                                <TableRow key={row.id}>
-                                    <CustomTableCell {...{ row, name: "id", onChange }} />
-                                    <CustomTableCell {...{ row, name: "employeeName", onChange }} />
-                                    <CustomTableCell {...{ row, name: "designation", onChange }} />
-                                    <CustomTableCell {...{ row, name: "mail", onChange }} />
-                                    <TableCell >
-                                        <IconButton
-                                            aria-label="edit"
-                                            style={{ color: '#3525B5' }}
-                                            onClick={() => onToggleEditMode(row.id)}
-                                        >
-                                            {row.isEditMode ? <DoneAllIcon sx={{ color: 'Green' }} /> : <EditIcon />}
-                                        </IconButton>
-                                        <IconButton
-                                            aria-label="delete"
-                                            style={{ color: 'Red' }}
-                                            onClick={() => handleDelete(i)}
-                                        >
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                    </TableBody>
+                    {loading ? <Loading /> :
+                        <TableBody>
+                            {rows
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, i) => (
+                                    <>
+                                        <TableRow key={row._id}>
+                                            <TableCell align="left" >{row._id}</TableCell>
+                                            <TableCell align="left" >{row.name}</TableCell>
+                                            <TableCell align="left" >{row.designation}</TableCell>
+                                            <TableCell align="left" >{row.email}</TableCell>
+                                            <TableCell >
+                                                <IconButton
+                                                    aria-label="edit"
+                                                    style={{ color: '#3525B5' }}
+                                                    onClick={() => editData(row)}
+                                                >
+                                                    <EditIcon />
+                                                </IconButton>
+                                                <IconButton
+                                                    aria-label="delete"
+                                                    style={{ color: 'Red' }}
+                                                    onClick={() => handleDelete(i, row._id)}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    </>
+                                ))}
+                        </TableBody>}
                 </Table>
                 <TablePagination
                     rowsPerPageOptions={[2, 5, 10]}

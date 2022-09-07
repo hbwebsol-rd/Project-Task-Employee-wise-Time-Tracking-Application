@@ -1,20 +1,25 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { PostData } from '../utils/fetch-sevice';
+import { UpdateData } from '../utils/fetch-sevice';
 
-const AddEmployee = ({ open, setOpen, classes }) => {
-    const [clientDetails, setClientDetails] = useState({ name: "", email: "",  password: "" })
+const UpdateClient = ({ open, setOpen, row, classes }) => {
+    const [clientDetails, setClientDetails] = useState({ })
     const dispatch = useDispatch();
     function handleClose() {
         setOpen(false);
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(PostData('customer', clientDetails))
+        dispatch(UpdateData(`customer/update/${row._id}`,clientDetails))
         setOpen(false);
+        
     };
 
+
+    useEffect(()=> {
+        setClientDetails({ name: row.name, email: row.email ,  password: "" })
+    }, [row])
     return (
         <>
             <Modal
@@ -24,13 +29,14 @@ const AddEmployee = ({ open, setOpen, classes }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={classes.formRoot}>
-                    <Typography className={classes.formTitle}>ADD CLIENT</Typography>
+                    <Typography className={classes.formTitle}>UPDATE CLIENT</Typography>
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Client Name"
+                        label="Client Name"
                         name="name"
                         autoComplete="name"
+                        value={clientDetails.name}
                         autoFocus
                         className={classes.inputField}
                         onChange={(e) => {
@@ -43,8 +49,9 @@ const AddEmployee = ({ open, setOpen, classes }) => {
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Client Email"
+                        label="Client Email"
                         name="email"
+                        value={clientDetails.email}
                         autoComplete="email"
                         autoFocus
                         className={classes.inputField}
@@ -81,4 +88,4 @@ const AddEmployee = ({ open, setOpen, classes }) => {
     )
 }
 
-export default AddEmployee
+export default UpdateClient

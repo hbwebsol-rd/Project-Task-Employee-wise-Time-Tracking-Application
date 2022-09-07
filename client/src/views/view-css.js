@@ -18,11 +18,11 @@ const useStyles = makeStyles({
             marginLeft: '-20px'
         },
     },
-    loginMain:{
-        width:'100%',
+    loginMain: {
+        width: '100%',
         height: '100vh',
-        backgroundColor:'#EBE9F9',
-        display:'flex',
+        backgroundColor: '#EBE9F9',
+        display: 'flex',
         alignItems: 'center',
     },
     loginRoot: {
@@ -30,32 +30,44 @@ const useStyles = makeStyles({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft:'25rem !important',
-        '@media(max-width: 1450px)' : {
-            marginLeft:'10rem !important'
+        marginLeft: '25rem !important',
+        '@media(max-width: 1450px)': {
+            marginLeft: '10rem !important'
         },
-        '@media(max-width: 1200px)' : {
-            margin:'2rem !important'
+        '@media(max-width: 1200px)': {
+            margin: '2rem !important'
+        },
+    },
+    loginTextItem: {
+        fontSize: '50px !important',
+        fontWeight: '600 !important',
+        position:'absolute',
+        top:'100px',
+        left:'30px',
+        color: '#ffffff',
+        '@media(max-width: 1450px)': {
+            fontSize: '40px !important',
         },
     },
     loginTitle:{
-        fontSize:'50px !important',
-        fontWeight:'500 !important',
-        color: '#ffffff',
-        '@media(max-width: 1450px)' : {
-            fontSize:'40px !important',
-        },
+        position:'absolute', 
+        left:'30px', 
+        top:'250px',
+        color:'#ffffff', 
+        fontSize:'40px !important', 
+        fontWeight:'500 !important'
     },
-    loginImageBox:{
-        width:'500px', 
-        height:'100vh',
-        display:'flex',
-        alignItems:'center',
-        justifyContent:'center',
-        '@media(max-width: 1450px)' : {
+
+    loginImageBox: {
+        width: '500px',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '@media(max-width: 1450px)': {
             width: '400px'
         },
-        '@media(max-width: 980px)' : {
+        '@media(max-width: 980px)': {
             width: '300px'
         },
     },
@@ -103,9 +115,9 @@ const useStyles = makeStyles({
     headerIcon: {
         fontSize: '35px !important',
         color: '#3525B5',
-        position:'absolute',
-        right:'60px',
-        top:'5px'
+        position: 'absolute',
+        right: '60px',
+        top: '5px'
     },
     headerIcons: {
         margin: '15px',
@@ -122,11 +134,11 @@ const useStyles = makeStyles({
         justifyContent: 'center',
     },
     dropdownList: {
-        position:'absolute',
-        top:'40px',
+        position: 'absolute',
+        top: '40px',
     },
     dropdownListItem: {
-        margin:'5px 0',
+        margin: '5px 0',
         textDecoration: 'none',
         color: 'grey',
         borderBottom: '1px solid #D3D3D3'
@@ -291,7 +303,7 @@ const useStyles = makeStyles({
         fontWeight: '700 !important',
         fontSize: '16px !important'
     },
-    tableButton:{
+    tableButton: {
         '@media(max-width: 900px)': {
             width: '6rem',
         },
