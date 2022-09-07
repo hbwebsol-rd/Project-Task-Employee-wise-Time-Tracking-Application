@@ -1,36 +1,29 @@
 import cookie from "react-cookies"
-import { FETCH_DATA_BEGIN, FETCH_DATA_FAILURE, FETCH_DATA_SUCCESS } from "../actions/action"
+import { FETCH_CLIENTS_BEGIN, FETCH_CLIENTS_FAILURE, FETCH_CLIENTS_SUCCESS } from "../actions/clientActions";
 
 const initialState = {
-    token: '',
-    role: '',
-    loggedIn: false,
     loading: false,
     error: null,
-    items: []
+    clients: []
 }
 
-if (cookie.load("token")) {
-    initialState.token = cookie.load("token");
-    initialState.loggedIn = true;
-}
-const reducer = (state = initialState, action) => {
+const client = (state = initialState, action) => {
     switch (action.type) {
-        case FETCH_DATA_BEGIN: {
+        case FETCH_CLIENTS_BEGIN: {
             return {
                 ...state,
                 loading: true,
                 error: null
             };
         }
-        case FETCH_DATA_SUCCESS: {
+        case FETCH_CLIENTS_SUCCESS: {
             return {
                 ...state,
                 loading: false,
-                items: action.payload.data
+                clients: action.payload.data
             };
         }
-        case FETCH_DATA_FAILURE: {
+        case FETCH_CLIENTS_FAILURE: {
             return {
                 ...state,
                 loading: false,
@@ -43,4 +36,4 @@ const reducer = (state = initialState, action) => {
     }
 } 
 
-export default reducer
+export default client

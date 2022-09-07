@@ -1,9 +1,8 @@
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { reducer } from "./reducers/reducer";
+import { createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk"; 
+import rootReducer from "./reducers";
 
-
-export const store = createStore(reducer, applyMiddleware(thunk));
-
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 //https://daveceddia.com/where-fetch-data-redux/

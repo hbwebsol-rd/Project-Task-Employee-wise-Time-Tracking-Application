@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useStyles } from '../views/view-css';
-import Image from '../image/login.png';
+import Image from '../image/reset.png';
 import ResetSuccess from '../components/ResetSuccess';
 
 
@@ -15,9 +15,9 @@ const ResetPassword = () => {
   };
   return (
     <div className={classes.loginMain} >
-      <div style={{backgroundImage: `url(${Image})`}}>
+      <div style={{backgroundImage: `url(${Image})`, backgroundSize:'cover', backgroundPosition:'center'}}>
         <Box className={classes.loginImageBox}>
-          <Typography className={classes.loginTitle}> WORKLOG</Typography>
+        <Typography sx={{fontSize:'25px', fontWeight:'600', position:'absolute', left:'20px', top:'30px', color:'#ffffff'}}>WORKLOG</Typography>
         </Box>
       </div>
       <div className={classes.loginForm} >
