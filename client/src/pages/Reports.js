@@ -140,18 +140,18 @@ function Employee() {
                 </div>
                 <div className={classes.tableHeadContainer}>
                     <Typography className={classes.tableCell}>Employee Name :  {employee}</Typography>
-                    <Typography className={classes.tableCell}>DATE :  {date}</Typography>
-                    <Typography className={classes.tableCell}>TOTAL SPENT TIME :</Typography>
+                    <Typography className={classes.tableCell}>Date :  {date}</Typography>
+                    <Typography className={classes.tableCell}>Total Spent Time :</Typography>
                 </div>
                 <Table aria-label="caption table">
-                    <TableHead style={{ backgroundColor: '#F5F3FF' }}>
+                    <TableHead style={{ backgroundColor: '#F5F3FF', height:'90px' }}>
                         <TableRow>
-                            <TableCell align="left" className={classes.tableCell} >ID</TableCell>
-                            <TableCell align="left" className={classes.tableCell}>PROJECT</TableCell>
-                            <TableCell align="left" className={classes.tableCell}>TASK</TableCell>
-                            <TableCell align="left" className={classes.tableCell}>DATE</TableCell>
-                            <TableCell align="left" className={classes.tableCell}>SPENT TIME</TableCell>
-                            <TableCell align="left" className={classes.tableCell}>ACTION</TableCell>
+                            <TableCell align="left" className={classes.tableCell} >Id</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Project</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Task</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Date</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Spent Time</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -174,7 +174,7 @@ function Employee() {
                                         </IconButton>
                                         <IconButton
                                             aria-label="delete"
-                                            style={{ color: 'Red' }}
+                                            style={{ color: '#FF6161' }}
                                             onClick={() => handleDelete(i)}
                                         >
                                             <DeleteIcon />

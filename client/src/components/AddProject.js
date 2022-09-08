@@ -1,7 +1,4 @@
 import { Box, Button, Modal, Stack, TextField, Typography } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers'
 
 
 const AddProject = ({ open, setOpen, classes }) => {
@@ -18,7 +15,9 @@ const AddProject = ({ open, setOpen, classes }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={classes.formRoot}>
-                    <Typography className={classes.formTitle}>ADD PROJECT</Typography>
+                    <div style={{ width: '100%' }}>
+                        <Typography className={classes.formTitle}>Add Project</Typography>
+                    </div>
                     <TextField
                         margin="normal"
                         required
@@ -37,24 +36,39 @@ const AddProject = ({ open, setOpen, classes }) => {
                         autoFocus
                         className={classes.inputField}
                     />
-                    <LocalizationProvider dateAdapter={AdapterDateFns} >
+                    <TextField
+                        margin="normal"
+                        required
+                        label="Technology"
+                        name="technology"
+                        autoComplete="name"
+                        autoFocus
+                        className={classes.inputField}
+                    />
                         <Stack direction='row' spacing={2}>
-                            <DesktopDatePicker
-                                label="Start Date"
-                                inputFormat="MM/dd/yyyy"
-                                renderInput={(params) => <TextField {...params} />}
+                            <TextField
+                                id="date"
+                                type='date'
+                                label="Date From"
+                                variant="outlined"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                                 className={classes.inputSelect}
                             />
-                            <DesktopDatePicker
-                                label="End Date"
-                                inputFormat="MM/dd/yyyy"
-                                renderInput={(params) => <TextField {...params} />}
+                            <TextField
+                                id="date"
+                                type='date'
+                                label="Date To"
+                                variant="outlined"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                                 className={classes.inputSelect}
                             />
                         </Stack>
-                    </LocalizationProvider>
                     <div>
-                        <Button sx={{ color: 'red', border: 'red' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
+                        <Button sx={{ color: '#FF6161', border: '#FF6767' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
                         <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton}>SAVE</Button>
                     </div>
                 </Box>

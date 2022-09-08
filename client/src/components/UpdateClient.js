@@ -4,21 +4,21 @@ import { useDispatch } from 'react-redux';
 import { UpdateData } from '../utils/fetch-sevice';
 
 const UpdateClient = ({ open, setOpen, row, classes }) => {
-    const [clientDetails, setClientDetails] = useState({ })
+    const [clientDetails, setClientDetails] = useState({})
     const dispatch = useDispatch();
     function handleClose() {
         setOpen(false);
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(UpdateData(`customer/update/${row._id}`,clientDetails))
+        dispatch(UpdateData(`customer/update/${row._id}`, clientDetails))
         setOpen(false);
-        
+
     };
 
 
-    useEffect(()=> {
-        setClientDetails({ name: row.name, email: row.email ,  password: "" })
+    useEffect(() => {
+        setClientDetails({ name: row.name, email: row.email, password: "" })
     }, [row])
     return (
         <>
@@ -29,7 +29,9 @@ const UpdateClient = ({ open, setOpen, row, classes }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={classes.formRoot}>
-                    <Typography className={classes.formTitle}>UPDATE CLIENT</Typography>
+                    <div style={{ width: '100%' }}>
+                        <Typography className={classes.formTitle}>Update Client</Typography>
+                    </div>
                     <TextField
                         margin="normal"
                         required
@@ -62,25 +64,9 @@ const UpdateClient = ({ open, setOpen, row, classes }) => {
                             })
                         }}
                     />
-                    <TextField
-                        margin="normal"
-                        required
-                        label="Enter Password"
-                        name="password"
-                        type='password'
-                        autoComplete="name"
-                        autoFocus
-                        onChange={(e) => {
-                            setClientDetails({
-                                ...clientDetails,
-                                [e.target.name]: e.target.value
-                            })
-                        }}
-                        className={classes.inputField}
-                    />
                     <div>
-                        <Button sx={{ color: 'red', border: 'red' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
-                        <Button  sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton} onClick={handleSubmit}>SAVE</Button>
+                        <Button sx={{ color: '#FF6161', border: '#FF6767' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
+                        <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton} onClick={handleSubmit}>SAVE</Button>
                     </div>
                 </Box>
             </Modal>

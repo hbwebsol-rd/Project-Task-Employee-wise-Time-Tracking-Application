@@ -1,10 +1,18 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Stack, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 
-const AddTask = ({ open, setOpen, classes }) => {
+const UpdateProject = ({ open, setOpen, row, classes }) => {
+    const [projectDetails, setProjectDetails] = useState({})
+    const dispatch = useDispatch();
     function handleClose() {
         setOpen(false);
     }
+
+    useEffect(() => {
+        setProjectDetails({ name: row.name, client: row.customerName, technology: row.technology })
+    }, [row])
 
     return (
         <>
@@ -16,13 +24,14 @@ const AddTask = ({ open, setOpen, classes }) => {
             >
                 <Box className={classes.formRoot}>
                     <div style={{ width: '100%' }}>
-                        <Typography className={classes.formTitle}>Add Task</Typography>
+                        <Typography className={classes.formTitle}>Update Project</Typography>
                     </div>
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Project Name"
+                        label="Project Name"
                         name="project"
+                        value={projectDetails.name}
                         autoComplete="name"
                         autoFocus
                         className={classes.inputField}
@@ -30,8 +39,9 @@ const AddTask = ({ open, setOpen, classes }) => {
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Task Name"
-                        name="task"
+                        label="Client Name"
+                        name="client"
+                        value={projectDetails.client}
                         autoComplete="name"
                         autoFocus
                         className={classes.inputField}
@@ -39,37 +49,34 @@ const AddTask = ({ open, setOpen, classes }) => {
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Employee Name"
-                        name="employee"
+                        label="Technology"
+                        name="technology"
+                        value={projectDetails.technology}
                         autoComplete="name"
                         autoFocus
                         className={classes.inputField}
                     />
                     <Stack direction='row' spacing={2}>
-                        <FormControl className={classes.inputSelect}>
-                            <InputLabel id="priority-label">Priority</InputLabel>
-                            <Select
-                                labelId="priority-label"
-                                id="select"
-                                label="Priority"
-                            >
-                                <MenuItem value='low'>Low</MenuItem>
-                                <MenuItem value='medium'>Medium</MenuItem>
-                                <MenuItem value='high'>High</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <FormControl className={classes.inputSelect}>
-                            <InputLabel size='large' id="status-label">Status</InputLabel>
-                            <Select
-                                labelId="status-label"
-                                id="select"
-                                label="Priority"
-                            >
-                                <MenuItem value='active'>Active</MenuItem>
-                                <MenuItem value='completed'>Completed</MenuItem>
-                                <MenuItem value='pending'>Pending</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <TextField
+                            id="date"
+                            type='date'
+                            label="Date From"
+                            variant="outlined"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            className={classes.inputSelect}
+                        />
+                        <TextField
+                            id="date"
+                            type='date'
+                            label="Date To"
+                            variant="outlined"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            className={classes.inputSelect}
+                        />
                     </Stack>
                     <div>
                         <Button sx={{ color: '#FF6161', border: '#FF6767' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
@@ -81,4 +88,4 @@ const AddTask = ({ open, setOpen, classes }) => {
     )
 }
 
-export default AddTask
+export default UpdateProject

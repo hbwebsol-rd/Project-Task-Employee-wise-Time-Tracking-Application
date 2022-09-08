@@ -18,6 +18,8 @@ const useStyles = makeStyles({
             marginLeft: '-20px'
         },
     },
+
+    
     loginMain: {
         width: '100%',
         height: '100vh',
@@ -72,6 +74,13 @@ const useStyles = makeStyles({
         },
     },
 
+    resetTitle: {
+        margin: '20px !important',
+        fontWeight: '700 !important',
+        fontSize: '18px !important',
+        color: '#3525B5'
+    },
+
 
     headerRoot: {
         width: '95%',
@@ -114,7 +123,7 @@ const useStyles = makeStyles({
     },
     headerIcon: {
         fontSize: '35px !important',
-        color: '#3525B5',
+        color: '#5B5B5B',
         position: 'absolute',
         right: '60px',
         top: '5px'
@@ -136,11 +145,13 @@ const useStyles = makeStyles({
     dropdownList: {
         position: 'absolute',
         top: '40px',
+        backgroundColor:'#FAFAFA',
+        borderRadius:'5px'
     },
     dropdownListItem: {
         margin: '5px 0',
         textDecoration: 'none',
-        color: 'grey',
+        color: '#A9A3A3',
         borderBottom: '1px solid #D3D3D3'
     },
 
@@ -177,9 +188,9 @@ const useStyles = makeStyles({
     box: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        width: '300px',
+        width: '350px',
         backgroundColor: '#D8FFD1',
         borderRadius: '20px',
         '@media(max-width: 800px)': {
@@ -188,6 +199,9 @@ const useStyles = makeStyles({
         '@media(max-width: 650px)': {
             width: '200px'
         },
+    },
+    countContainer:{
+        width : '5rem'
     },
     dashboardIcons: {
         fontSize: '60px !important',
@@ -243,8 +257,8 @@ const useStyles = makeStyles({
         fontSize: '14px !important'
     },
     status: {
-        width: '5rem',
-        padding: '5px',
+        width: '6rem',
+        padding: '10px',
         color: '#ffffff',
         borderRadius: '20px',
         fontSize: '12px !important',
@@ -269,8 +283,10 @@ const useStyles = makeStyles({
     },
     tableHeadContainer: {
         display: 'flex',
+        height:'90px',
+        alignItems:'center',
         justifyContent: 'space-between',
-        padding: '1rem',
+        padding: '0 1rem 0 1rem',
         backgroundColor: '#E6E2FF'
     },
     title: {
@@ -285,7 +301,6 @@ const useStyles = makeStyles({
     },
     tableContainer: {
         width: '95% !important',
-        marginTop: '2rem !important',
         '@media(max-width: 1350px)': {
             width: '85% !important',
             overflowX: 'auto !important'
@@ -301,7 +316,7 @@ const useStyles = makeStyles({
     tableCell: {
         color: '#000000',
         fontWeight: '700 !important',
-        fontSize: '16px !important'
+        fontSize: '20px !important'
     },
     tableButton: {
         '@media(max-width: 900px)': {
@@ -312,14 +327,21 @@ const useStyles = makeStyles({
 
 
     popTask: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
         display: 'flex',
-        alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '20rem'
-
+        alignItems: 'center',
+        transform: 'translate(-50%, -50%)',
+        width: '650px',
+        backgroundColor: 'white',
+        border: 'none',
+        borderRadius: '10px',
+        boxShadow: 24,
     },
     popTable: {
-        width: '500px !important',
+        width: '600px !important',
         backgroundColor: 'white',
         border: 'none',
         borderRadius: '10px',
@@ -355,17 +377,19 @@ const useStyles = makeStyles({
         p: 4,
     },
     formTitle: {
-        margin: '20px !important',
+        margin: '25px 0 0 50px !important',
         fontWeight: '700 !important',
         fontSize: '18px !important',
         color: '#3525B5'
     },
     inputField: {
         margin: '20px !important',
-        width: '25rem !important'
+        width: '25rem !important',
     },
     formButton: {
-        width: '5rem',
+        width: '11rem !important',
+        marginTop: '20px !important',
+        marginBottom: '30px !important',
         border: '1px solid !important',
         margin: '20px !important'
     },
@@ -384,7 +408,7 @@ const useStyles = makeStyles({
     },
     profileContainer: {
         marginTop: '8rem',
-        width: '70rem !important',
+        width: '700px !important',
         backgroundColor: '#F3F1FF'
     },
     profileBox: {
@@ -397,7 +421,7 @@ const useStyles = makeStyles({
     },
     profileLabel: {
         marginLeft: '3rem !important',
-        width: '25rem',
+        width: '20rem',
         fontWeight: '700 !important'
     },
     profileValue: {
@@ -412,6 +436,28 @@ const useStyles = makeStyles({
     editProfileLabel: {
         width: '10rem',
         fontWeight: '700 !important'
+    },
+
+
+    footer:{
+        color:"#999999", 
+        textAlign:"center",
+        position:'absolute',
+        left:'45%',
+        bottom:'20px',
+        fontSize:'12px !important',
+        fontWeight:'400 !important'
+    },
+
+    version:{
+        width:'5rem', 
+        display:'flex',
+        flexDirection:'column', 
+        justifyContent:'center', 
+        alignItems:'center',
+        position:'absolute',
+        bottom:'-180px'
+        
     }
 })
 

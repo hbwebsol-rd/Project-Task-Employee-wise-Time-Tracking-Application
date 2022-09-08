@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { PostData } from '../utils/fetch-sevice';
 
 const AddEmployee = ({ open, setOpen, classes }) => {
-    const [employeeDetails, setEmployeeDetails] = useState({designation: "", name: "", email: "",  password: "" })
+    const [employeeDetails, setEmployeeDetails] = useState({ designation: "", name: "", email: "", password: "" })
     const dispatch = useDispatch();
     function handleClose() {
         setOpen(false);
@@ -24,7 +24,9 @@ const AddEmployee = ({ open, setOpen, classes }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={classes.formRoot}>
-                    <Typography className={classes.formTitle}>ADD EMPLOYEE</Typography>
+                    <div style={{ width: '100%' }}>
+                        <Typography className={classes.formTitle}>Add Employee</Typography>
+                    </div>
                     <TextField
                         margin="normal"
                         required
@@ -87,8 +89,8 @@ const AddEmployee = ({ open, setOpen, classes }) => {
                         className={classes.inputField}
                     />
                     <div>
-                        <Button sx={{ color: 'red', border: 'red' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
-                        <Button  sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton} onClick={handleSubmit}>SAVE</Button>
+                        <Button sx={{ color: '#FF6161', border: '#FF6767' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
+                        <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton} onClick={handleSubmit}>SAVE</Button>
                     </div>
                 </Box>
             </Modal>

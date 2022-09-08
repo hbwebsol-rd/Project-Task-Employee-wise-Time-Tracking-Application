@@ -11,7 +11,7 @@ const UpdateTask = ({ open, setOpen, row, classes }) => {
     }
 
     useEffect(()=> {
-        setTaskDetails({designation: row.designation, name: row.name, email: row.email ,  password: "" })
+        setTaskDetails({task: row.taskName, project: row.projectName, employee: row.employeeName, priority: row.priority  })
     }, [row])
 
     return (
@@ -23,12 +23,15 @@ const UpdateTask = ({ open, setOpen, row, classes }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={classes.formRoot}>
-                    <Typography className={classes.formTitle}>UPDATE TASK</Typography>
+                <div style={{ width: '100%' }}>
+                        <Typography className={classes.formTitle}>Update Task</Typography>
+                    </div>
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Project Name"
-                        name="name"
+                        label="Project Name"
+                        name="project"
+                        value={taskDetails.project}
                         autoComplete="name"
                         autoFocus
                         className={classes.inputField}
@@ -36,8 +39,9 @@ const UpdateTask = ({ open, setOpen, row, classes }) => {
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Task Name"
-                        name="name"
+                        label="Task Name"
+                        name="task"
+                        value={taskDetails.task}
                         autoComplete="name"
                         autoFocus
                         className={classes.inputField}
@@ -45,8 +49,9 @@ const UpdateTask = ({ open, setOpen, row, classes }) => {
                     <TextField
                         margin="normal"
                         required
-                        label="Enter Employee Name"
-                        name="name"
+                        label="Employee Name"
+                        name="employee"
+                        value={taskDetails.employee}
                         autoComplete="name"
                         autoFocus
                         className={classes.inputField}
@@ -58,6 +63,7 @@ const UpdateTask = ({ open, setOpen, row, classes }) => {
                                 labelId="priority-label"
                                 id="select"
                                 label="Priority"
+                                value={taskDetails.priority}
                             >
                                 <MenuItem value='low'>Low</MenuItem>
                                 <MenuItem value='medium'>Medium</MenuItem>
@@ -78,7 +84,7 @@ const UpdateTask = ({ open, setOpen, row, classes }) => {
                         </FormControl>
                     </Stack>
                     <div>
-                        <Button sx={{ color: 'red', border: 'red' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
+                        <Button sx={{ color: '#FF6161', border: '#FF6767' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
                         <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton}>SAVE</Button>
                     </div>
                 </Box>

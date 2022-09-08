@@ -20,9 +20,9 @@ const ConfirmLogout = ({ open, setOpen, classes }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={classes.formRoot}>
-                    <Typography className={classes.formTitle}>ARE YOU SURE, YOU WANT TO LOGOUT?</Typography>
+                    <Typography className={classes.resetTitle}>ARE YOU SURE, YOU WANT TO LOGOUT?</Typography>
                     <div>
-                        <Button sx={{ color: 'red', border: 'red' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
+                        <Button sx={{ color: '#FF6161', border: '#FF6767' }} className={classes.formButton} onClick={() => setOpen(false)}>CANCEL</Button>
                         <Link to='/login' style={{ textDecoration: 'none' }}>
                             <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton} onClick={handleLogout}>LOGOUT</Button>
                         </Link>
