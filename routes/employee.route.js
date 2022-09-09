@@ -1,119 +1,41 @@
-const router=require('express').Router()
-const {check, validationResult}=require('express-validator')
-const employeeModel=require('../models/employee.model')
-const superUser=require('../middleware/superUser.middleware')
-const employee=require('../middleware/employee.middleware')
-const bcrypt=require('bcryptjs')
-const config=require('config')
-const mongoose = require('mongoose')
-const taskModel = require('../models/task.model')
+const {check}=require('express-validator')
+const Auth=require('../middleware/auth.middleware')
+const Employee=require('../controllers/employee.controller')
 
-// get request for tasks of current employee
-router.get('/login', employee, async(req, res)=>{
-    try {
-        const tasks=await taskModel.find({employeeId: req.userInfo.id})
-        if(!tasks) return res.status(200).json({message: 'No tasks found of the respective employee', success: false})
-        res.status(200).json(tasks)
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json|({message: 'Server Error', success: false})
-    }
-})
+module.exports=(app)=>{
 
-// get request for all employees
-router.get('/', superUser, async(req, res)=>{
-    try { 
-        const employees=await employeeModel.find().select('-password')
-        if(!employees) return res.status(200).json({message: 'No employees found', success: false})
-        res.status(200).json(employees)
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
-    }
-})
+    // get data of all employees by superuser
+    app.get('/api/getEmployees', Auth.superUser, Employee.getEmployees) 
 
-// get request for a single employee
-router.get('/:employee_id', superUser, async(req, res)=>{
-    try {
-        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Id', success: false})
-        const employee=await employeeModel.findById(req.params.employee_id)
-        if(!employee) return res.status(200).json({message: 'No employee found', success: false})
-        res.status(200).json(employee)
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
-    }
-})
+    // display current employee details by employee
+    app.get('/api/employee/profile', Auth.employee, Employee.getEmployeeProfile)
 
-// post request for adding a employee
-router.post('/', [superUser, [
-    check('designation', 'Please provide a designation').not().isEmpty(),
-    check('name', 'Please provide a name').not().isEmpty(),
-    check('email', 'Please provide a email').isEmail(),
-    check('password', 'Please provide a password').isLength({min: 8})
-]], async(req, res)=>{
-    const errors=validationResult(req)
-    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()})
+    // display current employee tasks by employee
+    app.get('/api/employee/tasks', Auth.employee, Employee.getEmployeeTasks)
 
-    const {name, email, password, designation}=req.body
+    // get data of a single employee by superuser
+    app.get('/api/getEmployee/:employee_id', Auth.superUser, Employee.getEmployee)
+
+    // create new employee by superuser
+    app.post('/api/addEmployee', [Auth.superUser, [check('name'), check('email'), check('password'), check('designation')]], Employee.createEmployee)
+
+    // add total time on task by employee
+    app.patch('/api/employee/task/addTotalTime/:task_id', [Auth.employee, [check('from'), check('to')]], Employee.addTotalTime)
+
+    // update status of task by employee
+    app.patch('/api/employee/task/updateStatus/:task_id', [Auth.employee, [check('status')]], Employee.updateTaskStatus)
+
+    // update employee by superuser
+    app.patch('/api/updateEmployee/:employee_id', [Auth.superUser, [check('name'), check('email'), check('designation')]], Employee.updateEmployee)
+
+    // update employee profile details by employee
+    // app.patch('/api/employee/updateProfile', [Auth.employee, [check('name'), check('email'), check('designation')]], Employee.employeeUpdateProfile)
     
-    try {
-        const employee=await employeeModel.findOne({email})
-        if(employee) return res.status(200).json({message: 'Employee already exists', success: false})
-        const newEmployee=await employeeModel({name, email, role: '2', password, designation})
+    // update employee profile password by employee
+    app.patch('/api/employee/updatePassword', [Auth.employee, [check('oldPassword'), check('password'), check('confirmPassword')]], Employee.employeeUpdatePassword)
 
-        const salt=await bcrypt.genSalt(10)
-        newEmployee.password=await bcrypt.hash(password, salt)
-        await newEmployee.save()
-        res.status(200).json({message: 'Employee added successfully', success: true})
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
-    }
+    // delete employee by superuser
+    app.delete('/api/deleteEmployee/:employee_id', Auth.superUser, Employee.deleteEmployee)
 
-})
+}
 
-// put request for updating a employee
-router.put('/update/:employee_id', [superUser, [
-    check('designation', 'Please provide a designation to update').not().isEmpty(),
-    check('name', 'Please provide a name to update').not().isEmpty(),
-    check('email', 'Please provide a email to update').isEmail(),
-    check('password', 'Please provide a password to update').isLength({min: 8})
-]], async(req, res)=>{
-    const errors=validationResult(req)
-    if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()})
-
-    const password=req.body
-    
-    try {
-        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Id', success: false})
-        let employee=await employeeModel.findById(req.params.employee_id)
-
-        if(!employee) return res.status(200).json({message: 'No employee found', success: false})
-
-        employee=await employeeModel.findByIdAndUpdate({_id: req.params.employee_id}, {...req.body})
-
-        const salt=await bcrypt.genSalt(10)
-        employee.password=await bcrypt.hash(employee.password, salt)
-        await employee.save()
-        res.status(200).json({message: 'Employee updated successfully', success: true})
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
-    }
-})
-
-// delete request to delete an employee
-router.delete('/:employee_id', superUser, async(req, res)=>{
-    try {
-        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Id', success: false})
-        const employee=await employeeModel.findByIdAndRemove(req.params.employee_id)
-        if(!employee) return res.status(200).json({message: 'No employee found', success: false})
-        res.status(200).json({message: 'Employee info removed successfully', success: true})
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
-    }
-})
-
-module.exports=router

@@ -4,19 +4,21 @@ const mongoose = require('mongoose');
 const db = require('config').get('ATLAS_URI');
 const app = express();
 const path = require('path');
-const cors = require("cors");
+const cors= require('cors')
 
-app.use(cors());
-app
-    .use(express.json())
-    .use('/api/user', require('./routes/user.route'))
-    .use('/api/auth', require('./routes/auth.route'))
-    .use('/api/employee', require('./routes/employee.route'))
-    .use('/api/project', require('./routes/project.route'))
-    .use('/api/task', require('./routes/task.route'))
-    .use('/api/customer', require('./routes/customer.route'))
-
-if (process.env.NODE_ENV === "production") {
+// Middleware
+app.use(cors())
+app.use(express.json())
+    
+// API Routes
+require("./routes/user.route")(app);
+require("./routes/customer.route")(app);
+require("./routes/project.route")(app);
+require("./routes/employee.route")(app);
+require("./routes/task.route")(app);
+require("./routes/export.route")(app);
+    
+    if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "client", "build")));
 //     app.get('/*', (req, res) => {
 //         res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
