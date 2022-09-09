@@ -2,7 +2,6 @@ import React, {useEffect} from 'react'
 import {Routes, Route, Navigate } from 'react-router-dom'
 import Home from '../Home'
 import Login from '../pages/Login'
-import Register from '../pages/Register'
 import ResetPassword from '../pages/ResetPassword'
 import ProtectedRoutes from './ProtectedRoutes'
 import Header from '../layout/Header'
@@ -16,6 +15,7 @@ import Client from '../pages/Client';
 import Profile from '../pages/Profile';
 import Reports from '../pages/Reports';
 import { useSelector } from 'react-redux'
+import Footer from '../layout/Footer'
 
 const Router = () => {
     const login = useSelector(state => state.login.loggedIn)
@@ -44,12 +44,12 @@ const Router = () => {
                                 <Route path='/reports' element={<Reports />} />
                                 <Route path="*" element={<Navigate to ="/dashboard" />}/>
                         </Routes>
+                        <Footer/>
                     </div>
                 </div>
             : 
                 <Routes>
                     <Route path='/login' element={<Login />} />
-                    <Route path='/register' element={<Register />} />
                     <Route path='/resetpassword' element={<ResetPassword />} />
                     <Route path="*" element={<Navigate to ="/login" />}/>
                 </Routes>

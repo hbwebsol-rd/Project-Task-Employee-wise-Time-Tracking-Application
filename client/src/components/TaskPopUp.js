@@ -30,16 +30,15 @@ const TaskPopUp = ({ pop, setPop, classes }) => {
                 <Box className={classes.popTask}>
                     <TableContainer className={classes.popTable} >
                         <div className={classes.popTitleContainer}>
-                            <Typography className={classes.popTitle}>VIEW TASK</Typography>
-                            <CancelIcon sx={{ color: 'red' }} onClick={handleClose} />
+                            <Typography className={classes.popTitle}>View Task</Typography>
                         </div>
-                        <Table aria-label="caption table">
+                        <Table aria-label="caption table" >
                             <TableHead style={{ backgroundColor: '#F5F3FF' }}>
                                 <TableRow>
-                                    <TableCell align="left" className={classes.tableCell} >DATE</TableCell>
-                                    <TableCell align="left" className={classes.tableCell}>TIME</TableCell>
-                                    <TableCell align="left" className={classes.tableCell}>SPENT HOURS</TableCell>
-                                    <TableCell align="left" className={classes.tableCell}>EMPLOYEE</TableCell>
+                                    <TableCell align="left" className={classes.tableCell} >Date</TableCell>
+                                    <TableCell align="left" className={classes.tableCell}>Time</TableCell>
+                                    <TableCell align="left" className={classes.tableCell}>Spent Hours</TableCell>
+                                    <TableCell align="left" className={classes.tableCell}>Employee</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -47,7 +46,7 @@ const TaskPopUp = ({ pop, setPop, classes }) => {
                                     <TableRow key={i}>
                                         <TableCell>{row.date}</TableCell>
                                         <TableCell>{row.time}</TableCell>
-                                        <TableCell>{row.spent}</TableCell>
+                                        <TableCell align="center">{row.spent}</TableCell>
                                         <TableCell>{row.employee}</TableCell>
                                     </TableRow>
                                 ))}

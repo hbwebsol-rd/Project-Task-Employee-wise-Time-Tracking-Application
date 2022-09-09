@@ -25,7 +25,7 @@ const HeaderTitle = ({ classes }) => {
         return <Typography className={classes.title}>TASKS</Typography>
     }
     if (location.pathname === '/reports') {
-        return <Typography className={classes.title}>Reports</Typography>
+        return <Typography className={classes.title}>REPORTS</Typography>
     }
 }
 

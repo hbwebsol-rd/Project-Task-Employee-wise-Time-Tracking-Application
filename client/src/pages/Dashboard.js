@@ -27,42 +27,42 @@ const Dashboard = () => {
     {
       title: 'Contrary to popular belief, Lorem Ipsum is not simply random text',
       client: 'Project Name - Client Name',
-      status: 'In Progress',
+      status: 'IN PROGRESS',
       color: '#FF9E67'
     },
     {
       title: 'Contrary to popular belief, Lorem Ipsum is not simply random text',
       client: 'Project Name - Client Name',
-      status: 'Pending',
+      status: 'PENDING',
       color: '#FF6767'
     },
     {
       title: 'Contrary to popular belief, Lorem Ipsum is not simply random text',
       client: 'Project Name - Client Name',
-      status: 'Done',
+      status: 'DONE',
       color: '#67EA52'
     },
     {
       title: 'Contrary to popular belief, Lorem Ipsum is not simply random text',
       client: 'Project Name - Client Name',
-      status: 'New',
-      color: '#FFA500'
+      status: 'NEW',
+      color: '#67D1FF'
     },
   ]
   return (
     <div className={classes.dashboardRoot}>
       <Grid container spacing={width < 800 ? 2 : 10}  >
         <Grid item >
-          <Card count={employeeCount} label='EMPLOYEES' icon={<BadgeIcon className={classes.dashboardIcons} />} classes={classes} />
+          <Card count={employeeCount} label='EMPLOYEES COUNT' icon={<BadgeIcon className={classes.dashboardIcons} />} classes={classes} />
         </Grid>
         <Grid item >
-          <Card count={projectCount} label='PROJECTS' icon={<DevicesOtherIcon className={classes.dashboardIcons} />} classes={classes} />
+          <Card count={projectCount} label='PROJECT COUNT' icon={<DevicesOtherIcon className={classes.dashboardIcons} />} classes={classes} />
         </Grid>
         <Grid item >
-          <Card count={taskCount} label='TASKS' icon={<GradingIcon className={classes.dashboardIcons} />} classes={classes} />
+          <Card count={taskCount} label='TASK COUNT' icon={<GradingIcon className={classes.dashboardIcons} />} classes={classes} />
         </Grid>
         <Grid item >
-          <Card count={clientCount} label='CLIENTS' icon={<GroupsIcon className={classes.dashboardIcons} />} classes={classes} />
+          <Card count={clientCount} label='CLIENT COUNT' icon={<GroupsIcon className={classes.dashboardIcons} />} classes={classes} />
         </Grid>
       </Grid>
       <Box className={classes.taskBox}>
@@ -75,7 +75,7 @@ const Dashboard = () => {
                   <Typography className={classes.taskTitle}>{task.title}</Typography>
                   <Typography className={classes.taskClient} >{task.client}</Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                   <Typography className={classes.status} backgroundColor={task.color} >{task.status}</Typography>
                 </Grid>
               </>

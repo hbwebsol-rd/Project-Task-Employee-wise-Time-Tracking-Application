@@ -4,7 +4,7 @@ import { useStyles } from '../views/view-css';
 import HeaderTitle from '../components/HeaderTitle';
 import { Link } from 'react-router-dom';
 import ConfirmLogout from '../components/ConfirmLogout';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -22,7 +22,7 @@ const Header = () => {
                 <div className={classes.headerIcons}>
                     <Grid item >
                         <Link to='#'>
-                            <NotificationsActiveIcon className={classes.headerIcon} />
+                            <NotificationsNoneIcon className={classes.headerIcon} />
                         </Link>
                     </Grid>
                     <div className={classes.dropdown}>
@@ -34,12 +34,12 @@ const Header = () => {
                                 <List className={classes.dropdownList}>
                                     <ListItem >
                                         <Link to='/profile' className={classes.dropdownListItem}   >
-                                            <Typography onClick={() => setDrop(!drop)} sx={{ display: 'flex', alignItems: 'center' }} > {<PermIdentityIcon />}   Profile</Typography>
+                                            <Typography onClick={() => setDrop(!drop)} sx={{ display: 'flex', alignItems: 'center' }} > {<PermIdentityIcon sx={{marginRight:'10px'}} />}   Profile</Typography>
                                         </Link>
                                     </ListItem>
                                     <ListItem>
                                         <Link to='#' onClick={() => setOpen(true)} className={classes.dropdownListItem}   >
-                                            <Typography onClick={() => setDrop(!drop)} sx={{ display: 'flex', alignItems: 'center' }} > {<LogoutIcon />}  Logout</Typography>
+                                            <Typography onClick={() => setDrop(!drop)} sx={{ display: 'flex', alignItems: 'center' }} > {<LogoutIcon sx={{marginRight:'10px'}} />}  Logout</Typography>
                                         </Link>
                                     </ListItem>
                                 </List>

@@ -17,7 +17,7 @@ const ResetSuccess = ({ open, setOpen, classes }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box className={classes.formRoot}>
-                    <Typography className={classes.formTitle} sx={{color:'green'}}>Link Sent Successfully</Typography>
+                    <Typography className={classes.resetTitle} sx={{color:'green'}}>Link Sent Successfully</Typography>
                 </Box>
             </Modal>
         </>

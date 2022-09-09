@@ -1,36 +1,29 @@
-import cookie from "react-cookies"
-import { FETCH_DATA_BEGIN, FETCH_DATA_FAILURE, FETCH_DATA_SUCCESS } from "../actions/action"
+import { FETCH_PROJECTS_BEGIN, FETCH_PROJECTS_FAILURE, FETCH_PROJECTS_SUCCESS } from "../actions/projectActions";
+
 
 const initialState = {
-    token: '',
-    role: '',
-    loggedIn: false,
     loading: false,
     error: null,
-    items: []
+    projects: []
 }
 
-if (cookie.load("token")) {
-    initialState.token = cookie.load("token");
-    initialState.loggedIn = true;
-}
-const reducer = (state = initialState, action) => {
+const project = (state = initialState, action) => {
     switch (action.type) {
-        case FETCH_DATA_BEGIN: {
+        case FETCH_PROJECTS_BEGIN: {
             return {
                 ...state,
                 loading: true,
                 error: null
             };
         }
-        case FETCH_DATA_SUCCESS: {
+        case FETCH_PROJECTS_SUCCESS: {
             return {
                 ...state,
                 loading: false,
-                items: action.payload.data
+                projects: action.payload.data
             };
         }
-        case FETCH_DATA_FAILURE: {
+        case FETCH_PROJECTS_FAILURE: {
             return {
                 ...state,
                 loading: false,
@@ -43,4 +36,4 @@ const reducer = (state = initialState, action) => {
     }
 } 
 
-export default reducer
+export default project
