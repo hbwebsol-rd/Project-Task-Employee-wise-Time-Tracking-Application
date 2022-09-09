@@ -1,30 +1,8 @@
 import axios from "axios";
 import cookie from "react-cookies";
-
-import { fetchDataBegin, fetchDataFailure, fetchDataSuccess } from "../store/actions/action";
 import { LOGGED_IN } from "../store/actions/loginActions";
 import { BASE_URL } from "./index";
 
-export const GetFetch = (url) => {
-    var token = ''
-    if (cookie.load("token")) {
-        token = cookie.load("token");
-    }
-    return dispatch => {
-        dispatch(fetchDataBegin());
-        return axios
-            .get(`${BASE_URL}${url}`, {
-                headers: {
-                    'x-auth-token': `${token}`
-                }
-            })
-            .then(json => {
-                dispatch(fetchDataSuccess(json.data));
-                return json.data;
-            })
-            .catch(error => dispatch(fetchDataFailure(error)));
-    };
-}
 
 export const PostData = (url, details) => {
     var token = ''
@@ -39,13 +17,13 @@ export const PostData = (url, details) => {
             }} )
             .then((response) => {
                 if (response.status === 200) {
-                    dispatch(GetFetch(url))
+                    console.log(response.data)
                 }
                 else {
                     console.log('Error');
                 }
             })
-            .catch(error => dispatch(fetchDataFailure(error)));
+            .catch(error => console.log(error));
     }
 }
 
@@ -62,13 +40,13 @@ export const UpdateData = (url, details) => {
             }} )
             .then((response) => {
                 if (response.status === 200) {
-                    dispatch(GetFetch(url))
+                    console.log(response.data)
                 }
                 else {
                     console.log('Error');
                 }
             })
-            .catch(error => dispatch(fetchDataFailure(error)));
+            .catch(error => console.log(error));
     }
 }
 
@@ -84,13 +62,13 @@ export const DeleteData = (url) => {
             }} )
             .then((response) => {
                 if (response.status === 200) {
-                    dispatch(GetFetch(url))
+                    console.log(response.data)
                 }
                 else {
                     console.log('Error');
                 }
             })
-            .catch(error => dispatch(fetchDataFailure(error)));
+            .catch(error => console.log(error));
     }
 }
 
@@ -114,6 +92,6 @@ export const PostUser = (url, details) => {
                     console.log('Error');
                 }
             })
-            .catch(error => dispatch(fetchDataFailure(error)));
+            .catch(error => console.log(error));
     }
 }

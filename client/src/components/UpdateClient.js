@@ -1,6 +1,7 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import swal from 'sweetalert';
 import { UpdateData } from '../utils/fetch-sevice';
 
 const UpdateClient = ({ open, setOpen, row, classes }) => {
@@ -13,7 +14,11 @@ const UpdateClient = ({ open, setOpen, row, classes }) => {
         event.preventDefault();
         dispatch(UpdateData(`customer/update/${row._id}`, clientDetails))
         setOpen(false);
-
+        swal({
+            title: "Updated Successfully",
+            icon: "success",
+            timer: 2000,
+        });
     };
 
 

@@ -1,6 +1,7 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import swal from 'sweetalert';
 import { PostData } from '../utils/fetch-sevice';
 
 const AddEmployee = ({ open, setOpen, classes }) => {
@@ -13,6 +14,11 @@ const AddEmployee = ({ open, setOpen, classes }) => {
         event.preventDefault();
         dispatch(PostData('customer', clientDetails))
         setOpen(false);
+        swal({
+            title: "Client Added Successfully",
+            icon: "success",
+            showConfirmButton: false,
+          });
     };
 
     return (

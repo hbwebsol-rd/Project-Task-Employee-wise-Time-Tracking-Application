@@ -1,6 +1,8 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import swal from 'sweetalert';
+import { GetFetch } from '../store/actions/employeeActions';
 import { PostData } from '../utils/fetch-sevice';
 
 const AddEmployee = ({ open, setOpen, classes }) => {
@@ -12,7 +14,13 @@ const AddEmployee = ({ open, setOpen, classes }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         dispatch(PostData('employee', employeeDetails))
+        dispatch(GetFetch('employee'))
         setOpen(false);
+        swal({
+            title: "Employee Added Successfully",
+            icon: "success",
+            timer: 2000,
+        });
     };
 
     return (

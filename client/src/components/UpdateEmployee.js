@@ -1,6 +1,8 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import swal from 'sweetalert';
+import { GetFetch } from '../store/actions/employeeActions';
 import { UpdateData } from '../utils/fetch-sevice';
 
 const UpdateEmployee = ({ open, setOpen, row, classes }) => {
@@ -12,8 +14,13 @@ const UpdateEmployee = ({ open, setOpen, row, classes }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
         dispatch(UpdateData(`employee/update/${row._id}`, employeeDetails))
+        dispatch(GetFetch('employee'));
         setOpen(false);
-
+        swal({
+            title: "Updated Successfully",
+            icon: "success",
+            timer: 2000,
+        });
     };
 
 

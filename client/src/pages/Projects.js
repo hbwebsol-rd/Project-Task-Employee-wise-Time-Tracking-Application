@@ -7,11 +7,11 @@ import { useStyles } from "../views/view-css";
 import AddProject from "../components/AddProject";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteData } from "../utils/fetch-sevice";
 import Loading from "../components/Loading";
 import { GetFetch } from "../store/actions/projectActions";
 import UpdateProject from "../components/UpdateProject";
 import SearchIcon from '@mui/icons-material/Search';
+import ConfirmDelete from "../components/ConfirmDelete";
 
 
 function Projects() {
@@ -26,6 +26,7 @@ function Projects() {
     const [open, setOpen] = useState(false);
     const [updateModal, setUpdateModal] = useState(false)
     const [updateRow, setUpdateRow] = useState({})
+    const [deleteModal, setDeleteModal] = useState(false);
 
     useEffect(() => {
         console.log("project", items)
@@ -43,13 +44,10 @@ function Projects() {
         setPage(0);
     }
 
-    const handleDelete = (index, id) => {
-        const list = [...rows];
-        list.splice(index, 1);
-        setRows(list);
-        dispatch(DeleteData(`project/${id}`))
+    const handleDeleteConfirm = (row) => {
+        setDeleteModal(true)
+        setUpdateRow(row);
     };
-
     const editData = (row) => {
         setUpdateRow(row);
         setUpdateModal(true)
@@ -59,6 +57,7 @@ function Projects() {
         <div className={classes.pageRoot}>
             <AddProject open={open} setOpen={setOpen} classes={classes} />
             <UpdateProject open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='project' classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField
@@ -91,7 +90,7 @@ function Projects() {
                             <TableCell align="center" className={classes.tableCell}>Action</TableCell>
                         </TableRow>
                     </TableHead>
-                    {loading ? <Loading /> :
+                    {loading ? <td colSpan={7}><Loading /></td> :
                         <TableBody>
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -115,7 +114,7 @@ function Projects() {
                                                 <IconButton
                                                     aria-label="delete"
                                                     style={{ color: '#FF6161' }}
-                                                    onClick={() => handleDelete(i, row._id)}
+                                                    onClick={() => handleDeleteConfirm(row)}
                                                 >
                                                     <DeleteIcon />
                                                 </IconButton>

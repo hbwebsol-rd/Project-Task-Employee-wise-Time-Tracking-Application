@@ -14,6 +14,7 @@ import UpdateTask from "../components/UpdateTask";
 import TaskPopUp from "../components/TaskPopUp";
 import PlagiarismIcon from '@mui/icons-material/Plagiarism';
 import SearchIcon from '@mui/icons-material/Search';
+import ConfirmDelete from "../components/ConfirmDelete";
 
 
 function Tasks() {
@@ -29,6 +30,7 @@ function Tasks() {
     const [updateModal, setUpdateModal] = useState(false)
     const [updateRow, setUpdateRow] = useState({})
     const [pop, setPop] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
 
     useEffect(() => {
         console.log("task", items)
@@ -46,11 +48,9 @@ function Tasks() {
         setPage(0);
     }
 
-    const handleDelete = (index, id) => {
-        const list = [...rows];
-        list.splice(index, 1);
-        setRows(list);
-        dispatch(DeleteData(`task/delete/${id}`))
+    const handleDeleteConfirm = (row) => {
+        setDeleteModal(true)
+        setUpdateRow(row);
     };
 
     const editData = (row) => {
@@ -63,6 +63,7 @@ function Tasks() {
             <AddTask open={open} setOpen={setOpen} classes={classes} />
             <TaskPopUp pop={pop} setPop={setPop} classes={classes} />
             <UpdateTask open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='task/delete' classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField
@@ -96,7 +97,7 @@ function Tasks() {
                             <TableCell align="center" className={classes.tableCell}>Action</TableCell>
                         </TableRow>
                     </TableHead>
-                    {loading ? <Loading /> :
+                    {loading ? <td colSpan={8}><Loading /></td> :
                         <TableBody>
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -121,7 +122,7 @@ function Tasks() {
                                                 <IconButton
                                                     aria-label="delete"
                                                     style={{ color: '#FF6161' }}
-                                                    onClick={() => handleDelete(i, row._id)}
+                                                    onClick={() => handleDeleteConfirm(row)}
                                                 >
                                                     <DeleteIcon />
                                                 </IconButton>

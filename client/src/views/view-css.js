@@ -85,11 +85,11 @@ const useStyles = makeStyles({
     headerRoot: {
         width: '95%',
         height: '3rem',
-        margin: '0',
+        margin: '0 40px',
         display: 'flex',
         backgroundColor: '#ffffff',
         position: 'fixed',
-        padding: '30px',
+        padding: '30px 0',
         zIndex: '1299 !important',
         '@media(max-width: 1400px)': {
             width: '90%'
@@ -112,14 +112,6 @@ const useStyles = makeStyles({
         '@media(max-width: 410px)': {
             fontSize: '18px !important',
         },
-    },
-    searchBar: {
-        height: '40px',
-        width: '15rem',
-        border: 'none',
-        borderRadius: '20px',
-        backgroundColor: '#F5F5F5',
-        textAlign: 'left'
     },
     headerIcon: {
         fontSize: '35px !important',
@@ -388,7 +380,7 @@ const useStyles = makeStyles({
     },
     formButton: {
         width: '11rem !important',
-        marginTop: '20px !important',
+        marginTop: '5px !important',
         marginBottom: '30px !important',
         border: '1px solid !important',
         margin: '20px !important'
@@ -446,7 +438,7 @@ const useStyles = makeStyles({
         left:'45%',
         bottom:'20px',
         fontSize:'12px !important',
-        fontWeight:'400 !important'
+        fontWeight:'400 !important',
     },
 
     version:{

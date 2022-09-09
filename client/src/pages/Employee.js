@@ -7,11 +7,11 @@ import { useStyles } from "../views/view-css";
 import AddEmployee from "../components/AddEmployee";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteData } from "../utils/fetch-sevice";
 import Loading from "../components/Loading";
 import UpdateEmployee from "../components/UpdateEmployee";
 import { GetFetch } from "../store/actions/employeeActions";
 import SearchIcon from '@mui/icons-material/Search';
+import ConfirmDelete from "../components/ConfirmDelete";
 
 
 function Employee() {
@@ -26,6 +26,7 @@ function Employee() {
     const [open, setOpen] = useState(false);
     const [updateModal, setUpdateModal] = useState(false)
     const [updateRow, setUpdateRow] = useState({})
+    const [deleteModal, setDeleteModal] = useState(false);
     useEffect(() => {
         console.log("employee", items)
         dispatch(GetFetch('employee'));
@@ -43,11 +44,9 @@ function Employee() {
         setPage(0);
     }
 
-    const handleDelete = (index, id) => {
-        const list = [...rows];
-        list.splice(index, 1);
-        setRows(list);
-        dispatch(DeleteData(`employee/${id}`))
+    const handleDeleteConfirm = (row) => {
+        setDeleteModal(true)
+        setUpdateRow(row);
     };
 
     const editData = (row) => {
@@ -58,7 +57,8 @@ function Employee() {
     return (
         <div className={classes.pageRoot}>
             <AddEmployee open={open} setOpen={setOpen} classes={classes} />
-            <UpdateEmployee open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
+            <UpdateEmployee open={updateModal} setOpen={setUpdateModal} row={updateRow}  classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='employee' classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField
@@ -89,7 +89,7 @@ function Employee() {
                             <TableCell align="left" className={classes.tableCell}>Action</TableCell>
                         </TableRow>
                     </TableHead>
-                    {loading ? <Loading /> :
+                    {loading ? <td colSpan={5}><Loading /></td> :
                         <TableBody>
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -111,7 +111,7 @@ function Employee() {
                                                 <IconButton
                                                     aria-label="delete"
                                                     style={{ color: 'Red' }}
-                                                    onClick={() => handleDelete(i, row._id)}
+                                                    onClick={() => handleDeleteConfirm(row)}
                                                 >
                                                     <DeleteIcon />
                                                 </IconButton>

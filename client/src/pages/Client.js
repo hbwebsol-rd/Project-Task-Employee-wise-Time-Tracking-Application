@@ -7,11 +7,11 @@ import { useStyles } from "../views/view-css";
 import AddClient from "../components/AddClient";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteData } from "../utils/fetch-sevice";
 import Loading from "../components/Loading";
 import UpdateClient from "../components/UpdateClient";
 import { GetFetch } from "../store/actions/clientActions";
 import SearchIcon from '@mui/icons-material/Search';
+import ConfirmDelete from "../components/ConfirmDelete";
 
 
 function Client() {
@@ -26,6 +26,7 @@ function Client() {
     const [open, setOpen] = useState(false);
     const [updateModal, setUpdateModal] = useState(false)
     const [updateRow, setUpdateRow] = useState({})
+    const [deleteModal, setDeleteModal] = useState(false);
 
     useEffect(() => {
         console.log('client', items)
@@ -44,11 +45,9 @@ function Client() {
         setPage(0);
     }
 
-    const handleDelete = (index, id) => {
-        const list = [...rows];
-        list.splice(index, 1);
-        setRows(list);
-        dispatch(DeleteData(`customer/${id}`))
+    const handleDeleteConfirm = (row) => {
+        setDeleteModal(true)
+        setUpdateRow(row);
     };
 
     const editData = (row) => {
@@ -60,6 +59,7 @@ function Client() {
         <div className={classes.pageRoot}>
             <AddClient open={open} setOpen={setOpen} classes={classes} />
             <UpdateClient open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='customer/delete' classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                 <TextField
@@ -89,7 +89,7 @@ function Client() {
                             <TableCell align="left" className={classes.tableCell}>Action</TableCell>
                         </TableRow>
                     </TableHead>
-                    {loading ? <Loading /> :
+                    {loading ? <td colSpan={5}><Loading /></td> :
                         <TableBody>
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -110,7 +110,7 @@ function Client() {
                                                 <IconButton
                                                     aria-label="delete"
                                                     style={{ color: '#FF6161' }}
-                                                    onClick={() => handleDelete(i, row._id)}
+                                                    onClick={() => handleDeleteConfirm(row)}
                                                 >
                                                     <DeleteIcon />
                                                 </IconButton>
