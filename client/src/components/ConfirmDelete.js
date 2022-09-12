@@ -1,30 +1,14 @@
 import { Box, Button, Modal, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import swal from 'sweetalert';
-import { DeleteData } from '../utils/fetch-sevice';
 
-const ConfirmDelete = ({ open, setOpen, row, link, classes }) => {
-    const dispatch = useDispatch();
-    const [id, setId] = useState()
-    const [url, setUrl] = useState()
+const ConfirmDelete = ({ open, setOpen, classes, onConfirm }) => {
 
-   useEffect(()=>{
-        setId(row ._id)
-        setUrl(link)
-    }, [row])
 
     function handleClose() {
         setOpen(false);
     }
-    const handleDelete = (id) => {
+    const handleDelete = () => {
         setOpen(false);
-        dispatch(DeleteData(`${url}/${id}`))
-        swal({
-            title: "Deleted Successfully",
-            icon: "success",
-            timer: 2000,
-        });
+        onConfirm();
     };
     return (
         <>
@@ -38,9 +22,9 @@ const ConfirmDelete = ({ open, setOpen, row, link, classes }) => {
                     <Typography className={classes.resetTitle}>Confirm Delete?</Typography>
                     <div>
                         <Button sx={{ color: '#FF6161', border: '#FF6767' }} className={classes.formButton} onClick={() => setOpen(false)}>Cancel</Button>
-                        
-                            <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton} onClick={() => handleDelete(id, url)}>Delete</Button>
-                     
+
+                        <Button sx={{ color: '#3525B5', border: '#3525B5' }} className={classes.formButton} onClick={() => handleDelete()}>Delete</Button>
+
                     </div>
                 </Box>
             </Modal>

@@ -1,31 +1,29 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import swal from 'sweetalert';
-import { GetFetch } from '../store/actions/employeeActions';
-import { UpdateData } from '../utils/fetch-sevice';
+import { useDispatch, useSelector } from 'react-redux';
+import { UpdateEmployeeAction } from '../store/actions/employeeActions';
 
 const UpdateEmployee = ({ open, setOpen, row, classes }) => {
     const [employeeDetails, setEmployeeDetails] = useState({})
     const dispatch = useDispatch();
+    const client = useSelector(state => state.client)
     function handleClose() {
         setOpen(false);
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(UpdateData(`employee/update/${row._id}`, employeeDetails))
-        dispatch(GetFetch('employee'));
+        dispatch(UpdateEmployeeAction(row._id, employeeDetails))
         setOpen(false);
-        swal({
-            title: "Updated Successfully",
-            icon: "success",
-            timer: 2000,
-        });
     };
+    useEffect(() => {
+        if(client.updated){
+            setOpen(false);
+        }
+    }, [client.updated])
 
 
     useEffect(() => {
-        setEmployeeDetails({ designation: row.designation, name: row.name, email: row.email, password: "" })
+        setEmployeeDetails({ designation: row.designation, name: row.name, email: row.email, password:'' })
     }, [row])
     return (
         <>
