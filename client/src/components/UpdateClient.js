@@ -1,29 +1,29 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import swal from 'sweetalert';
-import { UpdateData } from '../utils/fetch-sevice';
+import { useDispatch, useSelector } from 'react-redux';
+import { UpdateClientAction } from '../store/actions/clientActions';
 
 const UpdateClient = ({ open, setOpen, row, classes }) => {
     const [clientDetails, setClientDetails] = useState({})
     const dispatch = useDispatch();
+    const client = useSelector(state => state.client)
     function handleClose() {
         setOpen(false);
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(UpdateData(`customer/update/${row._id}`, clientDetails))
+        dispatch(UpdateClientAction(row._id, clientDetails))
         setOpen(false);
-        swal({
-            title: "Updated Successfully",
-            icon: "success",
-            timer: 2000,
-        });
     };
 
+    useEffect(() => {
+        if(client.updated){
+            setOpen(false);
+        }
+    }, [client.updated])
 
     useEffect(() => {
-        setClientDetails({ name: row.name, email: row.email, password: "" })
+        setClientDetails({ name: row.name, email: row.email })
     }, [row])
     return (
         <>

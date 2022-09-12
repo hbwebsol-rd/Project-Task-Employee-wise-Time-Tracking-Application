@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
-import { Button, IconButton, Input, InputAdornment, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Button, IconButton, InputAdornment, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import { TablePagination } from "@material-ui/core";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useStyles } from "../views/view-css";
@@ -9,7 +9,7 @@ import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import UpdateClient from "../components/UpdateClient";
-import { GetFetch } from "../store/actions/clientActions";
+import { DeleteClientAction, GetAllClientsAction } from "../store/actions/clientActions";
 import SearchIcon from '@mui/icons-material/Search';
 import ConfirmDelete from "../components/ConfirmDelete";
 
@@ -30,10 +30,10 @@ function Client() {
 
     useEffect(() => {
         console.log('client', items)
-        dispatch(GetFetch('customer'));
+        dispatch(GetAllClientsAction())
     }, [])
-    
-    useEffect(()=> {
+
+    useEffect(() => {
         setRows(items)
     }, [items])
 
@@ -59,10 +59,10 @@ function Client() {
         <div className={classes.pageRoot}>
             <AddClient open={open} setOpen={setOpen} classes={classes} />
             <UpdateClient open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
-            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='customer/delete' classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='customer/delete' classes={classes} onConfirm={() => dispatch(DeleteClientAction(updateRow._id))} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
-                <TextField
+                    <TextField
                         id="standard-basic"
                         placeholder="Search"
                         variant="outlined"
@@ -96,7 +96,7 @@ function Client() {
                                 .map((row, i) => (
                                     <>
                                         <TableRow key={row._id}>
-                                            <TableCell align="left" >{row._id}</TableCell>
+                                            <TableCell align="left" >{i+1}</TableCell>
                                             <TableCell align="left" >{row.name}</TableCell>
                                             <TableCell align="left" >{row.email}</TableCell>
                                             <TableCell >
