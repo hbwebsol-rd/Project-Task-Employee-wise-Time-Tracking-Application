@@ -9,15 +9,14 @@ import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import UpdateEmployee from "../components/UpdateEmployee";
-import { GetFetch } from "../store/actions/employeeActions";
+import { GetAllEmployeesAction, DeleteEmployeeAction } from "../store/actions/employeeActions";
 import SearchIcon from '@mui/icons-material/Search';
 import ConfirmDelete from "../components/ConfirmDelete";
-
 
 function Employee() {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const items = useSelector(state => state.employee.emp)
+    const items = useSelector(state => state.employee.employees)
     const loading = useSelector(state => state.employee.loading)
 
     const [rows, setRows] = useState(items);
@@ -29,7 +28,7 @@ function Employee() {
     const [deleteModal, setDeleteModal] = useState(false);
     useEffect(() => {
         console.log("employee", items)
-        dispatch(GetFetch('employee'));
+        dispatch(GetAllEmployeesAction());
     },[])
 
     useEffect(()=> {
@@ -58,7 +57,7 @@ function Employee() {
         <div className={classes.pageRoot}>
             <AddEmployee open={open} setOpen={setOpen} classes={classes} />
             <UpdateEmployee open={updateModal} setOpen={setUpdateModal} row={updateRow}  classes={classes} />
-            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='employee' classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal}  classes={classes} onConfirm={() => dispatch(DeleteEmployeeAction(updateRow._id))} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField
@@ -96,7 +95,7 @@ function Employee() {
                                 .map((row, i) => (
                                     <>
                                         <TableRow key={row._id}>
-                                            <TableCell align="left" >{row._id}</TableCell>
+                                            <TableCell align="left" >{i+1}</TableCell>
                                             <TableCell align="left" >{row.name}</TableCell>
                                             <TableCell align="left" >{row.designation}</TableCell>
                                             <TableCell align="left" >{row.email}</TableCell>

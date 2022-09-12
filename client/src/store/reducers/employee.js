@@ -1,19 +1,43 @@
-import cookie from "react-cookies"
-import { FETCH_EMPLOYEES_BEGIN, FETCH_EMPLOYEES_FAILURE, FETCH_EMPLOYEES_SUCCESS } from "../actions/employeeActions";
+import { FETCH_EMPLOYEES_BEGIN, FETCH_EMPLOYEES_FAILURE, FETCH_EMPLOYEES_SUCCESS, EMPLOYEE_ACTION_FAIL, EMPLOYEE_UPDATED_SUCCESSFULLY, EMPLOYEE_ADDED_SUCCESSFULLY } from "../actions/employeeActions";
+import { EMPLOYEE_LOADER } from "../actions/employeeActions";
 
 const initialState = {
-    token: '',
     loading: false,
     error: null,
-    emp: []
+    updated: false,
+    employees: []
 }
 
-if (cookie.load("token")) {
-    initialState.token = cookie.load("token");
-    initialState.loggedIn = true;
-}
-const employee = (state = initialState, action) => {
+const client = (state = initialState, action) => {
     switch (action.type) {
+        case EMPLOYEE_LOADER: {
+            return {
+                ...state,
+                loading: true,
+                updated: false
+            }
+        }
+        case EMPLOYEE_ACTION_FAIL: {
+            return {
+                ...state,
+                loading: false
+            }
+        }
+        case EMPLOYEE_ADDED_SUCCESSFULLY: {
+            return {
+                ...state,
+                loading: false,
+                updated: true,
+                employees: action.payload
+            }
+        }
+        case EMPLOYEE_UPDATED_SUCCESSFULLY: {
+            return {
+                ...state,
+                loading: false,
+                updated: true
+            }
+        }
         case FETCH_EMPLOYEES_BEGIN: {
             return {
                 ...state,
@@ -25,7 +49,7 @@ const employee = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                emp: action.payload.data
+                employees: action.payload
             };
         }
         case FETCH_EMPLOYEES_FAILURE: {
@@ -39,6 +63,6 @@ const employee = (state = initialState, action) => {
             return state
         }
     }
-} 
+}
 
-export default employee
+export default client

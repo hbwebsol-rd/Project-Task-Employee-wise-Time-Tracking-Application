@@ -2,8 +2,7 @@ import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import swal from 'sweetalert';
-import { GetFetch } from '../store/actions/employeeActions';
-import { PostData } from '../utils/fetch-sevice';
+import { AddEmployeeAction, GetAllEmployeesAction } from '../store/actions/employeeActions';
 
 const AddEmployee = ({ open, setOpen, classes }) => {
     const [employeeDetails, setEmployeeDetails] = useState({ designation: "", name: "", email: "", password: "" })
@@ -13,8 +12,8 @@ const AddEmployee = ({ open, setOpen, classes }) => {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(PostData('employee', employeeDetails))
-        dispatch(GetFetch('employee'))
+        dispatch(AddEmployeeAction(employeeDetails))
+        dispatch(GetAllEmployeesAction())
         setOpen(false);
         swal({
             title: "Employee Added Successfully",
