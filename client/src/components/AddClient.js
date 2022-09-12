@@ -1,25 +1,27 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import swal from 'sweetalert';
-import { PostData } from '../utils/fetch-sevice';
+import { useDispatch, useSelector } from 'react-redux';
+import {AddClientAction} from '../store/actions/clientActions';
 
 const AddEmployee = ({ open, setOpen, classes }) => {
     const [clientDetails, setClientDetails] = useState({ name: "", email: "", password: "" })
     const dispatch = useDispatch();
+    const client = useSelector(state => state.client)
     function handleClose() {
         setOpen(false);
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(PostData('customer', clientDetails))
-        setOpen(false);
-        swal({
-            title: "Client Added Successfully",
-            icon: "success",
-            showConfirmButton: false,
-          });
+        dispatch(AddClientAction(clientDetails));
     };
+    console.log('client', client)
+
+    useEffect(() => {
+        if(client.updated){
+            setOpen(false);
+        }
+    }, [client.updated])
 
     return (
         <>
