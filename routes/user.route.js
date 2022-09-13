@@ -4,6 +4,9 @@ const Auth=require('../middleware/auth.middleware')
 
 module.exports=(app)=>{
 
+    // superUser dashboard
+    app.get('/api/user/dashboard', Auth.superUser, User.getDashBoard)
+
     // Get Data of all superUsers
     app.get('/api/getUsers', Auth.superUser, User.getUsers)
 
@@ -14,19 +17,19 @@ module.exports=(app)=>{
     app.get('/api/getUser/:user_id', Auth.superUser, User.getUser)
 
     // User/Employee login
-    app.post('/api/user/login', [check('role'), check('email'), check('password')], User.loginUser)
+    app.post('/api/user/login', [check('role').not().isEmpty().isNumeric(), check('email').isEmail(), check('password').isLength({min: 8})], User.loginUser)
 
     // User/Employee forgot password
-    app.post('/api/user/login/forgotPassword', [check('email')], User.forgotPassword)
+    app.post('/api/user/login/forgotPassword', [check('email').isEmail()], User.forgotPassword)
 
     // User/Employee reset password
-    app.patch('/api/user/login/resetPassword', [Auth.resetPassword, [check('password'), check('confirmPassword')]], User.resetPassword)
+    app.patch('/api/user/login/resetPassword', [Auth.resetPassword, [check('password').isLength({min: 8}), check('confirmPassword').isLength({min: 8})]], User.resetPassword)
     
     // User update profile
-    app.patch('/api/user/updateProfile', [Auth.superUser, [check('email'), check('phoneNumber')]], User.updateProfile)
+    app.patch('/api/user/updateProfile', [Auth.superUser, [check('email').isEmail(), check('phoneNumber').isEmpty().isNumeric().isLength({min: 8})]], User.updateProfile)
     
     // User update password
-    app.patch('/api/user/updatePassword', [Auth.superUser, [check('oldPassword'), check('password'), check('confirmPassword')]], User.updatePassword)
+    app.patch('/api/user/updatePassword', [Auth.superUser, [check('oldPassword').isLength({min: 8}), check('password').isLength({min: 8}), check('confirmPassword').isLength({min: 8})]], User.updatePassword)
     
 }
 

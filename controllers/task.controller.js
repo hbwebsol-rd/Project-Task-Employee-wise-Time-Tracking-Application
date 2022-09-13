@@ -1,8 +1,10 @@
 const taskModel=require('../models/task.model')
 const projectModel=require('../models/project.model')
 const employeeModel=require('../models/employee.model')
+const customerModel = require('../models/customer.model')
 const mongoose=require('mongoose')
 const nodemailer=require('nodemailer')
+const config=require('config')
 
 // get data for all tasks
 module.exports.getTasks=async(req, res)=>{
@@ -42,6 +44,21 @@ module.exports.getTask=async(req, res)=>{
         // display task
         res.status(200).json({success: true, data: existingTask})
 
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).json({message: 'Server Error', success: false})
+    }
+}
+
+module.exports.addTaskDropdown=async(req, res)=>{
+    try {
+        // display all tasks
+        const existingCustomers=await customerModel.find({}, {name: 1})
+        const existingProjects=await projectModel.find({}, {name: 1})
+        const existingEmployees=await employeeModel.find({}, {name: 1})
+        res.status(200).json({success: true, data: {customers: existingCustomers.map(data=>data),
+                                                    projects: existingProjects.map(data=>data),
+                                                    employeess: existingEmployees.map(data=>data)}})
     } catch (err) {
         console.error(err.message)
         res.status(500).json({message: 'Server Error', success: false})

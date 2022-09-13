@@ -11,6 +11,9 @@ module.exports=(app)=>{
     // get data of a single task
     app.get('/api/getTask/:task_id', Auth.superUser, Task.getTask)
 
+    // dropdown for task creation
+    app.get('/api/taskDropdown', Auth.superUser, Task.addTaskDropdown)
+
     // create new task
     app.post('/api/addTask', [Auth.superUser, [check('taskName'), check('projectId'), check('employeeId'), check('priority'), check('status')]], Task.createTask)
 
