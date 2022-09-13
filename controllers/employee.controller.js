@@ -83,6 +83,27 @@ module.exports.getEmployeeTasks=async(req, res)=>{
     }
 }
 
+// EMPLOYEE
+// display employee today tasks
+module.exports.getEmployeeDashboard=async(req, res)=>{
+    try {
+        // check existing tasks
+        const todayTasks=[]
+        const existingTasks=await taskModel.find({employeeName: req.userInfo.name})
+        if(!existingTasks.length>0) return res.status(400).json({message: 'No tasks found', success: false})
+        existingTasks.map(task=>{
+            if(task.created_date.toLocaleDateString()===new Date().toLocaleDateString()) todayTasks.push(task)
+        })
+        if(!todayTasks.length>0) todayTasks.push('No Tasks Found')
+        // display employee tasks
+        res.status(200).json({success: true, data: todayTasks})
+
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).json({message: 'Server Error', success: false})
+    }
+}
+
 // SUPERUSER
 // retrieve data for a single employee
 module.exports.getEmployee=async(req, res)=>{

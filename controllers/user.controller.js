@@ -1,11 +1,41 @@
 const userModel=require('../models/users.model')
 const employeeModel=require('../models/employee.model')
+const customerModel=require('../models/customer.model')
+const taskModel=require('../models/task.model')
+const projectModel=require('../models/project.model')
 const mailTemplate=require('../mail_template/mail_template')
 const nodemailer=require('nodemailer')
 const mongoose=require('mongoose')
 const bcrypt=require('bcryptjs')
 const jwt=require('jsonwebtoken')
 const config=require('config')
+
+// superUser dashboard
+module.exports.getDashBoard=async(req, res)=>{
+    try {
+        // find count of customers, employees, tasks, projects
+        const todayTasks=[]
+        const existingCustomers=await customerModel.count()
+        const existingProjects=await projectModel.count()
+        const existingEmployees=await employeeModel.count()
+        const existingTasks=await taskModel.find()
+        // find tasks with current date
+        existingTasks.map(task=>{
+            if(task.created_date.toLocaleDateString()===new Date().toLocaleDateString()) todayTasks.push(task)
+        })
+        if(!todayTasks.length>0) todayTasks.push('No Tasks Found')
+        // display count of all customers, employees, tasks, projects and todayTasks
+        res.status(200).json({success: true, data: {count: {customers: existingCustomers,
+                                                            projects: existingProjects,
+                                                            employees: existingEmployees,
+                                                            tasks: existingTasks.length},
+                                                    todayTasks}})
+
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).json({message: 'Server Error', success: false})
+    }
+}
 
 // retrieve info of all users
 module.exports.getUsers=async(req, res)=>{
@@ -67,13 +97,15 @@ module.exports.getUser=async(req, res)=>{
 
 // login superUser/employee
 module.exports.loginUser=async(req,res)=>{
-    const {role, email, password}=req.body
+    // const {role, email, password}=req.body
+    const { email, password}=req.body
     const errors=[]
+    const role=1
     // check role
-    if(!role) errors.push("Role is required")
-    else if(role&&typeof role === 'string') errors.push("Role must be a number") 
-    else if(role<1||role>2) errors.push("Role must be 1 or 2") 
-    if(role===0) errors.pop()
+    // if(!role) errors.push("Role is required")
+    // else if(role&&typeof role === 'string') errors.push("Role must be a number") 
+    // else if(role<1||role>2) errors.push("Role must be 1 or 2") 
+    // if(role===0) errors.pop()
     // check email
     if(!email) errors.push("Email is required") 
     else if(email&&!email.includes('@')||!email.endsWith('.com')) errors.push("Invalid Email Id") 

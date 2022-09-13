@@ -13,6 +13,9 @@ module.exports=(app)=>{
     // display current employee tasks by employee
     app.get('/api/employee/tasks', Auth.employee, Employee.getEmployeeTasks)
 
+    // display current employee today tasks by employee
+    app.get('/api/employee/dashboard', Auth.employee, Employee.getEmployeeDashboard)
+
     // get data of a single employee by superuser
     app.get('/api/getEmployee/:employee_id', Auth.superUser, Employee.getEmployee)
 
@@ -29,7 +32,7 @@ module.exports=(app)=>{
     app.patch('/api/updateEmployee/:employee_id', [Auth.superUser, [check('name'), check('email'), check('designation')]], Employee.updateEmployee)
 
     // update employee profile details by employee
-    // app.patch('/api/employee/updateProfile', [Auth.employee, [check('name'), check('email'), check('designation')]], Employee.employeeUpdateProfile)
+    // app.patch('/api/employee/updateProfile', [Auth.employee, [check('email')]], Employee.employeeUpdateProfile)
     
     // update employee profile password by employee
     app.patch('/api/employee/updatePassword', [Auth.employee, [check('oldPassword'), check('password'), check('confirmPassword')]], Employee.employeeUpdatePassword)
