@@ -6,7 +6,7 @@ const userSchema=mongoose.Schema({
         required: true
     },
     role: {
-        type: String,
+        type: Number,
         required: true
     },
     email: {
@@ -15,10 +15,10 @@ const userSchema=mongoose.Schema({
         unique: true
     },
     phoneNumber: {
-        type: String,
+        type: Number,
         required: true,
         unique: true
-    }, 
+    },
     password: {
         type: String,
         required: true

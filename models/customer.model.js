@@ -6,8 +6,12 @@ const customerSchema=new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true, 
+        required: true,
         unique: true
+    },
+    created_date: {
+        type: Date,
+        default: Date.now
     }
 })
 

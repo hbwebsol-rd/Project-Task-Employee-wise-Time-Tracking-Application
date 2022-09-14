@@ -6,11 +6,11 @@ const employeeSchema=mongoose.Schema({
         required: true
     },
     role: {
-        type: String,
+        type: Number,
         required: true
     },
     email: {
-        type: String, 
+        type: String,
         required: true
     },
     password: {
@@ -21,7 +21,7 @@ const employeeSchema=mongoose.Schema({
         type: String,
         required: true
     },
-    date: {
+    created_date: {
         type: Date,
         default: Date.now
     },

@@ -1,11 +1,11 @@
 const mongoose=require('mongoose')
 
 const taskSchema=mongoose.Schema({
-    projectId: {
+    projectName: {
         type: String,
         ref: 'project.model'
     },
-    employeeId: {
+    employeeName: {
         type: String,
         ref: 'employee.model'
     },
@@ -17,15 +17,25 @@ const taskSchema=mongoose.Schema({
         type: String,
         required: true
     },
-    status: { 
+    status: {
         type: String,
         required: true
     },
+    totalTime: [{
+        from: {
+            type: Date,
+            required: true
+        },
+        to: {
+            type: Date,
+            required: true
+        }
+    }],
     timeOnTask: {
-        type: Date,
+        type: Number,
         required: true
     },
-    date: {
+    created_date: {
         type: Date,
         default: Date.now
     },
