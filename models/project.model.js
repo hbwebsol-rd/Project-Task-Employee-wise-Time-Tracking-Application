@@ -8,8 +8,8 @@ const projectSchema=mongoose.Schema({
     },
     customerName: {
         type: String,
-        required: true
-    }, 
+        ref: 'customer.model'
+    },
     technology: {
         type: String,
         required: true
@@ -22,7 +22,7 @@ const projectSchema=mongoose.Schema({
         type: Date,
         required: true
     },
-    date: {
+    created_date: {
         type: Date,
         default: Date.now
     },
