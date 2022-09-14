@@ -8,10 +8,11 @@ import AddProject from "../components/AddProject";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
-import { GetFetch } from "../store/actions/projectActions";
+import { DeleteProjectAction, GetAllProjectsAction } from "../store/actions/projectActions";
 import UpdateProject from "../components/UpdateProject";
 import SearchIcon from '@mui/icons-material/Search';
 import ConfirmDelete from "../components/ConfirmDelete";
+import moment from "moment";
 
 
 function Projects() {
@@ -29,10 +30,9 @@ function Projects() {
     const [deleteModal, setDeleteModal] = useState(false);
 
     useEffect(() => {
-        console.log("project", items)
-        dispatch(GetFetch('project'));
+        dispatch(GetAllProjectsAction());
     }, [])
-    useEffect(()=> {
+    useEffect(() => {
         setRows(items)
     }, [items])
 
@@ -57,7 +57,7 @@ function Projects() {
         <div className={classes.pageRoot}>
             <AddProject open={open} setOpen={setOpen} classes={classes} />
             <UpdateProject open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
-            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='project' classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} onConfirm={() => dispatch(DeleteProjectAction(updateRow._id))} classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField
@@ -79,7 +79,7 @@ function Projects() {
                     </Button>
                 </div>
                 <Table aria-label="caption table">
-                    <TableHead style={{ backgroundColor: '#F5F3FF', height: '90px' }}>
+                    <TableHead className={classes.tableHead}>
                         <TableRow>
                             <TableCell align="left" className={classes.tableCell} >Id</TableCell>
                             <TableCell align="left" className={classes.tableCell}>Project Name</TableCell>
@@ -97,12 +97,16 @@ function Projects() {
                                 .map((row, i) => (
                                     <>
                                         <TableRow key={row._id}>
-                                            <TableCell align="left" >{row._id}</TableCell>
+                                            <TableCell align="left" >{i + 1}</TableCell>
                                             <TableCell align="left" >{row.name}</TableCell>
                                             <TableCell align="left" >{row.customerName}</TableCell>
                                             <TableCell align="left" >{row.technology}</TableCell>
-                                            <TableCell align="left" >{row.start}</TableCell>
-                                            <TableCell align="left" >{row.end}</TableCell>
+                                            <TableCell align="left" >
+                                                {moment(`${row.start}`).format("Do MMMM YYYY")}
+                                            </TableCell>
+                                            <TableCell align="left" >
+                                                {moment(`${row.end}`).format("Do MMMM YYYY")}
+                                            </TableCell>
                                             <TableCell align="center">
                                                 <IconButton
                                                     aria-label="edit"

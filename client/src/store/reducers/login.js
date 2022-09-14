@@ -1,5 +1,5 @@
 import cookie from "react-cookies"
-import { LOGGED_IN, LOGOUT } from "../actions/loginActions";
+import { LOGIN, LOGIN_FAIL, LOGIN_LOADER, LOGOUT } from "../actions/loginActions";
 
 const initialState = {
     token: '',
@@ -11,12 +11,17 @@ const initialState = {
 
 if (cookie.load("token")) {
     initialState.token = cookie.load("token");
-    initialState.loggedIn = true;
+    initialState.loggedIn = true
 }
-
 const login = (state = initialState, action) => {
     switch (action.type) {
-        case LOGGED_IN: {  
+        case LOGIN_LOADER: {
+            return {
+                ...state,
+                loading: true,
+            }
+        }
+        case LOGIN: {
             return {
                 ...state,
                 loading: false,
@@ -24,16 +29,22 @@ const login = (state = initialState, action) => {
             }
         }
         case LOGOUT: {
-            return{
+            cookie.remove('token')
+            return {
                 ...state,
-                loading:false,
-                loggedIn:false
+                loading: false,
+                loggedIn: false
             }
         }
+        case LOGIN_FAIL:
+            return {
+                ...state,
+                loading: false,
+            };
         default: {
             return state
         }
     }
-} 
+}
 
 export default login

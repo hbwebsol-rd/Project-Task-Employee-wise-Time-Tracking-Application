@@ -16,10 +16,9 @@ export const GetAllEmployeesAction = () => (dispatch) => {
     type: EMPLOYEE_LOADER,
   });
 
-  GetFetch("employee")
+  GetFetch("getEmployees")
     .then((response) => {
-      var data = response.data;
-      console.log('response', response)
+      var data = response.data.data;
       let { message } = response.data;
       if (response.status === 200) {
         dispatch({
@@ -54,9 +53,8 @@ export const AddEmployeeAction = (requestBody) => (dispatch) => {
     type: EMPLOYEE_LOADER,
   });
 
-  PostFetch("employee", requestBody)
+  PostFetch("addEmployee", requestBody)
     .then((response) => {
-      console.log('response', response)
       let { message } = response.data;
       if (response.status === 200) {
         swal({
@@ -97,9 +95,8 @@ export const UpdateEmployeeAction = (id, requestBody) => (dispatch) => {
     type: EMPLOYEE_LOADER,
   });
 
-  UpdateFetch(`employee/update/${id}`, requestBody)
+  UpdateFetch(`updateEmployee/${id}`, requestBody)
     .then((response) => {
-      console.log('response', response)
       let { message } = response.data;
       if (response.status === 200) {
         swal({
@@ -140,9 +137,8 @@ export const DeleteEmployeeAction = (id) => (dispatch) => {
     type: EMPLOYEE_LOADER,
   });
 
-  DeleteFetch(`employee/${id}`)
+  DeleteFetch(`deleteEmployee/${id}`)
     .then((response) => {
-      console.log('response', response)
       let { message } = response.data;
       if (response.status === 200) {
         swal({

@@ -81,7 +81,7 @@ function Client() {
                     </Button>
                 </div>
                 <Table aria-label="caption table">
-                    <TableHead style={{ backgroundColor: '#F5F3FF', height: '90px' }}>
+                    <TableHead className={classes.tableHead}>
                         <TableRow>
                             <TableCell align="left" className={classes.tableCell} >Id</TableCell>
                             <TableCell align="left" className={classes.tableCell}>Name</TableCell>

@@ -15,7 +15,6 @@ const AddEmployee = ({ open, setOpen, classes }) => {
         event.preventDefault();
         dispatch(AddClientAction(clientDetails));
     };
-    console.log('client', client)
 
     useEffect(() => {
         if(client.updated){
