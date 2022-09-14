@@ -1,6 +1,4 @@
-import axios from "axios";
 import cookie from "react-cookies";
-import { LOGGED_IN } from "../store/actions/loginActions";
 import { BASE_URL } from "./index";
 
 
@@ -98,7 +96,7 @@ export const UpdateFetch = (url, updateDetails) => {
     var raw = JSON.stringify(updateDetails);
 
     var requestOptions = {
-        method: "PUT",
+        method: "PATCH",
         headers: myHeaders,
         body: raw,
         redirect: "follow",
@@ -169,27 +167,33 @@ export const DeleteFetch = (url) => {
 };
 
 
+export const PostUser = (url, registerDetails) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-export const PostUser = (url, details) => {
-    return dispatch => {
-        return axios
-            .post(`${BASE_URL}${url}`, details)
-            .then((response) => {
-                if (response.status === 200) {
-                    var data = response.data
-                    var token = data.token
-                    if (token) {
-                        cookie.save('token', token, { path: '/' })
-                    }
-                    dispatch({
-                        type: LOGGED_IN,
-                        payload: { token },
-                    });
-                }
-                else {
-                    console.log('Error');
-                }
-            })
-            .catch(error => console.log(error));
+    var raw = JSON.stringify(registerDetails);
+
+    var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+    };
+
+    try {
+        const response = fetch(`${BASE_URL}${url}`, requestOptions).then((res) => {
+            return new Promise((resolve) =>
+                res.json().then((json) =>
+                    resolve({
+                        status: res.status,
+                        data: json,
+                    })
+                )
+            );
+        });
+
+        return Promise.resolve(response);
+    } catch (error) {
+        return Promise.reject(error);
     }
 }

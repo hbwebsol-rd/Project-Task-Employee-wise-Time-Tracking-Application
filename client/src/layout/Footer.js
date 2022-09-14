@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <>
       <div >
-        <Typography className={classes.footer}> Copyright &copy; Worklog 2022</Typography>
+        <Typography sx={{ fontSize:'12px !important', fontWeight:'400 !important', color:"#999999"   }}> Copyright &copy; Worklog 2022</Typography>
       </div>
     </>
   )
