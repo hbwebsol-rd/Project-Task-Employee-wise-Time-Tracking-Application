@@ -28,12 +28,12 @@ const Profile = () => {
     return (
         <div className={classes.pageRoot}>
             <PageLoader loading={loading} />
+            <EditProfile open={open} setOpen={setOpen} user = {userDetails} classes={classes} />
             <Box container className={classes.profileContainer}>
                 <Box className={classes.profileTitleBox}>
                     <Typography className={classes.profileTitle} >PROFILE</Typography>
                     <Button onClick={() => setOpen(true)} > <EditIcon sx={{ color: '#3525B5' }} /> </Button>
                 </Box>
-                <EditProfile open={open} setOpen={setOpen} classes={classes} />
                 <Box className={classes.profileBox}>
                     <Typography className={classes.profileLabel}>Name</Typography>
                     <Typography className={classes.profileValue}>{userDetails.name}</Typography>

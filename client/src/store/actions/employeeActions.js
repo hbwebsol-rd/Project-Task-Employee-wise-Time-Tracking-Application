@@ -43,7 +43,7 @@ export const GetAllEmployeesAction = () => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        showConfirmButton: false,
+        
       });
     });
 };
@@ -60,7 +60,7 @@ export const AddEmployeeAction = (requestBody) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-          showConfirmButton: false,
+          
         });
         dispatch({
           type: EMPLOYEE_ADDED_SUCCESSFULLY,
@@ -73,7 +73,7 @@ export const AddEmployeeAction = (requestBody) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-          showConfirmButton: false,
+          
         });
       }
     })
@@ -85,7 +85,7 @@ export const AddEmployeeAction = (requestBody) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        showConfirmButton: false,
+        
       });
     });
 };
@@ -102,7 +102,7 @@ export const UpdateEmployeeAction = (id, requestBody) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-          showConfirmButton: false,
+          
         });
         dispatch({
           type: EMPLOYEE_UPDATED_SUCCESSFULLY,
@@ -115,7 +115,7 @@ export const UpdateEmployeeAction = (id, requestBody) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-          showConfirmButton: false,
+          
         });
       }
     })
@@ -127,7 +127,7 @@ export const UpdateEmployeeAction = (id, requestBody) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        showConfirmButton: false,
+        
       });
     });
 };
@@ -144,7 +144,7 @@ export const DeleteEmployeeAction = (id) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-          showConfirmButton: false,
+          
         });
         dispatch({
           type: EMPLOYEE_UPDATED_SUCCESSFULLY,
@@ -157,7 +157,7 @@ export const DeleteEmployeeAction = (id) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-          showConfirmButton: false,
+          
         });
       }
     })
@@ -169,7 +169,7 @@ export const DeleteEmployeeAction = (id) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        showConfirmButton: false,
+        
       });
     });
 };

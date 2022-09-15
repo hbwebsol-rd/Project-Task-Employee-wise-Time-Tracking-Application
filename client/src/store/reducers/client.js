@@ -27,7 +27,6 @@ const client = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 updated: true,
-                clients: action.payload.data
             }
         }
         case CLIENT_UPDATED_SUCCESSFULLY: {

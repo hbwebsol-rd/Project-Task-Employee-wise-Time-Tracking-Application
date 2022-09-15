@@ -27,7 +27,6 @@ const project = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 updated: true,
-                projects: action.payload.data
             }
         }
         case PROJECT_UPDATED_SUCCESSFULLY: {

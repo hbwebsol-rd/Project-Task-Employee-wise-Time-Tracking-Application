@@ -27,7 +27,6 @@ const task = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 updated: true,
-                tasks: action.payload.data
             }
         }
         case TASK_UPDATED_SUCCESSFULLY: {

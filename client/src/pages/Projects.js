@@ -95,7 +95,6 @@ function Projects() {
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, i) => (
-                                    <>
                                         <TableRow key={row._id}>
                                             <TableCell align="left" >{i + 1}</TableCell>
                                             <TableCell align="left" >{row.name}</TableCell>
@@ -124,7 +123,6 @@ function Projects() {
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
-                                    </>
                                 ))}
                         </TableBody>}
                 </Table>

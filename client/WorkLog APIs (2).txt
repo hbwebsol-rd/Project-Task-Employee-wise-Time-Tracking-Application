@@ -1,0 +1,85 @@
+WorkLog APIs
+-SuperUser and Auth
+  GET Request:
+  -http://localhost:3002/api/user/dashboard
+  -http://localhost:3002/api/getUsers
+  -http://localhost:3002/api/user/profile
+  -http://localhost:3002/api/getUser/:id
+
+  POST Request:
+  -http://localhost:3002/api/user/login
+  -http://localhost:3002/api/user/login/forgotPassword
+
+  PATCH Request:
+  -http://localhost:3002/api/user/login/resetPassword
+  -http://localhost:3002/api/user/updateProfile
+  -http://localhost:3002/api/user/updatePassword
+
+
+-Customer
+  GET Requests
+  -http://localhost:3002/api/getCustomers
+  -http://localhost:3002/api/getCustomer/:id
+
+  POST Requests
+  -http://localhost:3002/api/addCustomer
+
+  PUT Requests
+  -http://localhost:3002/api/updateCustomer/:id
+
+  DELETE Requests
+  -http://localhost:3002/api/deleteCustomer/:id
+
+
+-Projects
+  GET Requests
+  -http://localhost:3002/api/getProjects
+  -http://localhost:3002/api/getProject/:id
+
+  POST Requests
+  -http://localhost:3002/api/addProject
+
+  PUT Requests
+  -http://localhost:3002/api/updateProject/:id
+
+  DELETE Requests
+  -http://localhost:3002/api/deleteProject/:id
+
+
+-Employee
+  GET Requests:
+  -http://localhost:3002/api/getEmployees
+  -http://localhost:3002/api/employee/profile
+  -http://localhost:3002/api/employee/tasks
+  -http://localhost:3002/api/employee/dashboard
+  -http://localhost:3002/api/getEmployee/:id
+
+  POST Requests:
+  -http://localhost:3002/api/addEmployee
+
+  PATCH Requests:
+  -http://localhost:3002/api/employee/task/addTotalTime/:id
+  -http://localhost:3002/api/employee/task/updateStatus/:id
+  -http://localhost:3002/api/updateEmployee/:id
+  -http://localhost:3002/api/employee/updatePassword
+  
+  DELETE Requests:
+  -http://localhost:3002/api/deleteEmployee/:id
+
+
+
+-Tasks
+
+  GET Requests
+  -http://localhost:3002/api/getTasks
+  -http://localhost:3002/api/taskDropdown
+  -http://localhost:3002/api/getTask/:id
+
+  POST Requests
+  -http://localhost:3002/api/addTask
+
+  PUT Requests
+  -http://localhost:3002/api/updateTask/:id
+  
+  DELETE Requests
+  -http://localhost:3002/api/deleteTask/:id
