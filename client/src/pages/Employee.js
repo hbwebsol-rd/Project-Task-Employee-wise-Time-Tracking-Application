@@ -27,7 +27,6 @@ function Employee() {
     const [updateRow, setUpdateRow] = useState({})
     const [deleteModal, setDeleteModal] = useState(false);
     useEffect(() => {
-        console.log("employee", items)
         dispatch(GetAllEmployeesAction());
     },[])
 
@@ -79,7 +78,7 @@ function Employee() {
                     </Button>
                 </div>
                 <Table aria-label="caption table">
-                    <TableHead style={{ backgroundColor: '#F5F3FF', height: '90px' }}>
+                    <TableHead className={classes.tableHead}>
                         <TableRow>
                             <TableCell align="left" className={classes.tableCell} >Id</TableCell>
                             <TableCell align="left" className={classes.tableCell}>Name</TableCell>
@@ -93,7 +92,6 @@ function Employee() {
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, i) => (
-                                    <>
                                         <TableRow key={row._id}>
                                             <TableCell align="left" >{i+1}</TableCell>
                                             <TableCell align="left" >{row.name}</TableCell>
@@ -116,7 +114,6 @@ function Employee() {
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
-                                    </>
                                 ))}
                         </TableBody>}
                 </Table>

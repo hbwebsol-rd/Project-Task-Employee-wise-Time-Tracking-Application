@@ -1,29 +1,44 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useStyles } from '../views/view-css';
 import Img from '../image/login.png';
-import { PostUser } from '../utils/fetch-sevice';
-import { loggedIn } from '../store/actions/loginActions';
+import { LoginAction } from '../store/actions/loginActions';
+import PageLoader from '../components/PageLoader';
 
 
 const Login = () => {
   const classes = useStyles();
   const [loginDetail, setLoginDetails] = useState({ email: "hussainbandook01@gmail.com", password: "12345678" });
+  const [emailError, setEmailError] = useState()
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const loading= useSelector(state => state.login.loading)
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(PostUser('auth/user/login', loginDetail))
-    dispatch(loggedIn());
-    navigate('/home')
-  };
+
+    if (!loginDetail.email) {
+      setEmailError('Email Required')
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(loginDetail.email)
+    ) {
+      setEmailError('Invalid email address')
+    }
+    else {
+      dispatch(LoginAction(loginDetail))
+      navigate('/home')
+    }
+  }
+
   return (
     <div className={classes.loginMain} >
-      <div style={{backgroundImage: `url(${Img})`}}>
+      <PageLoader loading={loading} />
+      <div style={{ backgroundImage: `url(${Img})` }}>
         <Box className={classes.loginImageBox}>
-          <Typography className={classes.loginTextItem}>GET {<br/>} STARTED !</Typography>
+          <Typography className={classes.loginTextItem}>GET {<br />} STARTED !</Typography>
           <Typography className={classes.loginTitle}>WORKLOG</Typography>
         </Box>
       </div>
@@ -36,15 +51,17 @@ const Login = () => {
             <TextField
               margin="normal"
               name='email'
+              error = {emailError ? true : false}
+              helperText= {emailError ? emailError : null}
               required
               fullWidth
               id="email"
               label="Email Address"
               value={loginDetail.email}
-              onChange={(e)=> {
+              onChange={(e) => {
                 setLoginDetails({
                   ...loginDetail,
-                  [e.target.name] : e.target.value
+                  [e.target.name]: e.target.value
                 })
               }}
             />
@@ -56,10 +73,10 @@ const Login = () => {
               label="Password"
               type="password"
               value={loginDetail.password}
-              onChange={(e)=> {
+              onChange={(e) => {
                 setLoginDetails({
                   ...loginDetail,
-                  [e.target.name] : e.target.value
+                  [e.target.name]: e.target.value
                 })
               }}
             />

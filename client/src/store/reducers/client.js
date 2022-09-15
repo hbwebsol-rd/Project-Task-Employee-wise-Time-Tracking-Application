@@ -1,4 +1,4 @@
-import { FETCH_CLIENTS_BEGIN, FETCH_CLIENTS_FAILURE, FETCH_CLIENTS_SUCCESS, CLEINT_LOADER, CLEINT_ACTION_FAIL, CLEINT_UPDATED_SUCCESSFULLY, CLEINT_ADDED_SUCCESSFULLY } from "../actions/clientActions";
+import { FETCH_CLIENTS_BEGIN, FETCH_CLIENTS_FAILURE, FETCH_CLIENTS_SUCCESS, CLIENT_LOADER, CLIENT_ACTION_FAIL, CLIENT_UPDATED_SUCCESSFULLY, CLIENT_ADDED_SUCCESSFULLY } from "../actions/clientActions";
 
 const initialState = {
     loading: false,
@@ -9,28 +9,27 @@ const initialState = {
 
 const client = (state = initialState, action) => {
     switch (action.type) {
-        case CLEINT_LOADER: {
+        case CLIENT_LOADER: {
             return {
                 ...state,
                 loading: true,
                 updated: false
             }
         }
-        case CLEINT_ACTION_FAIL: {
+        case CLIENT_ACTION_FAIL: {
             return {
                 ...state,
                 loading: false
             }
         }
-        case CLEINT_ADDED_SUCCESSFULLY: {
+        case CLIENT_ADDED_SUCCESSFULLY: {
             return {
                 ...state,
                 loading: false,
                 updated: true,
-                clients: action.payload
             }
         }
-        case CLEINT_UPDATED_SUCCESSFULLY: {
+        case CLIENT_UPDATED_SUCCESSFULLY: {
             return {
                 ...state,
                 loading: false,

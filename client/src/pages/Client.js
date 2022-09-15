@@ -29,10 +29,8 @@ function Client() {
     const [deleteModal, setDeleteModal] = useState(false);
 
     useEffect(() => {
-        console.log('client', items)
         dispatch(GetAllClientsAction())
     }, [])
-
     useEffect(() => {
         setRows(items)
     }, [items])
@@ -81,7 +79,7 @@ function Client() {
                     </Button>
                 </div>
                 <Table aria-label="caption table">
-                    <TableHead style={{ backgroundColor: '#F5F3FF', height: '90px' }}>
+                    <TableHead className={classes.tableHead}>
                         <TableRow>
                             <TableCell align="left" className={classes.tableCell} >Id</TableCell>
                             <TableCell align="left" className={classes.tableCell}>Name</TableCell>
@@ -91,10 +89,9 @@ function Client() {
                     </TableHead>
                     {loading ? <td colSpan={5}><Loading /></td> :
                         <TableBody>
-                            {rows
+                            {rows && rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, i) => (
-                                    <>
                                         <TableRow key={row._id}>
                                             <TableCell align="left" >{i+1}</TableCell>
                                             <TableCell align="left" >{row.name}</TableCell>
@@ -116,14 +113,13 @@ function Client() {
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
-                                    </>
                                 ))}
                         </TableBody>}
                 </Table>
                 <TablePagination
                     rowsPerPageOptions={[2, 5, 10]}
                     component="div"
-                    count={rows.length}
+                    count={rows &&  rows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

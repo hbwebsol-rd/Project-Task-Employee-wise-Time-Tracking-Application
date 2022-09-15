@@ -28,7 +28,6 @@ const client = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 updated: true,
-                employees: action.payload
             }
         }
         case EMPLOYEE_UPDATED_SUCCESSFULLY: {

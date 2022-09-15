@@ -7,14 +7,14 @@ import { useStyles } from "../views/view-css";
 import AddTask from "../components/AddTask";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteData } from "../utils/fetch-sevice";
 import Loading from "../components/Loading";
-import { GetFetch } from "../store/actions/taskActions";
+import { DeleteTaskAction, GetAllTasksAction } from "../store/actions/taskActions";
 import UpdateTask from "../components/UpdateTask";
 import TaskPopUp from "../components/TaskPopUp";
 import PlagiarismIcon from '@mui/icons-material/Plagiarism';
 import SearchIcon from '@mui/icons-material/Search';
 import ConfirmDelete from "../components/ConfirmDelete";
+import moment from "moment/moment";
 
 
 function Tasks() {
@@ -33,10 +33,9 @@ function Tasks() {
     const [deleteModal, setDeleteModal] = useState(false);
 
     useEffect(() => {
-        console.log("task", items)
-        dispatch(GetFetch('task'));
+        dispatch(GetAllTasksAction());
     }, [])
-    useEffect(()=> {
+    useEffect(() => {
         setRows(items)
     }, [items])
 
@@ -63,7 +62,7 @@ function Tasks() {
             <AddTask open={open} setOpen={setOpen} classes={classes} />
             <TaskPopUp pop={pop} setPop={setPop} classes={classes} />
             <UpdateTask open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
-            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='task/delete' classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} onConfirm={() => dispatch(DeleteTaskAction(updateRow._id))} classes={classes} />
             <TableContainer component={Paper} className={classes.tableContainer}>
                 <div className={classes.titleContainer}>
                     <TextField
@@ -85,7 +84,7 @@ function Tasks() {
                     </Button>
                 </div>
                 <Table aria-label="caption table">
-                    <TableHead style={{ backgroundColor: '#F5F3FF', height: '90px' }}>
+                    <TableHead className={classes.tableHead}>
                         <TableRow>
                             <TableCell align="left" className={classes.tableCell} >Id</TableCell>
                             <TableCell align="left" className={classes.tableCell}>Project Name</TableCell>
@@ -102,15 +101,16 @@ function Tasks() {
                             {rows
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, i) => (
-                                    <>
                                         <TableRow key={row._id}>
-                                            <TableCell align="left" >{row._id}</TableCell>
+                                            <TableCell align="left" >{i+1}</TableCell>
                                             <TableCell align="left" >{row.projectName}</TableCell>
                                             <TableCell align="left" >{row.employeeName}</TableCell>
                                             <TableCell align="left" >{row.taskName}</TableCell>
                                             <TableCell align="left" >{row.priority}</TableCell>
                                             <TableCell align="left" >{row.status}</TableCell>
-                                            <TableCell align="left" >{row.timeOnTask}</TableCell>
+                                            <TableCell align="left" >
+                                                {moment(`${row.timeOnTask}`).format("Do MMMM YYYY")}
+                                            </TableCell>
                                             <TableCell align="center">
                                                 <IconButton
                                                     aria-label="edit"
@@ -135,7 +135,6 @@ function Tasks() {
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
-                                    </>
                                 ))}
                         </TableBody>}
                 </Table>

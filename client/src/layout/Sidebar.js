@@ -49,10 +49,10 @@ const Sidebar = () => {
                         </Link>
                     </ListItem>
                 </div> : null}
-                <div className={classes.version}>
+                <footer className={classes.version}>
                     <Typography sx={{fontSize:'12px', fontWeight:'400', color:'#ffffff', letterSpacing:'0.15em'}}>Version</Typography>
                     <Typography sx={{fontSize:'12px', fontWeight:'600', color:'#ffffff', letterSpacing:'0.15em'}} >1.0.0</Typography>
-                </div>
+                </footer>
 
             </List>
         </div>

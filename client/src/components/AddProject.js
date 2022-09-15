@@ -14,7 +14,7 @@ const AddProject = ({ open, setOpen, classes }) => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box className={classes.formRoot}>
+                <Box  className={classes.formRoot}>
                     <div style={{ width: '100%' }}>
                         <Typography className={classes.formTitle}>Add Project</Typography>
                     </div>

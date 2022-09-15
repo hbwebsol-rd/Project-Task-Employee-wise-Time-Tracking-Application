@@ -275,7 +275,7 @@ const useStyles = makeStyles({
     },
     tableHeadContainer: {
         display: 'flex',
-        height:'90px',
+        height:'70px',
         alignItems:'center',
         justifyContent: 'space-between',
         padding: '0 1rem 0 1rem',
@@ -305,10 +305,15 @@ const useStyles = makeStyles({
             },
         },
     },
+
+    tableHead:{
+        backgroundColor: '#F5F3FF', 
+        height: '70px'
+    },
     tableCell: {
         color: '#000000',
         fontWeight: '700 !important',
-        fontSize: '20px !important'
+        fontSize: '16px !important'
     },
     tableButton: {
         '@media(max-width: 900px)': {
@@ -432,13 +437,13 @@ const useStyles = makeStyles({
 
 
     footer:{
-        color:"#999999", 
-        textAlign:"center",
-        position:'absolute',
-        left:'45%',
-        bottom:'20px',
-        fontSize:'12px !important',
-        fontWeight:'400 !important',
+        width:'100%',
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center',
+        position:'fixed',
+        bottom:'10px',
+
     },
 
     version:{
@@ -447,9 +452,8 @@ const useStyles = makeStyles({
         flexDirection:'column', 
         justifyContent:'center', 
         alignItems:'center',
-        position:'absolute',
-        bottom:'-180px'
-        
+        position:'fixed',
+        bottom:'10px',
     }
 })
 
