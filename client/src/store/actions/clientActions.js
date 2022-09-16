@@ -1,15 +1,17 @@
-import { DeleteFetch, GetFetch, PostFetch, UpdateFetch } from '../../utils/fetch-sevice';
-import swal from 'sweetalert';
+import {
+  DeleteFetch,
+  GetFetch,
+  PostFetch,
+  UpdateFetch,
+} from "../../utils/fetch-sevice";
+import swal from "sweetalert";
 
-
-export const FETCH_CLIENTS_BEGIN = 'FETCH_CLIENTS_BEGIN';
-export const FETCH_CLIENTS_SUCCESS = 'FETCH_CLIENTS_SUCCESS';
-export const FETCH_CLIENTS_FAILURE = 'FETCH_CLIENTS_FAILURE';
-export const CLIENT_LOADER = 'CLIENT_LOADER';
-export const CLIENT_ACTION_FAIL = 'CLIENT_ACTION_FAIL';
-export const CLIENT_UPDATED_SUCCESSFULLY = 'CLIENT_UPDATED_SUCCESSFULLY';
-export const CLIENT_ADDED_SUCCESSFULLY = 'CLIENT_ADDED_SUCCESSFULLY';
-
+export const CLIENTS_FETCHED_SUCCESSFULLY = "CLIENTS_FETCHED_SUCCESSFULLY";
+export const CLIENT_LOADER = "CLIENT_LOADER";
+export const CLIENT_ACTION_FAIL = "CLIENT_ACTION_FAIL";
+export const CLIENT_UPDATED_SUCCESSFULLY = "CLIENT_UPDATED_SUCCESSFULLY";
+export const CLIENT_ADDED_SUCCESSFULLY = "CLIENT_ADDED_SUCCESSFULLY";
+export const CLIENT_DELETED_SUCCESSFULLY = "CLIENT_DELETED_SUCCESSFULLY";
 
 export const GetAllClientsAction = () => (dispatch) => {
   dispatch({
@@ -22,7 +24,7 @@ export const GetAllClientsAction = () => (dispatch) => {
       let { message } = response.data;
       if (response.status === 200) {
         dispatch({
-          type: FETCH_CLIENTS_SUCCESS,
+          type: CLIENTS_FETCHED_SUCCESSFULLY,
           payload: data || [],
         });
       } else {
@@ -43,7 +45,6 @@ export const GetAllClientsAction = () => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-
       });
     });
 };
@@ -60,12 +61,12 @@ export const AddClientAction = (requestBody) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-
         });
         dispatch({
           type: CLIENT_ADDED_SUCCESSFULLY,
           payload: "",
         });
+        dispatch(GetAllClientsAction());
       } else {
         dispatch({
           type: CLIENT_ACTION_FAIL,
@@ -73,7 +74,6 @@ export const AddClientAction = (requestBody) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-
         });
       }
     })
@@ -85,7 +85,6 @@ export const AddClientAction = (requestBody) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-
       });
     });
 };
@@ -102,12 +101,12 @@ export const UpdateClientAction = (id, requestBody) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-
         });
         dispatch({
           type: CLIENT_UPDATED_SUCCESSFULLY,
           payload: "",
         });
+        dispatch(GetAllClientsAction());
       } else {
         dispatch({
           type: CLIENT_ACTION_FAIL,
@@ -115,7 +114,6 @@ export const UpdateClientAction = (id, requestBody) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-
         });
       }
     })
@@ -127,7 +125,6 @@ export const UpdateClientAction = (id, requestBody) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-
       });
     });
 };
@@ -146,9 +143,10 @@ export const DeleteClientAction = (id) => (dispatch) => {
           icon: "success",
         });
         dispatch({
-          type: CLIENT_UPDATED_SUCCESSFULLY,
+          type: CLIENT_DELETED_SUCCESSFULLY,
           payload: "",
         });
+        dispatch(GetAllClientsAction());
       } else {
         dispatch({
           type: CLIENT_ACTION_FAIL,
@@ -156,7 +154,6 @@ export const DeleteClientAction = (id) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-
         });
       }
     })

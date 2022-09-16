@@ -34,6 +34,7 @@ const UpdateClient = ({ open, setOpen, row, classes }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -44,6 +45,7 @@ const UpdateClient = ({ open, setOpen, row, classes }) => {
   };
 
   function handleClose() {
+    reset();
     setOpen(false);
   }
 

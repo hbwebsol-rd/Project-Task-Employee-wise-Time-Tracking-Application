@@ -41,6 +41,7 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -51,6 +52,7 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
   };
 
   function handleClose() {
+    reset();
     setOpen(false);
   }
 

@@ -32,6 +32,7 @@ const AddEmployee = ({ open, setOpen, classes }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -42,6 +43,7 @@ const AddEmployee = ({ open, setOpen, classes }) => {
   };
 
   function handleClose() {
+    reset();
     setOpen(false);
   }
 
