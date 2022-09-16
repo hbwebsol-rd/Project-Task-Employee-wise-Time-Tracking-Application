@@ -1,15 +1,17 @@
-import { DeleteFetch, GetFetch, PostFetch, UpdateFetch } from '../../utils/fetch-sevice';
-import swal from 'sweetalert';
+import {
+  DeleteFetch,
+  GetFetch,
+  PostFetch,
+  UpdateFetch,
+} from "../../utils/fetch-sevice";
+import swal from "sweetalert";
 
-
-export const FETCH_EMPLOYEES_BEGIN = 'FETCH_EMPLOYEES_BEGIN';
-export const FETCH_EMPLOYEES_SUCCESS = 'FETCH_EMPLOYEES_SUCCESS';
-export const FETCH_EMPLOYEES_FAILURE = 'FETCH_EMPLOYEES_FAILURE';
-export const EMPLOYEE_LOADER = 'EMPLOYEE_LOADER';
-export const EMPLOYEE_ACTION_FAIL = 'EMPLOYEE_ACTION_FAIL';
-export const EMPLOYEE_UPDATED_SUCCESSFULLY = 'EMPLOYEE_UPDATED_SUCCESSFULLY';
-export const EMPLOYEE_ADDED_SUCCESSFULLY = 'EMPLOYEE_ADDED_SUCCESSFULLY';
-
+export const EMPLOYEES_FETCHED_SUCCESSFULLY = "EMPLOYEES_FETCHED_SUCCESSFULLY";
+export const EMPLOYEE_LOADER = "EMPLOYEE_LOADER";
+export const EMPLOYEE_ACTION_FAIL = "EMPLOYEE_ACTION_FAIL";
+export const EMPLOYEE_UPDATED_SUCCESSFULLY = "EMPLOYEE_UPDATED_SUCCESSFULLY";
+export const EMPLOYEE_ADDED_SUCCESSFULLY = "EMPLOYEE_ADDED_SUCCESSFULLY";
+export const EMPLOYEE_DELETED_SUCCESSFULLY = "EMPLOYEE_DELETED_SUCCESSFULLY";
 
 export const GetAllEmployeesAction = () => (dispatch) => {
   dispatch({
@@ -22,7 +24,7 @@ export const GetAllEmployeesAction = () => (dispatch) => {
       let { message } = response.data;
       if (response.status === 200) {
         dispatch({
-          type: FETCH_EMPLOYEES_SUCCESS,
+          type: EMPLOYEES_FETCHED_SUCCESSFULLY,
           payload: data || [],
         });
       } else {
@@ -43,7 +45,6 @@ export const GetAllEmployeesAction = () => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        
       });
     });
 };
@@ -60,12 +61,12 @@ export const AddEmployeeAction = (requestBody) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-          
         });
         dispatch({
           type: EMPLOYEE_ADDED_SUCCESSFULLY,
           payload: "",
         });
+        dispatch(GetAllEmployeesAction());
       } else {
         dispatch({
           type: EMPLOYEE_ACTION_FAIL,
@@ -73,7 +74,6 @@ export const AddEmployeeAction = (requestBody) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-          
         });
       }
     })
@@ -85,7 +85,6 @@ export const AddEmployeeAction = (requestBody) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        
       });
     });
 };
@@ -102,12 +101,12 @@ export const UpdateEmployeeAction = (id, requestBody) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-          
         });
         dispatch({
           type: EMPLOYEE_UPDATED_SUCCESSFULLY,
           payload: "",
         });
+        dispatch(GetAllEmployeesAction());
       } else {
         dispatch({
           type: EMPLOYEE_ACTION_FAIL,
@@ -115,7 +114,6 @@ export const UpdateEmployeeAction = (id, requestBody) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-          
         });
       }
     })
@@ -127,7 +125,6 @@ export const UpdateEmployeeAction = (id, requestBody) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        
       });
     });
 };
@@ -144,12 +141,12 @@ export const DeleteEmployeeAction = (id) => (dispatch) => {
         swal({
           title: message || "fsadfl; Added Successfully",
           icon: "success",
-          
         });
         dispatch({
-          type: EMPLOYEE_UPDATED_SUCCESSFULLY,
+          type: EMPLOYEE_DELETED_SUCCESSFULLY,
           payload: "",
         });
+        dispatch(GetAllEmployeesAction());
       } else {
         dispatch({
           type: EMPLOYEE_ACTION_FAIL,
@@ -157,7 +154,6 @@ export const DeleteEmployeeAction = (id) => (dispatch) => {
         swal({
           title: message || "Something went wrong. Please try again later.",
           icon: "error",
-          
         });
       }
     })
@@ -169,8 +165,6 @@ export const DeleteEmployeeAction = (id) => (dispatch) => {
       swal({
         title: error.message || "Something went wrong. Please try again later.",
         icon: "error",
-        
       });
     });
 };
-
