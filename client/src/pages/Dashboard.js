@@ -15,15 +15,12 @@ import PageLoader from "../components/PageLoader";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const count = useSelector((state) => state.dashboard.count);
-  const tasks = useSelector((state) => state.dashboard.todayTask);
+  // const tasks = useSelector((state) => state.dashboard.todayTask);
+  const tasks = useSelector((state) => state.task.tasks);
   const loading = useSelector((state) => state.dashboard.loading);
 
   const { width } = useWindowSize();
   const classes = useStyles();
-  const [employeeCount, setEmployeeCount] = useState(count.employees);
-  const [projectCount, setProjectCount] = useState(count.projects);
-  const [clientCount, setClientCount] = useState(count.customers);
-  const [taskCount, setTaskCount] = useState(count.tasks);
   const [todayTask, setTodayTask] = useState(tasks);
 
   useEffect(() => {
@@ -32,10 +29,6 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    setEmployeeCount(count.employees);
-    setProjectCount(count.projects);
-    setClientCount(count.customers);
-    setTaskCount(count.tasks);
     {
       tasks &&
         tasks.forEach((task) => {
@@ -60,18 +53,13 @@ const Dashboard = () => {
       <div className={classes.dashboardRoot}>
         <PageLoader loading={loading} />
 
-        <Grid container spacing={width < 800 ? 2 : 10}>
-          <Grid item>
-            <Card
-              count={employeeCount}
-              label="EMPLOYEES COUNT"
-              icon={<BadgeIcon className={classes.dashboardIcons} />}
-              classes={classes}
-            />
+        <Grid className={classes.gridBox} container  >
+          <Grid item >
+            <Card count={count.employees} label='EMPLOYEES COUNT' icon={<BadgeIcon className={classes.dashboardIcons} />} classes={classes} />
           </Grid>
           <Grid item>
             <Card
-              count={projectCount}
+              count={count.projects}
               label="PROJECT COUNT"
               icon={<DevicesOtherIcon className={classes.dashboardIcons} />}
               classes={classes}
@@ -79,7 +67,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item>
             <Card
-              count={taskCount}
+              count={count.tasks}
               label="TASK COUNT"
               icon={<GradingIcon className={classes.dashboardIcons} />}
               classes={classes}
@@ -87,7 +75,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item>
             <Card
-              count={clientCount}
+              count={count.customers}
               label="CLIENT COUNT"
               icon={<GroupsIcon className={classes.dashboardIcons} />}
               classes={classes}
@@ -108,7 +96,7 @@ const Dashboard = () => {
               todayTask.map((task, i) => {
                 return (
                   <>
-                    <Grid item xs={width > 880 ? 8 : 10}>
+                    <Grid item xs={width > 880 ? 8 : 8}>
                       <Typography className={classes.taskTitle}>
                         {task.taskName}
                       </Typography>

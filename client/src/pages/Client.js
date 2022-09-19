@@ -67,104 +67,79 @@ function Client() {
     setUpdateModal(true);
   };
 
-  return (
-    <div className={classes.pageRoot}>
-      <AddClient open={open} setOpen={setOpen} classes={classes} />
-      <UpdateClient
-        open={updateModal}
-        setOpen={setUpdateModal}
-        row={updateRow}
-        classes={classes}
-      />
-      <ConfirmDelete
-        open={deleteModal}
-        setOpen={setDeleteModal}
-        row={updateRow}
-        link="customer/delete"
-        classes={classes}
-        onConfirm={() => dispatch(DeleteClientAction(updateRow._id))}
-      />
-      <TableContainer component={Paper} className={classes.tableContainer}>
-        <div className={classes.titleContainer}>
-          <TextField
-            id="standard-basic"
-            placeholder="Search"
-            variant="outlined"
-            size="small"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button className={classes.addButton} onClick={() => setOpen(true)}>
-            {<ControlPointIcon fontSize="small" sx={{ mr: "5px" }} />}
-            Add Client
-          </Button>
-        </div>
-        <Table aria-label="caption table">
-          <TableHead className={classes.tableHead}>
-            <TableRow>
-              <TableCell align="left" className={classes.tableCell}>
-                Id
-              </TableCell>
-              <TableCell align="left" className={classes.tableCell}>
-                Name
-              </TableCell>
-              <TableCell align="left" className={classes.tableCell}>
-                Email
-              </TableCell>
-              <TableCell align="left" className={classes.tableCell}>
-                Action
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          {loading ? (
-            <TableCell colSpan={5}>
-              <Loading />
-            </TableCell>
-          ) : (
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, i) => (
-                  <TableRow key={row._id}>
-                    <TableCell align="left">{i + 1}</TableCell>
-                    <TableCell align="left">{row.name}</TableCell>
-                    <TableCell align="left">{row.email}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        aria-label="edit"
-                        style={{ color: "#3525B5" }}
-                        onClick={() => editData(row)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        style={{ color: "#FF6161" }}
-                        onClick={() => handleDeleteConfirm(row)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          )}
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[2, 5, 10]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
+return (
+        <div className={classes.pageRoot}>
+            <AddClient open={open} setOpen={setOpen} classes={classes} />
+            <UpdateClient open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
+            <ConfirmDelete open={deleteModal} setOpen={setDeleteModal} row={updateRow} link='customer/delete' classes={classes} onConfirm={() => dispatch(DeleteClientAction(updateRow._id))} />
+            <TableContainer component={Paper} className={classes.tableContainer}>
+                <div className={classes.titleContainer}>
+                    <TextField
+                        id="standard-basic"
+                        placeholder="Search"
+                        variant="outlined"
+                        size='small'
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                    <Button className={classes.addButton} onClick={() => setOpen(true)}>
+                        {<ControlPointIcon fontSize='small' sx={{ mr: '5px' }} />}
+                        Add Client
+                    </Button>
+                </div>
+                <Table className={classes.table} aria-label="caption table">
+                    <TableHead className={classes.tableHead}>
+                        <TableRow>
+                            <TableCell align="left" className={classes.tableCell} >Id</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Name</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Email</TableCell>
+                            <TableCell align="left" className={classes.tableCell}>Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    {loading ? <td colSpan={5}><Loading /></td> :
+                        <TableBody>
+                            {rows && rows
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, i) => (
+                                        <TableRow key={row._id}>
+                                            <TableCell align="left" >{i+1}</TableCell>
+                                            <TableCell align="left" >{row.name}</TableCell>
+                                            <TableCell align="left" >{row.email}</TableCell>
+                                            <TableCell >
+                                                <IconButton
+                                                    aria-label="edit"
+                                                    style={{ color: '#3525B5' }}
+                                                    onClick={() => editData(row)}
+                                                >
+                                                    <EditIcon />
+                                                </IconButton>
+                                                <IconButton
+                                                    aria-label="delete"
+                                                    style={{ color: '#FF6161' }}
+                                                    onClick={() => handleDeleteConfirm(row)}
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                ))}
+                        </TableBody>}
+                </Table>
+                <TablePagination
+                    rowsPerPageOptions={[2, 5, 10]}
+                    component="div"
+                    count={rows &&  rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </TableContainer>
     </div>
   );
 }
