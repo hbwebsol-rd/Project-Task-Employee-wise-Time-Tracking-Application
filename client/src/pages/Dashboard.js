@@ -66,7 +66,7 @@ const Dashboard = () => {
         
         <PageLoader loading={loading} />
 
-        <Grid container spacing={width < 800 ? 2 : 10}  >
+        <Grid className={classes.gridBox} container  >
           <Grid item >
             <Card count={employeeCount} label='EMPLOYEES COUNT' icon={<BadgeIcon className={classes.dashboardIcons} />} classes={classes} />
           </Grid>
@@ -86,7 +86,7 @@ const Dashboard = () => {
             {todayTask.map((task, i) => {
               return (
                 <>
-                  <Grid item xs={width > 880 ? 8 : 10}>
+                  <Grid item xs={width > 880 ? 8 : 8}>
                     <Typography className={classes.taskTitle}>{task.taskName}</Typography>
                     <Typography className={classes.taskClient} >{task.projectName}</Typography>
                   </Grid>

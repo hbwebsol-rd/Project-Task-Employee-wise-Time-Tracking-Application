@@ -138,12 +138,21 @@ function Employee() {
                         />
                     </div>
                 </div>
-                <div className={classes.tableHeadContainer}>
-                    <Typography className={classes.tableCell}>Employee Name :  {employee}</Typography>
-                    <Typography className={classes.tableCell}>Date :  {date}</Typography>
-                    <Typography className={classes.tableCell}>Total Spent Time :</Typography>
-                </div>
-                <Table aria-label="caption table">
+                
+                <Table className={classes.table} aria-label="caption table">
+                <TableHead className={classes.tableHeadContainer}>
+                <TableRow>
+                    {/* <Typography className={classes.tableCell}>Employee Name :  {employee}</Typography> */}
+                    <TableCell align="left" className={classes.tableCell} >Employee Name :  {employee}</TableCell>
+                    <TableCell></TableCell>
+                    {/* <Typography className={classes.tableCell}>Date :  {date}</Typography> */}
+                    <TableCell align="left" className={classes.tableCell} >Date :  {date}</TableCell>
+                    <TableCell></TableCell>
+                    {/* <Typography className={classes.tableCell}>Total Spent Time :</Typography> */}
+                    <TableCell align="left" className={classes.tableCell} >Total Spent Time :</TableCell>
+                    <TableCell></TableCell>
+                </TableRow>
+                </TableHead>
                     <TableHead className={classes.tableHead}>
                         <TableRow>
                             <TableCell align="left" className={classes.tableCell} >Id</TableCell>

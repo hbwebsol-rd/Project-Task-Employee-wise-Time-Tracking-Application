@@ -77,7 +77,7 @@ function Employee() {
                         Add Employee
                     </Button>
                 </div>
-                <Table aria-label="caption table">
+                <Table className={classes.table} aria-label="caption table">
                     <TableHead className={classes.tableHead}>
                         <TableRow>
                             <TableCell align="left" className={classes.tableCell} >Id</TableCell>

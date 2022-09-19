@@ -10,6 +10,7 @@ const useStyles = makeStyles({
     },
     main: {
         width: '100%',
+        height: 'calc(100% + 1px)',
         backgroundColor: '#ffffff',
         borderRadius: '30px',
         flex: 1,
@@ -174,7 +175,7 @@ const useStyles = makeStyles({
 
 
     dashboardRoot: {
-        marginLeft: '40px !important',
+        padding: '0 40px',
         marginTop: '8rem',
     },
     box: {
@@ -182,14 +183,20 @@ const useStyles = makeStyles({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        width: '350px',
+        minHeight: '150px',
         backgroundColor: '#D8FFD1',
         borderRadius: '20px',
-        '@media(max-width: 800px)': {
-            width: '220px'
+        
+    },
+    gridBox:{
+        display: 'grid !important',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridGap: '30px',
+        '@media(max-width: 1080px)': {
+            gridTemplateColumns: 'repeat(2, 1fr)',
         },
-        '@media(max-width: 650px)': {
-            width: '200px'
+        '@media(max-width: 767px)': {
+            gridTemplateColumns: 'repeat(1, 1fr)',
         },
     },
     countContainer:{
@@ -199,37 +206,18 @@ const useStyles = makeStyles({
         fontSize: '60px !important',
         color: '#3525B5',
         marginLeft: '15px',
-        '@media(max-width: 800px)': {
-            fontSize: '40px !important',
-        },
     },
     count: {
         fontWeight: '800 !important',
         fontSize: '40px !important',
-        '@media(max-width: 800px)': {
-            fontSize: '30px !important',
-        },
-        '@media(max-width: 650px)': {
-            fontSize: '20px !important',
-        },
     },
     typo: {
         fontWeight: '800 !important',
         fontSize: '20px !important',
-        '@media(max-width: 650px)': {
-            fontSize: '15px !important',
-        },
     },
     taskBox: {
         margin: '10px !important',
-        width: '60rem',
-        '@media(max-width: 800px)': {
-            width: '40rem'
-        },
-        '@media(max-width: 610px)': {
-            width: '20rem',
-            margin: '0px !important',
-        },
+        maxWidth: '60rem',
     },
     taskHead: {
         margin: '40px 0 20px 0 !important',
@@ -262,10 +250,10 @@ const useStyles = makeStyles({
     pageRoot: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
         marginTop: '8rem',
+        height: 'calc(100vh - 170px)'
     },
     titleContainer: {
         display: 'flex',
@@ -297,15 +285,11 @@ const useStyles = makeStyles({
             width: '85% !important',
             overflowX: 'auto !important'
         },
-        table: {
-            width: '75% !important',
-            '@media(max-width: 1350px)': {
-                width: '85% !important',
-                overflowX: 'auto '
-            },
-        },
+        
     },
-
+    table: {
+        minWidth: '1000px'
+    },
     tableHead:{
         backgroundColor: '#F5F3FF', 
         height: '70px'
@@ -313,7 +297,7 @@ const useStyles = makeStyles({
     tableCell: {
         color: '#000000',
         fontWeight: '700 !important',
-        fontSize: '16px !important'
+        fontSize: '16px !important',
     },
     tableButton: {
         '@media(max-width: 900px)': {
@@ -406,7 +390,12 @@ const useStyles = makeStyles({
     profileContainer: {
         marginTop: '8rem',
         width: '700px !important',
-        backgroundColor: '#F3F1FF'
+        backgroundColor: '#F3F1FF',
+        '@media(max-width: 900px)': {
+            width: 'calc(100% - 80px) !important',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+        },
     },
     profileBox: {
         display: 'flex',
@@ -419,7 +408,12 @@ const useStyles = makeStyles({
     profileLabel: {
         marginLeft: '3rem !important',
         width: '20rem',
-        fontWeight: '700 !important'
+        fontWeight: '700 !important',
+        '@media(max-width: 900px)': {
+            width: 'calc(100% - 300px) !important',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+        },
     },
     profileValue: {
         color: '#5C5C5C',
@@ -441,8 +435,8 @@ const useStyles = makeStyles({
         display:'flex',
         alignItems:'center',
         justifyContent:'center',
-        position:'fixed',
-        bottom:'10px',
+        position:'relative',
+        bottom:'-20px',
 
     },
 
