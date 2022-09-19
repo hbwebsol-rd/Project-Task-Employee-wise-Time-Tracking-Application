@@ -1,59 +1,73 @@
 import React, { useEffect, useState } from "react";
-import EditIcon from '@mui/icons-material/Edit';
-import { Button, IconButton, InputAdornment, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import { TablePagination } from "@material-ui/core";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useStyles } from "../views/view-css";
 import AddClient from "../components/AddClient";
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import UpdateClient from "../components/UpdateClient";
-import { DeleteClientAction, GetAllClientsAction } from "../store/actions/clientActions";
-import SearchIcon from '@mui/icons-material/Search';
+import {
+  DeleteClientAction,
+  GetAllClientsAction,
+} from "../store/actions/clientActions";
+import SearchIcon from "@mui/icons-material/Search";
 import ConfirmDelete from "../components/ConfirmDelete";
 
-
 function Client() {
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    const items = useSelector(state => state.client.clients)
-    const loading = useSelector(state => state.client.loading)
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.client.clients);
+  const loading = useSelector((state) => state.client.loading);
 
-    const [rows, setRows] = useState(items);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [open, setOpen] = useState(false);
-    const [updateModal, setUpdateModal] = useState(false)
-    const [updateRow, setUpdateRow] = useState({})
-    const [deleteModal, setDeleteModal] = useState(false);
+  const [rows, setRows] = useState(items);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [open, setOpen] = useState(false);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [updateRow, setUpdateRow] = useState({});
+  const [deleteModal, setDeleteModal] = useState(false);
 
-    useEffect(() => {
-        dispatch(GetAllClientsAction())
-    }, [])
-    useEffect(() => {
-        setRows(items)
-    }, [items])
+  useEffect(() => {
+    dispatch(GetAllClientsAction());
+  }, []);
+  useEffect(() => {
+    setRows(items);
+  }, [items]);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage)
-    }
-    const handleChangeRowsPerPage = event => {
-        setRowsPerPage(parseInt(event.target.value));
-        setPage(0);
-    }
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value));
+    setPage(0);
+  };
 
-    const handleDeleteConfirm = (row) => {
-        setDeleteModal(true)
-        setUpdateRow(row);
-    };
+  const handleDeleteConfirm = (row) => {
+    setDeleteModal(true);
+    setUpdateRow(row);
+  };
 
-    const editData = (row) => {
-        setUpdateRow(row);
-        setUpdateModal(true)
-    }
+  const editData = (row) => {
+    setUpdateRow(row);
+    setUpdateModal(true);
+  };
 
-    return (
+return (
         <div className={classes.pageRoot}>
             <AddClient open={open} setOpen={setOpen} classes={classes} />
             <UpdateClient open={updateModal} setOpen={setUpdateModal} row={updateRow} classes={classes} />
@@ -126,7 +140,7 @@ function Client() {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </TableContainer>
-        </div>
-    );
+    </div>
+  );
 }
-export default Client
+export default Client;

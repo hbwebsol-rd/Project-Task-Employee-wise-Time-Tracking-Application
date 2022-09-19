@@ -16,8 +16,8 @@ const HeaderTitle = ({ classes }) => {
         <Box
           component="img"
           sx={{
-            height: 40,
-            width: 100,
+            height: 70,
+            objectFit: 'contain'
           }}
           alt="The house from the offer."
           src={`${Logo}`}

@@ -1,6 +1,5 @@
 import { makeStyles } from "@mui/styles";
 
-
 const useStyles = makeStyles({
     root: {
         width: '100%',
@@ -10,7 +9,7 @@ const useStyles = makeStyles({
     },
     main: {
         width: '100%',
-        height: 'calc(100% + 1px)',
+        height: '100%',
         backgroundColor: '#ffffff',
         borderRadius: '30px',
         flex: 1,
@@ -20,158 +19,135 @@ const useStyles = makeStyles({
         },
     },
 
-    
-    loginMain: {
-        width: '100%',
-        height: '100vh',
-        backgroundColor: '#EBE9F9',
-        display: 'flex',
-        alignItems: 'center',
+  loginMain: {
+    width: "100%",
+    height: "100vh",
+    backgroundColor: "#EBE9F9",
+    display: "flex",
+    alignItems: "center",
+  },
+  loginRoot: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "25rem !important",
+    "@media(max-width: 1450px)": {
+      marginLeft: "10rem !important",
     },
-    loginRoot: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: '25rem !important',
-        '@media(max-width: 1450px)': {
-            marginLeft: '10rem !important'
-        },
-        '@media(max-width: 1200px)': {
-            margin: '2rem !important'
-        },
+    "@media(max-width: 1200px)": {
+      margin: "2rem !important",
     },
-    loginTextItem: {
-        fontSize: '50px !important',
-        fontWeight: '600 !important',
-        position:'absolute',
-        top:'100px',
-        left:'30px',
-        color: '#ffffff',
-        '@media(max-width: 1450px)': {
-            fontSize: '40px !important',
-        },
+  },
+  loginTextItem: {
+    fontSize: "50px !important",
+    fontWeight: "600 !important",
+    position: "absolute",
+    top: "100px",
+    left: "30px",
+    color: "#ffffff",
+    "@media(max-width: 1450px)": {
+      fontSize: "40px !important",
     },
-    loginTitle:{
-        position:'absolute', 
-        left:'30px', 
-        top:'250px',
-        color:'#ffffff', 
-        fontSize:'40px !important', 
-        fontWeight:'500 !important'
-    },
+  },
+  loginTitle: {
+    position: "absolute",
+    left: "30px",
+    top: "250px",
+    color: "#ffffff",
+    fontSize: "40px !important",
+    fontWeight: "500 !important",
+  },
 
-    loginImageBox: {
-        width: '500px',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        '@media(max-width: 1450px)': {
-            width: '400px'
-        },
-        '@media(max-width: 980px)': {
-            width: '300px'
-        },
+  loginImageBox: {
+    width: "500px",
+    height: "100vh",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    "@media(max-width: 1450px)": {
+      width: "400px",
     },
+    "@media(max-width: 980px)": {
+      width: "300px",
+    },
+  },
 
-    resetTitle: {
-        margin: '20px !important',
-        fontWeight: '700 !important',
-        fontSize: '18px !important',
-        color: '#3525B5'
-    },
+  resetTitle: {
+    margin: "20px !important",
+    fontWeight: "700 !important",
+    fontSize: "18px !important",
+    color: "#3525B5",
+  },
 
+  headerRoot: {
+    width: "95%",
+    height: "3rem",
+    margin: "0 40px",
+    display: "flex",
+    backgroundColor: "#ffffff",
+    position: "fixed",
+    padding: "30px 0",
+    zIndex: "1299 !important",
+    "@media(max-width: 1400px)": {
+      width: "90%",
+    },
+    "@media(max-width: 968px)": {
+      width: "85%",
+    },
+    "@media(max-width: 728px)": {
+      width: "80%",
+      height: "1rem",
+    },
+    "@media(max-width: 500px)": {
+      width: "70%",
+    },
+  },
+  logo: {
+    fontWeight: "800 !important",
+    fontSize: "22px !important",
+    color: "#3525B5",
+    "@media(max-width: 410px)": {
+      fontSize: "18px !important",
+    },
+  },
+  headerIcon: {
+    fontSize: "42px !important",
+    color: "#5B5B5B",
+    position: "absolute",
+    right: "60px",
+    top: "4px",
+  },
+  headerIcons: {
+    margin: "15px",
+    position: "absolute",
+    right: "4%",
+    display: "flex",
+    justifyContent: "center",
+  },
 
-    headerRoot: {
-        width: '95%',
-        height: '3rem',
-        margin: '0 40px',
-        display: 'flex',
-        backgroundColor: '#ffffff',
-        position: 'fixed',
-        padding: '30px 0',
-        zIndex: '1299 !important',
-        '@media(max-width: 1400px)': {
-            width: '90%'
-        },
-        '@media(max-width: 968px)': {
-            width: '85%'
-        },
-        '@media(max-width: 728px)': {
-            width: '80%',
-            height: '1rem'
-        },
-        '@media(max-width: 500px)': {
-            width: '70%'
-        },
-    },
-    logo: {
-        fontWeight: '800 !important',
-        fontSize: '22px !important',
-        color: '#3525B5',
-        '@media(max-width: 410px)': {
-            fontSize: '18px !important',
-        },
-    },
-    headerIcon: {
-        fontSize: '35px !important',
-        color: '#5B5B5B',
-        position: 'absolute',
-        right: '60px',
-        top: '5px'
-    },
-    headerIcons: {
-        margin: '15px',
-        position: 'absolute',
-        right: '4%',
-        display: 'flex',
-        justifyContent: 'center',
+  sidebarRoot: {
+    width: "20rem",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: "#3525b5",
+    borderRadius: "30px",
+    overflowY: "hidden",
+  },
 
+  sidebarIcons: {
+    color: "#ffffff",
+    margin: "25px 12px !important",
+    "@media(max-width: 500px)": {
+      marginLeft: "5px !important",
     },
-    dropdown: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    dropdownList: {
-        position: 'absolute',
-        top: '40px',
-        backgroundColor:'#FAFAFA',
-        borderRadius:'5px'
-    },
-    dropdownListItem: {
-        margin: '5px 0',
-        textDecoration: 'none',
-        color: '#A9A3A3',
-        borderBottom: '1px solid #D3D3D3'
-    },
-
-
-
-    sidebarRoot: {
-        width: '20rem',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        backgroundColor: '#3525b5',
-        borderRadius: '30px',
-        overflowY: 'hidden'
-    },
-
-    sidebarIcons: {
-        color: '#ffffff',
-        margin: '25px 12px !important',
-        '@media(max-width: 500px)': {
-            marginLeft: '5px !important'
-        },
-    },
-    sidebarListIcon: {
-        color: '#3525b5',
-        margin: '35px 0 0 35px !important'
-    },
+  },
+  sidebarListIcon: {
+    color: "#3525b5",
+    margin: "35px 0 0 35px !important",
+  },
 
 
     dashboardRoot: {
@@ -306,79 +282,77 @@ const useStyles = makeStyles({
 
     },
 
+  popTask: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    transform: "translate(-50%, -50%)",
+    width: "650px",
+    backgroundColor: "white",
+    border: "none",
+    borderRadius: "10px",
+    boxShadow: 24,
+  },
+  popTable: {
+    width: "600px !important",
+    backgroundColor: "white",
+    border: "none",
+    borderRadius: "10px",
+    boxShadow: 24,
+  },
+  popTitleContainer: {
+    margin: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "",
+  },
+  popTitle: {
+    color: "#3525B5",
+    fontWeight: "700 !important",
+  },
 
-    popTask: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translate(-50%, -50%)',
-        width: '650px',
-        backgroundColor: 'white',
-        border: 'none',
-        borderRadius: '10px',
-        boxShadow: 24,
-    },
-    popTable: {
-        width: '600px !important',
-        backgroundColor: 'white',
-        border: 'none',
-        borderRadius: '10px',
-        boxShadow: 24,
-    },
-    popTitleContainer: {
-        margin: '10px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: ''
-    },
-    popTitle: {
-        color: '#3525B5',
-        fontWeight: '700 !important',
-    },
-
-
-    formRoot: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: 'translate(-50%, -50%)',
-        width: '500px',
-        backgroundColor: 'white',
-        border: 'none',
-        borderRadius: '10px',
-        boxShadow: 24,
-        p: 4,
-    },
-    formTitle: {
-        margin: '25px 0 0 50px !important',
-        fontWeight: '700 !important',
-        fontSize: '18px !important',
-        color: '#3525B5'
-    },
-    inputField: {
-        margin: '20px !important',
-        width: '25rem !important',
-    },
-    formButton: {
-        width: '11rem !important',
-        marginTop: '5px !important',
-        marginBottom: '30px !important',
-        border: '1px solid !important',
-        margin: '20px !important'
-    },
-    inputSelect: {
-        width: '12rem !important',
-        marginTop: '20px !important',
-        marginBottom: '20px !important',
-    },
+  formRoot: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    transform: "translate(-50%, -50%)",
+    width: "500px",
+    backgroundColor: "white",
+    border: "none",
+    borderRadius: "10px",
+    boxShadow: 24,
+    p: 4,
+  },
+  formTitle: {
+    margin: "25px 0 0 50px !important",
+    fontWeight: "700 !important",
+    fontSize: "18px !important",
+    color: "#3525B5",
+  },
+  inputField: {
+    margin: "20px !important",
+    width: "25rem !important",
+  },
+  formButton: {
+    width: "11rem !important",
+    marginTop: "5px !important",
+    marginBottom: "30px !important",
+    border: "1px solid !important",
+    margin: "20px !important",
+  },
+  inputSelect: {
+    width: "12rem !important",
+    marginTop: "20px !important",
+    marginBottom: "20px !important",
+  },
 
 
     profileTitle: {
@@ -440,16 +414,15 @@ const useStyles = makeStyles({
 
     },
 
-    version:{
-        width:'5rem', 
-        display:'flex',
-        flexDirection:'column', 
-        justifyContent:'center', 
-        alignItems:'center',
-        position:'fixed',
-        bottom:'10px',
-    }
-})
+  version: {
+    width: "5rem",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "fixed",
+    bottom: "10px",
+  },
+});
 
-
-export { useStyles }
+export { useStyles };
