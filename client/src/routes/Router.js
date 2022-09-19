@@ -41,7 +41,6 @@ const Router = () => {
               <Route path="/reports" element={<Reports />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
-
             <div style={{ flex: 1 }}></div>
             <footer className={classes.footer}>
               <Footer />
@@ -50,6 +49,7 @@ const Router = () => {
         </div>
       ) : (
         <Routes>
+          <Route path="/login/admin" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="*" element={<Navigate to="/login" />} />
