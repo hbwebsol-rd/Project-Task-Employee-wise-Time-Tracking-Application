@@ -52,13 +52,33 @@ module.exports.getTask=async(req, res)=>{
 
 module.exports.addTaskDropdown=async(req, res)=>{
     try {
-        // display all tasks
-        const existingCustomers=await customerModel.find({}, {name: 1})
-        const existingProjects=await projectModel.find({}, {name: 1})
-        const existingEmployees=await employeeModel.find({}, {name: 1})
-        res.status(200).json({success: true, data: {customers: existingCustomers.map(data=>data),
-                                                    projects: existingProjects.map(data=>data),
-                                                    employeess: existingEmployees.map(data=>data)}})
+        // access employees and projects
+        const pipeline=[
+            { $lookup: {
+                    from: "projects",
+                    localField: "name",
+                    foreignField: "customerName",
+                    as: "projects"
+                } },
+            { $lookup: {
+                    from: "employees",
+                    localField: "a",
+                    foreignField: "nam",
+                    as: "employees"
+                } },
+                // systematic response
+            {$project: {name: 1, 
+                        projects: {$map: 
+                            {input: "$projects", as: "projects", in: 
+                                {id: "$$projects._id", name: "$$projects.name"}}}, 
+                        employees: {$map: 
+                            {input: "$employees", as: "employees", in: 
+                                {id: "$$employees._id", name: "$$employees.name"}}}}},
+            ]
+        // check existing customers
+        const existingCustomers=await customerModel.aggregate(pipeline)
+        // display customers
+        res.status(200).json({success: true, data: existingCustomers.map(data=>data)})
     } catch (err) {
         console.error(err.message)
         res.status(500).json({message: 'Server Error', success: false})
