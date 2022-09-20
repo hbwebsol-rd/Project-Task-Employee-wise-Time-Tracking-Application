@@ -15,8 +15,7 @@ import PageLoader from "../components/PageLoader";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const count = useSelector((state) => state.dashboard.count);
-  // const tasks = useSelector((state) => state.dashboard.todayTask);
-  const tasks = useSelector((state) => state.task.tasks);
+  const tasks = useSelector((state) => state.dashboard.todayTask);
   const loading = useSelector((state) => state.dashboard.loading);
 
   const { width } = useWindowSize();
