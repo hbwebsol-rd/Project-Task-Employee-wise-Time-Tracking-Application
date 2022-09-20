@@ -72,7 +72,7 @@ module.exports.createProject=async(req, res)=>{
         const cId=await customerModel.findById({_id: customerId})
         if(!cId) return res.status(400).json({message: "No such customer found", success: false})
         // create new project
-        const newProject=await projectModel({name, customerName: cId.name, technology, start, end})
+        const newProject=await projectModel({name, customerName: cId.name, customerId, technology, start, end})
         // save new project
         await newProject.save()
         res.status(200).json({message: 'Project added successfully', success: true})
