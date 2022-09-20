@@ -5,8 +5,16 @@ const taskSchema=mongoose.Schema({
         type: String,
         ref: 'project.model'
     },
+    projectId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'project.model'
+    },
     employeeName: {
         type: String,
+        ref: 'employee.model'
+    },
+    employeeId: {
+        type: mongoose.Types.ObjectId,
         ref: 'employee.model'
     },
     taskName: {

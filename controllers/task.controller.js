@@ -50,30 +50,31 @@ module.exports.getTask=async(req, res)=>{
     }
 }
 
+// addTask dropdown
 module.exports.addTaskDropdown=async(req, res)=>{
     try {
         // access employees and projects
         const pipeline=[
             { $lookup: {
                     from: "projects",
-                    localField: "name",
-                    foreignField: "customerName",
+                    localField: "all",
+                    foreignField: "all",
                     as: "projects"
                 } },
             { $lookup: {
                     from: "employees",
-                    localField: "a",
-                    foreignField: "nam",
+                    localField: "all",
+                    foreignField: "all",
                     as: "employees"
                 } },
                 // systematic response
             {$project: {name: 1, 
                         projects: {$map: 
                             {input: "$projects", as: "projects", in: 
-                                {id: "$$projects._id", name: "$$projects.name"}}}, 
+                                {projectId: "$$projects._id", projectName: "$$projects.name"}}}, 
                         employees: {$map: 
                             {input: "$employees", as: "employees", in: 
-                                {id: "$$employees._id", name: "$$employees.name"}}}}},
+                                {employeeId: "$$employees._id", employeeName: "$$employees.name"}}}}},
             ]
         // check existing customers
         const existingCustomers=await customerModel.aggregate(pipeline)
@@ -116,7 +117,7 @@ module.exports.createTask=async(req, res)=>{
         const existingTaskProjectNames=existingTask.map(data=>data.projectName)
         for(let i=0;i<existingTaskProjectNames.length;i++) if(existingProject.name===existingTaskProjectNames[i]) return res.status(200).json({message: 'Task already assigned', success: false})  
         // create new task
-        const taskFields={taskName, priority, status, timeOnTask: 0, projectName: existingProject.name, employeeName: existingEmployee.name}
+        const taskFields={taskName, priority, status, timeOnTask: 0, projectName: existingProject.name, employeeName: existingEmployee.name, employeeId, projectId}
         let newTask=new taskModel(taskFields)
         // save new task
         await newTask.save()
