@@ -8,15 +8,16 @@ const useStyles = makeStyles({
         height: '100vh',
     },
     main: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#ffffff',
-        borderRadius: '30px',
-        flex: 1,
-        overflowY: 'auto',
-        '@media(max-width: 500px)': {
-            marginLeft: '-20px'
-        },
+      display: "flex",
+      flexDirection: "column",
+      width: "100%",
+      backgroundColor: "#ffffff",
+      borderRadius: "30px",
+      flex: 1,
+      overflowY: "auto",
+      "@media(max-width: 500px)": {
+        marginLeft: "-20px",
+      },
     },
 
   loginMain: {
@@ -235,7 +236,6 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
         margin: '2rem',
-
     },
     tableHeadContainer: {
         display: 'flex',
@@ -257,6 +257,7 @@ const useStyles = makeStyles({
     },
     tableContainer: {
         width: '95% !important',
+        textTransform: 'capitalize',
         '@media(max-width: 1350px)': {
             width: '85% !important',
             overflowX: 'auto !important'
@@ -403,15 +404,12 @@ const useStyles = makeStyles({
         fontWeight: '700 !important'
     },
 
-
     footer:{
         width:'100%',
         display:'flex',
         alignItems:'center',
         justifyContent:'center',
-        position:'relative',
-        bottom:'-20px',
-
+        padding:'20px 0'
     },
 
   version: {

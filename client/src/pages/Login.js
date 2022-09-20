@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { useStyles } from '../views/view-css';
@@ -15,8 +15,8 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loading= useSelector(state => state.login.loading)
-
-
+  let { admin } = useParams();
+  
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -28,7 +28,7 @@ const Login = () => {
       setEmailError('Invalid email address')
     }
     else {
-      dispatch(LoginAction(loginDetail))
+      dispatch(LoginAction({ email: loginDetail.email, password: loginDetail.password, role: admin ? 1 : 2 }))
       navigate('/home')
     }
   }

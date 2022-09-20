@@ -95,7 +95,7 @@ const Dashboard = () => {
               todayTask.map((task, i) => {
                 return (
                   <>
-                    <Grid item xs={width > 880 ? 8 : 8}>
+                    <Grid item xs={8}>
                       <Typography className={classes.taskTitle}>
                         {task.taskName}
                       </Typography>

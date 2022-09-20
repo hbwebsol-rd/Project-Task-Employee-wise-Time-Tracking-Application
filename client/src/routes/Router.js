@@ -49,8 +49,8 @@ const Router = () => {
         </div>
       ) : (
         <Routes>
-          <Route path="/login/admin" element={<Login />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/login/:admin" element={<Login />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
