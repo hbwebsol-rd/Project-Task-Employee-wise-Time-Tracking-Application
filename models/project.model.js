@@ -10,6 +10,10 @@ const projectSchema=mongoose.Schema({
         type: String,
         ref: 'customer.model'
     },
+    customerId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'customer.model'
+    },
     technology: {
         type: String,
         required: true

@@ -16,10 +16,8 @@ module.exports=(app)=>{
     // Get Data of a single superUser
     app.get('/api/getUser/:user_id', Auth.superUser, User.getUser)
 
-    // User/Employee login
-    app.post('/api/user/login', [check('email').isEmail(), check('password').isLength({min: 8})], User.loginEmployee)
-
-    app.post('/api/user/login/admin', [check('email').isEmail(), check('password').isLength({min: 8})], User.loginUser)
+    // Login superuser/employee
+    app.post('/api/user/login', [check('email').isEmail(), check('password').isLength({min: 8})], User.loginUser)
 
     // User/Employee forgot password
     app.post('/api/user/login/forgotPassword', [check('email').isEmail()], User.forgotPassword)
