@@ -94,7 +94,6 @@ module.exports.getEmployeeDashboard=async(req, res)=>{
         existingTasks.map(task=>{
             if(task.created_date.toLocaleDateString()===new Date().toLocaleDateString()) todayTasks.push(task)
         })
-        if(!todayTasks.length>0) todayTasks.push('No Tasks Found')
         // display employee tasks
         res.status(200).json({success: true, data: todayTasks})
 

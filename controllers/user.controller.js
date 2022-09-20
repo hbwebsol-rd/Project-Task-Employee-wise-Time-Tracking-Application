@@ -23,7 +23,6 @@ module.exports.getDashBoard=async(req, res)=>{
         existingTasks.map(task=>{
             if(task.created_date.toLocaleDateString()===new Date().toLocaleDateString()) todayTasks.push(task)
         })
-        if(!todayTasks.length>0) todayTasks.push('No Tasks Found')
         // display count of all customers, employees, tasks, projects and todayTasks
         res.status(200).json({success: true, data: {count: {customers: existingCustomers,
                                                             projects: existingProjects,
@@ -95,17 +94,11 @@ module.exports.getUser=async(req, res)=>{
     }
 }
 
-// login superUser/employee
+// login superUser
 module.exports.loginUser=async(req,res)=>{
     // const {role, email, password}=req.body
-    const { email, password}=req.body
+    const {email, password}=req.body
     const errors=[]
-    const role=1
-    // check role
-    // if(!role) errors.push("Role is required")
-    // else if(role&&typeof role === 'string') errors.push("Role must be a number") 
-    // else if(role<1||role>2) errors.push("Role must be 1 or 2") 
-    // if(role===0) errors.pop()
     // check email
     if(!email) errors.push("Email is required") 
     else if(email&&!email.includes('@')||!email.endsWith('.com')) errors.push("Invalid Email Id") 
@@ -117,13 +110,8 @@ module.exports.loginUser=async(req,res)=>{
 
     try {
         // check existing user
-        if(role===1){
-            existingUser=await userModel.findOne({email})
-            if(!existingUser) return res.status(400).json({message: 'Invalid Credentials', success: false})
-        }else if(role===2){
-            existingUser=await employeeModel.findOne({email})
-            if(!existingUser) return res.status(400).json({message: 'Invalid Credentials', success: false})
-        }else return res.status(400).json({message: 'Invalid Role ID', success: false})
+        const existingUser=await userModel.findOne({email})
+        if(!existingUser) return res.status(400).json({message: 'Invalid Credentials', success: false})
         const isMatch=await bcrypt.compare(password, existingUser.password)
         if(!isMatch) return res.status(400).json({message: 'Invalid Credentials', success: false})
         // payload for jwt and signature
@@ -132,6 +120,45 @@ module.exports.loginUser=async(req,res)=>{
                 id: existingUser.id,
                 name: existingUser.name,
                 role: existingUser.role
+            }
+        }
+        jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err, token)=>{
+            if(err) throw err
+            res.status(200).json({token})
+        })
+    
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).json({message: 'Server Error', success: false})
+    }
+}
+
+// login employee
+module.exports.loginEmployee=async(req,res)=>{
+    // const {role, email, password}=req.body
+    const {email, password}=req.body
+    const errors=[]
+    // check email
+    if(!email) errors.push("Email is required") 
+    else if(email&&!email.includes('@')||!email.endsWith('.com')) errors.push("Invalid Email Id") 
+    // check password
+    if(!password) errors.push("Password is required") 
+    else if(password&&password.length<8) errors.push("Invalid password")
+    // display errors
+    if(errors.length>0) return res.status(400).json({errors: errors, success: false})
+
+    try {
+        // check existing user
+        const existingEmployee=await employeeModel.findOne({email})
+        if(!existingEmployee) return res.status(400).json({message: 'Invalid Credentials', success: false})
+        const isMatch=await bcrypt.compare(password, existingEmployee.password)
+        if(!isMatch) return res.status(400).json({message: 'Invalid Credentials', success: false})
+        // payload for jwt and signature
+        const payload={
+            userInfo: {
+                id: existingEmployee.id,
+                name: existingEmployee.name,
+                role: existingEmployee.role
             }
         }
         jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err, token)=>{
