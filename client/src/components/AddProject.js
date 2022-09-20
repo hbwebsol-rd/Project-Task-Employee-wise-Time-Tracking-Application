@@ -118,8 +118,8 @@ const AddProject = ({ open, setOpen, classes }) => {
                 });
               }}
             >
-              {clients.map((client) => {
-                return <MenuItem value={client._id}>{client.name}</MenuItem>;
+              {clients.map((client, i) => {
+                return <MenuItem key={i} value={client._id}>{client.name}</MenuItem>;
               })}
             </Select>
           </FormControl>

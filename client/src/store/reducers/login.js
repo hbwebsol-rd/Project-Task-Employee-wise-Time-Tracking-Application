@@ -26,6 +26,7 @@ const login = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 loggedIn: true,
+                role:action.payload.role
             }
         }
         case LOGOUT: {

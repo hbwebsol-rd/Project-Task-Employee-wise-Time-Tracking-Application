@@ -19,15 +19,16 @@ export const LoginAction = (requestBody) => (dispatch) => {
     .then((response) => {
       var data = response.data;
       var token = data.token;
+      var role = requestBody.role
+      console.log(data)
       if (token) {
         cookie.save('token', token, { path: '/' })
       }
-      console.log(data)
       let { message } = response.data;
       if (response.status === 200) {
         dispatch({
           type: LOGIN,
-          payload: { token },
+          payload: { token, role },
         });
       } else {
         dispatch({

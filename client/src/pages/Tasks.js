@@ -55,7 +55,7 @@ function Tasks() {
   }, [items]);
 
   const StatusType = ({ status }) => {
-    if (status === "Completed") {
+    if (status === "Completed" || status === "completed") {
       return (
         <Typography
           sx={{
@@ -71,7 +71,7 @@ function Tasks() {
         </Typography>
       );
     }
-    if (status === "Done") {
+    if (status === "Pending" || status === "pending") {
       return (
         <Typography
           sx={{
@@ -87,7 +87,7 @@ function Tasks() {
         </Typography>
       );
     }
-    if (status === "work not started") {
+    if (status === "Active" || status === "active") {
       return (
         <Typography
           sx={{
@@ -103,7 +103,20 @@ function Tasks() {
         </Typography>
       );
     }
-    return <Typography>{status}</Typography>;
+    return (
+      <Typography
+        sx={{
+          width: "110px",
+          py: "2px",
+          backgroundColor: "#67D1FF",
+          color: "#ffffff",
+          textAlign: "center",
+          borderRadius: "10px",
+        }}
+      >
+        {status}
+      </Typography>
+    );
   };
 
   const handleChangePage = (event, newPage) => {
@@ -168,13 +181,13 @@ function Tasks() {
                 Id
               </TableCell>
               <TableCell align="left" className={classes.tableCell}>
+                Task Name
+              </TableCell>
+              <TableCell align="left" className={classes.tableCell}>
                 Project Name
               </TableCell>
               <TableCell align="left" className={classes.tableCell}>
                 Employee Name
-              </TableCell>
-              <TableCell align="left" className={classes.tableCell}>
-                Task Name
               </TableCell>
               <TableCell align="left" className={classes.tableCell}>
                 Priority
@@ -201,9 +214,9 @@ function Tasks() {
                 .map((row, i) => (
                   <TableRow key={row._id}>
                     <TableCell align="left">{i + 1}</TableCell>
+                    <TableCell align="left">{row.taskName}</TableCell>
                     <TableCell align="left">{row.projectName}</TableCell>
                     <TableCell align="left">{row.employeeName}</TableCell>
-                    <TableCell align="left">{row.taskName}</TableCell>
                     <TableCell align="left">{row.priority}</TableCell>
                     <TableCell align="left">
                       {<StatusType status={row.status} />}

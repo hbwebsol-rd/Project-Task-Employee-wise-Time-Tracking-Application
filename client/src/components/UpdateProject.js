@@ -16,6 +16,7 @@ import {
   import { yupResolver } from "@hookform/resolvers/yup";
   import * as yup from "yup";
   import { UpdateProjectAction } from "../store/actions/projectActions";
+  import moment from "moment";
   
   const UpdateProject = ({ open, setOpen, row, classes }) => {
     const dispatch = useDispatch();
@@ -31,7 +32,7 @@ import {
       setClients(items);
     }, [items]);
     useEffect(() => {
-        setProjectDetails({ name: row.name, customerId: row._id, technology: row.technology, start: row.start, end: row.end })
+        setProjectDetails({ name: row.name, customerId: row._id, technology: row.technology, start: moment(row.start).format('YYYY-MM-DD'), end: moment(row.end).format('YYYY-MM-DD') })
     }, [row])
   
     const schema = yup
@@ -116,8 +117,8 @@ import {
                   });
                 }}
               >
-                {clients.map((client) => {
-                  return <MenuItem value={client._id}>{client.name}</MenuItem>;
+                {clients.map((client, i) => {
+                  return <MenuItem key={i} value={client._id}>{client.name}</MenuItem>;
                 })}
               </Select>
             </FormControl>
