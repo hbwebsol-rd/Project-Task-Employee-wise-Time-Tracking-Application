@@ -66,7 +66,7 @@ export const AddTaskAction = (requestBody) => (dispatch) => {
           type: TASK_ADDED_SUCCESSFULLY,
           payload: "",
         });
-        dispatch(GetAllTasksAction);
+        dispatch(GetAllTasksAction());
       } else {
         dispatch({
           type: TASK_ACTION_FAIL,
@@ -109,7 +109,7 @@ export const UpdateTaskAction = (id, requestBody) => (dispatch) => {
           type: TASK_UPDATED_SUCCESSFULLY,
           payload: "",
         });
-        dispatch(GetAllTasksAction);
+        dispatch(GetAllTasksAction());
       } else {
         dispatch({
           type: TASK_ACTION_FAIL,
@@ -152,7 +152,7 @@ export const DeleteTaskAction = (id) => (dispatch) => {
           type: TASK_UPDATED_SUCCESSFULLY,
           payload: "",
         });
-        dispatch(GetAllTasksAction);
+        dispatch(GetAllTasksAction());
       } else {
         dispatch({
           type: TASK_ACTION_FAIL,

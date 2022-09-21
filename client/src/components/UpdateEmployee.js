@@ -79,7 +79,7 @@ const UpdateEmployee = ({ open, setOpen, row, classes }) => {
             autoComplete="name"
             value={employeeDetails.name}
             helperText={errors.name && errors.name.message}
-            error={errors.name && errors.name.message}
+            error={!!errors?.name?.message}
             {...register("name")}
             autoFocus
             className={classes.inputField}
@@ -98,7 +98,7 @@ const UpdateEmployee = ({ open, setOpen, row, classes }) => {
             value={employeeDetails.email}
             autoComplete="email"
             helperText={errors.email && errors.email.message}
-            error={errors.email && errors.email.message}
+            error={!!errors?.name?.message}
             {...register("email")}
             autoFocus
             className={classes.inputField}
@@ -117,7 +117,7 @@ const UpdateEmployee = ({ open, setOpen, row, classes }) => {
             value={employeeDetails.designation}
             autoComplete="designation"
             helperText={errors.designation && errors.designation.message}
-            error={errors.designation && errors.designation.message}
+            error={!!errors?.name?.message}
             {...register("designation")}
             autoFocus
             onChange={(e) => {

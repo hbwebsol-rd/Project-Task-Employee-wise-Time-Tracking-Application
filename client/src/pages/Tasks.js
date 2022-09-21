@@ -174,7 +174,7 @@ function Tasks() {
             Add Task
           </Button>
         </div>
-        <Table className={classes.table} aria-label="caption table">
+        <Table className={classes.table} aria-label="caption table" >
           <TableHead className={classes.tableHead}>
             <TableRow>
               <TableCell align="left" className={classes.tableCell}>
@@ -208,7 +208,7 @@ function Tasks() {
               <Loading />
             </TableCell>
           ) : (
-            <TableBody>
+            <TableBody className={classes.tableBody}>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, i) => (

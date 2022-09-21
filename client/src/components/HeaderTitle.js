@@ -1,29 +1,14 @@
 import { Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import Logo from "../image/worklog.png";
+import { useLocation } from "react-router-dom";
 
 const HeaderTitle = ({ classes }) => {
   const location = useLocation();
   if (
     location.pathname === "/dashboard" ||
-    location.pathname === "/home" ||
-    location.pathname === "/profile"
+    location.pathname === "/home"
   ) {
-    return (
-      <Link to="/home" style={{ textDecoration: "none" }}>
-        <Box
-          component="img"
-          sx={{
-            height: 70,
-            objectFit: 'contain'
-          }}
-          alt="The house from the offer."
-          src={`${Logo}`}
-        />
-      </Link>
-    );
+    return <Typography className={classes.title}>DASHBOARD</Typography>;
   }
   if (location.pathname === "/employee") {
     return <Typography className={classes.title}>EMPLOYEES</Typography>;

@@ -1,24 +1,21 @@
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
-    root: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        height: '100vh',
-    },
-    main: {
-      display: "flex",
-      flexDirection: "column",
-      width: "100%",
-      backgroundColor: "#ffffff",
-      borderRadius: "30px",
-      flex: 1,
-      overflowY: "auto",
-      "@media(max-width: 500px)": {
-        marginLeft: "-20px",
-      },
-    },
+  root: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    height: "100vh",
+  },
+  main: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    backgroundColor: "#ffffff",
+    borderRadius: "30px",
+    flex: 1,
+    overflowY: "auto",
+  },
 
   loginMain: {
     width: "100%",
@@ -43,10 +40,10 @@ const useStyles = makeStyles({
   loginTextItem: {
     fontSize: "50px !important",
     fontWeight: "600 !important",
-    position: "absolute",
-    top: "100px",
-    left: "30px",
     color: "#ffffff",
+    margin:'30px !important',
+    marginTop:'40% !important',
+    letterSpacing:'0.25em !important',
     "@media(max-width: 1450px)": {
       fontSize: "40px !important",
     },
@@ -63,8 +60,6 @@ const useStyles = makeStyles({
   loginImageBox: {
     width: "500px",
     height: "100vh",
-    display: "flex",
-    alignItems: "center",
     justifyContent: "center",
     "@media(max-width: 1450px)": {
       width: "400px",
@@ -72,6 +67,11 @@ const useStyles = makeStyles({
     "@media(max-width: 980px)": {
       width: "300px",
     },
+  },
+  loginInput:{
+    "& .MuiFilledInput-root": {
+      background: "#ffffff"
+    }
   },
 
   resetTitle: {
@@ -82,7 +82,7 @@ const useStyles = makeStyles({
   },
 
   headerRoot: {
-    width: "95%",
+    width: "90%",
     height: "3rem",
     margin: "0 40px",
     display: "flex",
@@ -90,17 +90,17 @@ const useStyles = makeStyles({
     position: "fixed",
     padding: "30px 0",
     zIndex: "1299 !important",
-    "@media(max-width: 1400px)": {
-      width: "90%",
-    },
-    "@media(max-width: 968px)": {
+    "@media(max-width: 1650px)": {
       width: "85%",
     },
-    "@media(max-width: 728px)": {
+    "@media(max-width: 1228px)": {
       width: "80%",
+    },
+    "@media(max-width: 1000px)": {
+      width: "75%",
       height: "1rem",
     },
-    "@media(max-width: 500px)": {
+    "@media(max-width: 800px)": {
       width: "70%",
     },
   },
@@ -132,156 +132,153 @@ const useStyles = makeStyles({
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
     backgroundColor: "#3525b5",
-    borderRadius: "30px",
     overflowY: "hidden",
   },
 
-  sidebarIcons: {
+  sidebarList: {
+    display: "flex",
+    alignItems: "center",
     color: "#ffffff",
-    margin: "25px 12px !important",
-    "@media(max-width: 500px)": {
-      marginLeft: "5px !important",
-    },
-  },
-  sidebarListIcon: {
-    color: "#3525b5",
-    margin: "35px 0 0 35px !important",
+    margin: "15px 12px !important",
+    textDecoration: "none",
   },
 
+  sidebarLabel: {
+    marginLeft: "10px !important",
+    fontSize: "14px !important",
+  },
 
-    dashboardRoot: {
-        padding: '0 40px',
-        marginTop: '8rem',
+  dashboardRoot: {
+    padding: "0 40px",
+    marginTop: "8rem",
+  },
+  box: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    minHeight: "110px",
+    backgroundColor: "#D8FFD1",
+    borderRadius: "20px",
+  },
+  gridBox: {
+    display: "grid !important",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gridGap: "40px",
+    "@media(max-width: 1080px)": {
+      gridTemplateColumns: "repeat(2, 1fr)",
     },
-    box: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        minHeight: '150px',
-        backgroundColor: '#D8FFD1',
-        borderRadius: '20px',
-        
+    "@media(max-width: 767px)": {
+      gridTemplateColumns: "repeat(1, 1fr)",
     },
-    gridBox:{
-        display: 'grid !important',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gridGap: '30px',
-        '@media(max-width: 1080px)': {
-            gridTemplateColumns: 'repeat(2, 1fr)',
-        },
-        '@media(max-width: 767px)': {
-            gridTemplateColumns: 'repeat(1, 1fr)',
-        },
+  },
+  countContainer: {
+    width: "5rem",
+  },
+  dashboardIcons: {
+    fontSize: "60px !important",
+    color: "#3525B5",
+    marginLeft: "15px",
+  },
+  count: {
+    fontWeight: "800 !important",
+    fontSize: "35px !important",
+  },
+  typo: {
+    fontWeight: "800 !important",
+    fontSize: "16px !important",
+  },
+  taskBox: {
+    margin: "10px !important",
+    maxWidth: "60rem",
+    textTransform: "capitalize",
+  },
+  taskHead: {
+    margin: "40px 0 20px 0 !important",
+    fontWeight: "800 !important",
+    color: "#3525B5",
+  },
+  taskTitle: {
+    fontWeight: "800 !important",
+    fontSize: "16px !important",
+    "@media(max-width: 650px)": {
+      fontSize: "13px !important",
     },
-    countContainer:{
-        width : '5rem'
-    },
-    dashboardIcons: {
-        fontSize: '60px !important',
-        color: '#3525B5',
-        marginLeft: '15px',
-    },
-    count: {
-        fontWeight: '800 !important',
-        fontSize: '40px !important',
-    },
-    typo: {
-        fontWeight: '800 !important',
-        fontSize: '20px !important',
-    },
-    taskBox: {
-        margin: '10px !important',
-        maxWidth: '60rem',
-    },
-    taskHead: {
-        margin: '40px 0 20px 0 !important',
-        fontWeight: '800 !important',
-        color: '#3525B5',
-    },
-    taskTitle: {
-        fontWeight: '800 !important',
-        fontSize: '16px !important',
-        '@media(max-width: 650px)': {
-            fontSize: '13px !important',
-        },
-    },
-    taskClient: {
-        color: '#767676',
-        fontWeight: '600 !important',
-        fontSize: '14px !important'
-    },
-    status: {
-        width: '6rem',
-        padding: '10px',
-        color: '#ffffff',
-        borderRadius: '20px',
-        fontSize: '12px !important',
-        textAlign: 'center'
-    },
+  },
+  taskClient: {
+    color: "#767676",
+    fontWeight: "600 !important",
+    fontSize: "14px !important",
+  },
+  status: {
+    width: "6rem",
+    padding: "10px",
+    color: "#ffffff",
+    borderRadius: "20px",
+    fontSize: "12px !important",
+    textAlign: "center",
+  },
 
-
-
-    pageRoot: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        marginTop: '8rem',
-        height: 'calc(100vh - 170px)'
+  pageRoot: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    marginTop: "8rem",
+  },
+  titleContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    margin: "2rem",
+  },
+  tableHeadContainer: {
+    display: "flex",
+    height: "70px",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 1rem 0 1rem",
+    backgroundColor: "#E6E2FF",
+  },
+  title: {
+    fontWeight: "800 !important",
+    fontSize: "22px !important",
+    color: "#3525B5",
+  },
+  addButton: {
+    width: "10rem",
+    border: "1px solid #3525B5 !important",
+    color: "#3525B5 !important",
+  },
+  tableContainer: {
+    width: "95% !important",
+    maxHeight:'600px',
+    textTransform: "capitalize",
+    "@media(max-width: 1350px)": {
+      width: "85% !important",
+      overflowX: "auto !important",
     },
-    titleContainer: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        margin: '2rem',
+  },
+  table: {
+    minWidth: "1000px",
+  },
+  tableBody:{
+    
+  },
+  tableHead: {
+    backgroundColor: "#F5F3FF",
+    height: "70px",
+  },
+  tableCell: {
+    color: "#000000",
+    fontWeight: "700 !important",
+    fontSize: "16px !important",
+  },
+  tableButton: {
+    "@media(max-width: 900px)": {
+      width: "6rem",
     },
-    tableHeadContainer: {
-        display: 'flex',
-        height:'70px',
-        alignItems:'center',
-        justifyContent: 'space-between',
-        padding: '0 1rem 0 1rem',
-        backgroundColor: '#E6E2FF'
-    },
-    title: {
-        fontWeight: '800 !important',
-        fontSize: '22px !important',
-        color: '#3525B5'
-    },
-    addButton: {
-        width: '10rem',
-        border: '1px solid #3525B5 !important',
-        color: '#3525B5 !important'
-    },
-    tableContainer: {
-        width: '95% !important',
-        textTransform: 'capitalize',
-        '@media(max-width: 1350px)': {
-            width: '85% !important',
-            overflowX: 'auto !important'
-        },
-        
-    },
-    table: {
-        minWidth: '1000px'
-    },
-    tableHead:{
-        backgroundColor: '#F5F3FF', 
-        height: '70px'
-    },
-    tableCell: {
-        color: '#000000',
-        fontWeight: '700 !important',
-        fontSize: '16px !important',
-    },
-    tableButton: {
-        '@media(max-width: 900px)': {
-            width: '6rem',
-        },
-
-    },
+  },
 
   popTask: {
     position: "absolute",
@@ -355,65 +352,64 @@ const useStyles = makeStyles({
     marginBottom: "20px !important",
   },
 
+  profileTitle: {
+    margin: "30px !important",
+    color: "#3525B5",
+    fontWeight: "600 !important",
+    fontSize: "20px !important",
+  },
+  profileContainer: {
+    marginTop: "8rem",
+    width: "700px !important",
+    backgroundColor: "#F3F1FF",
+    "@media(max-width: 900px)": {
+      width: "calc(100% - 80px) !important",
+      marginLeft: "auto",
+      marginRight: "auto",
+    },
+  },
+  profileBox: {
+    display: "flex",
+    alignItems: "center",
+    margin: "20px 30px",
+    backgroundColor: "#ffffff",
+    height: "3rem",
+    borderRadius: "10px",
+  },
+  profileLabel: {
+    marginLeft: "3rem !important",
+    width: "20rem",
+    fontWeight: "700 !important",
+    "@media(max-width: 900px)": {
+      width: "calc(100% - 300px) !important",
+      marginLeft: "auto",
+      marginRight: "auto",
+    },
+  },
+  profileValue: {
+    color: "#5C5C5C",
+    fontWeight: "400 !important",
+  },
+  profileTitleBox: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginRight: "30px",
+  },
+  editProfileLabel: {
+    width: "10rem",
+    fontWeight: "700 !important",
+  },
 
-    profileTitle: {
-        margin: '30px !important',
-        color: '#3525B5',
-        fontWeight: '600 !important',
-        fontSize: '20px !important',
-    },
-    profileContainer: {
-        marginTop: '8rem',
-        width: '700px !important',
-        backgroundColor: '#F3F1FF',
-        '@media(max-width: 900px)': {
-            width: 'calc(100% - 80px) !important',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-        },
-    },
-    profileBox: {
-        display: 'flex',
-        alignItems: 'center',
-        margin: '20px 30px',
-        backgroundColor: '#ffffff',
-        height: '3rem',
-        borderRadius: '10px'
-    },
-    profileLabel: {
-        marginLeft: '3rem !important',
-        width: '20rem',
-        fontWeight: '700 !important',
-        '@media(max-width: 900px)': {
-            width: 'calc(100% - 300px) !important',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-        },
-    },
-    profileValue: {
-        color: '#5C5C5C',
-        fontWeight: '400 !important',
-    },
-    profileTitleBox: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginRight: '30px'
-    },
-    editProfileLabel: {
-        width: '10rem',
-        fontWeight: '700 !important'
-    },
-
-    footer:{
-        width:'100%',
-        display:'flex',
-        alignItems:'center',
-        justifyContent:'center',
-        padding:'20px 0'
-    },
+  footer: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px 0",
+  },
 
   version: {
-    width: "5rem",
+    width: "10rem",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

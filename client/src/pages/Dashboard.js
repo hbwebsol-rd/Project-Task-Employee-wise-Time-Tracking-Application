@@ -33,13 +33,13 @@ const Dashboard = () => {
         tasks.forEach((task) => {
           task.color = "#67D1FF";
 
-          if (task.status === "Done") {
+          if (task.status === "completed") {
             task.color = "#67EA52";
           }
-          if (task.status === "Completed") {
+          if (task.status === "active") {
             task.color = "#FF9E67";
           }
-          if (task.status === "work not started") {
+          if (task.status === "pending") {
             task.color = "#FF6767";
           }
         });
@@ -52,9 +52,14 @@ const Dashboard = () => {
       <div className={classes.dashboardRoot}>
         <PageLoader loading={loading} />
 
-        <Grid className={classes.gridBox} container  >
-          <Grid item >
-            <Card count={count.employees} label='EMPLOYEES COUNT' icon={<BadgeIcon className={classes.dashboardIcons} />} classes={classes} />
+        <Grid className={classes.gridBox} container>
+          <Grid item>
+            <Card
+              count={count.employees}
+              label="EMPLOYEES COUNT"
+              icon={<BadgeIcon className={classes.dashboardIcons} />}
+              classes={classes}
+            />
           </Grid>
           <Grid item>
             <Card

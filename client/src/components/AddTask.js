@@ -64,6 +64,7 @@ const AddTask = ({ open, setOpen, classes }) => {
 
   const onSubmit = () => {
     dispatch(AddTaskAction(taskDetails));
+    reset();
     setOpen(false);
   };
   function handleClose() {
