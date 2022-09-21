@@ -39,12 +39,12 @@ const Sidebar = () => {
                     </ListItem>
 
                     <ListItem >
-                        <Link to='/employee  ' >
+                        <Link to='/employee' >
                             <BadgeIcon className={classes.sidebarIcons} />
                         </Link>
                     </ListItem>
                     <ListItem >
-                        <Link to='/reports  ' >
+                        <Link to='/reports' >
                             <AssessmentIcon className={classes.sidebarIcons} />
                         </Link>
                     </ListItem>
