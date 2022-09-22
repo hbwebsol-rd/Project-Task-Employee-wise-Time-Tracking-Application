@@ -11,28 +11,18 @@ import {
   } from "@mui/material";
   import { useEffect, useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { GetAllClientsAction } from "../store/actions/clientActions";
   import { useForm } from "react-hook-form";
   import { yupResolver } from "@hookform/resolvers/yup";
   import * as yup from "yup";
   import { UpdateProjectAction } from "../store/actions/projectActions";
   import moment from "moment";
   
-  const UpdateProject = ({ open, setOpen, row, classes }) => {
+  const UpdateProject = ({ open, setOpen, row, rows, classes }) => {
     const dispatch = useDispatch();
-    const items = useSelector((state) => state.client.clients);
-  
-    const [clients, setClients] = useState(items);
     const [projectDetails, setProjectDetails] = useState({})
-  
+
     useEffect(() => {
-      dispatch(GetAllClientsAction());
-    }, []);  
-    useEffect(() => {
-      setClients(items);
-    }, [items]);
-    useEffect(() => {
-        setProjectDetails({ name: row.name, customerId: row._id, technology: row.technology, start: moment(row.start).format('YYYY-MM-DD'), end: moment(row.end).format('YYYY-MM-DD') })
+        setProjectDetails({ name: row.name, customerId: row.customerId, technology: row.technology, start: moment(row.start).format('YYYY-MM-DD'), end: moment(row.end).format('YYYY-MM-DD') })
     }, [row])
   
     const schema = yup
@@ -117,8 +107,8 @@ import {
                   });
                 }}
               >
-                {clients.map((client, i) => {
-                  return <MenuItem key={i} value={client._id}>{client.name}</MenuItem>;
+                {rows.map((client, i) => {
+                  return <MenuItem key={i} value={client.customerId}>{client.customerName}</MenuItem>;
                 })}
               </Select>
             </FormControl>

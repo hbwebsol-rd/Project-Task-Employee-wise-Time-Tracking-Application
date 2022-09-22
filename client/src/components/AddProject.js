@@ -9,19 +9,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { GetAllClientsAction } from "../store/actions/clientActions";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AddProjectAction } from "../store/actions/projectActions";
 
-const AddProject = ({ open, setOpen, classes }) => {
+const AddProject = ({ open, setOpen,rows, classes }) => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.client.clients);
-
-  const [clients, setClients] = useState(items);
   const [projectDetails, setProjectDetails] = useState({
     name: "",
     customerId: "",
@@ -29,15 +25,6 @@ const AddProject = ({ open, setOpen, classes }) => {
     start: "",
     end: "",
   });
-
-  useEffect(() => {
-    dispatch(GetAllClientsAction());
-  }, []);
-
-  useEffect(() => {
-    setClients(items);
-  }, [items]);
-
   const schema = yup
     .object({
       name: yup.string().required("Name Required"),
@@ -119,8 +106,8 @@ const AddProject = ({ open, setOpen, classes }) => {
                 });
               }}
             >
-              {clients.map((client, i) => {
-                return <MenuItem key={i} value={client._id}>{client.name}</MenuItem>;
+              {rows.map((client, i) => {
+                return <MenuItem key={i} value={client.customerId}>{client.customerName}</MenuItem>;
               })}
             </Select>
           </FormControl>

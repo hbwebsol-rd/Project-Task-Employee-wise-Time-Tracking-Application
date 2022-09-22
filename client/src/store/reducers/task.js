@@ -1,10 +1,11 @@
-import { FETCH_TASKS_BEGIN, FETCH_TASKS_FAILURE, FETCH_TASKS_SUCCESS, TASK_LOADER, TASK_ACTION_FAIL, TASK_UPDATED_SUCCESSFULLY, TASK_ADDED_SUCCESSFULLY } from "../actions/taskActions";
+import { TASK_FETCHED_SUCCESSFULLY, TASK_LOADER, TASK_ACTION_FAIL, TASK_UPDATED_SUCCESSFULLY, TASK_ADDED_SUCCESSFULLY, EMPLOYEE_TASKS_FETCHED_SUCCESSFULLY } from "../actions/taskActions";
 
 const initialState = {
     loading: false,
     error: null,
     updated: false,
-    tasks: []
+    tasks: [],
+    employeeTasks: []
 }
 
 const task = (state = initialState, action) => {
@@ -36,27 +37,21 @@ const task = (state = initialState, action) => {
                 updated: true
             }
         }
-        case FETCH_TASKS_BEGIN: {
-            return {
-                ...state,
-                loading: true,
-                error: null
-            };
-        }
-        case FETCH_TASKS_SUCCESS: {
+        case TASK_FETCHED_SUCCESSFULLY: {
             return {
                 ...state,
                 loading: false,
                 tasks: action.payload.data
             };
         }
-        case FETCH_TASKS_FAILURE: {
+        case EMPLOYEE_TASKS_FETCHED_SUCCESSFULLY: {
             return {
                 ...state,
                 loading: false,
-                error: action.payload.error,
+                employeeTasks: action.payload.data
             };
         }
+
         default: {
             return state
         }

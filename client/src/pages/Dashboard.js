@@ -8,11 +8,12 @@ import { useStyles } from "../views/view-css";
 import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { GetAllDashboardAction } from "../store/actions/dashboardActions";
-import { GetAllTasksAction } from "../store/actions/taskActions";
 import PageLoader from "../components/PageLoader";
+import useWindowSize from "../utils/useWindowSize";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const { width }= useWindowSize
   const count = useSelector((state) => state.dashboard.count);
   const tasks = useSelector((state) => state.dashboard.todayTask);
   const loading = useSelector((state) => state.dashboard.loading);
@@ -20,7 +21,6 @@ const Dashboard = () => {
 
   const classes = useStyles();
   const [todayTask, setTodayTask] = useState(tasks);
-
   useEffect(() => {
     if (role === 1) {
       dispatch(GetAllDashboardAction());
@@ -95,8 +95,7 @@ const Dashboard = () => {
           <Grid container spacing={4}>
             {todayTask.length === 0 ? (
               <Typography
-                className={classes.taskTitle}
-                sx={{ margin: "30px", color: "#FF6161" }}
+                sx={{ margin: "20px",ml:'50px',fontSize: "16px",fontWeight: "800", color: "#FF6161" }}
               >
                 No task Found.!!
               </Typography>
@@ -104,7 +103,7 @@ const Dashboard = () => {
               todayTask.map((task, i) => {
                 return (
                   <>
-                    <Grid item xs={9}>
+                    <Grid item xs={ width>900 ? 9: 8}>
                       <Typography className={classes.taskTitle}>
                         {task.taskName}
                       </Typography>
