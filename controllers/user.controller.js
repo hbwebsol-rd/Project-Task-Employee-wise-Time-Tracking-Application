@@ -97,7 +97,8 @@ module.exports.getUser=async(req, res)=>{
 
 // login superUser/Employee
 module.exports.loginUser=async(req,res)=>{
-    const {role, email, password}=req.body
+    const {role, password}=req.body
+    let {email}=req.body
     // const {email, password}=req.body
     const errors=[]
     // check role
@@ -115,7 +116,9 @@ module.exports.loginUser=async(req,res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
 
     try {
+        email=email.toLowerCase()
         if(parseInt(role)===1){
+            // existingUser=await userModel.findOne({email}).select()
             existingUser=await userModel.findOne({email})
             if(!existingUser) return res.status(400).json({message: 'Invalid Credentials', success: false})
         }else if(parseInt(role)===2){
@@ -135,7 +138,7 @@ module.exports.loginUser=async(req,res)=>{
         }
         jwt.sign(payload, config.get('jwtToken'), {expiresIn: 360000}, (err, token)=>{
             if(err) throw err
-            res.status(200).json({token})
+            res.status(200).json({token: token, data: existingUser})
         })
     
     } catch (err) {
@@ -146,7 +149,7 @@ module.exports.loginUser=async(req,res)=>{
 
 // user forgot password at login
 module.exports.forgotPassword=async(req, res)=>{
-    const {email}=req.body
+    let {email}=req.body
     const errors=[]
     // check email
     if(!email) errors.push("Email is required") 
@@ -155,6 +158,7 @@ module.exports.forgotPassword=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
 
     try {
+        email=email.toLowerCase()
         // check existing mail-employee/admin
         const existingEmail=await employeeModel.findOne({email})||await userModel.findOne({email})
         if(!existingEmail) return res.status(200).json({message: 'Email not found', success: false})
@@ -268,8 +272,13 @@ module.exports.resetPassword=async(req, res)=>{
 
 // update superUser profile
 module.exports.updateProfile=async(req, res)=>{
-    const {email, phoneNumber}=req.body
+    const {gender, name, phoneNumber}=req.body
+    let email=req.body
     const errors=[]
+    // check name
+    if(!name) errors.push("Name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check email
     if(!email) errors.push("Email is required") 
     else if(email&&!email.includes('@')||!email.endsWith('.com')) errors.push("Invalid Email Id")
@@ -284,6 +293,7 @@ module.exports.updateProfile=async(req, res)=>{
         const existingUser=await userModel.findById({_id: req.userInfo.id})
         if(!existingUser) return res.status(500).json({message: 'User not found', success: false})
         // check email
+        email=email.toLowerCase()
         const existingUserEmail=await userModel.findOne({email})
         if(existingUserEmail) if(existingUser.id!==existingUserEmail.id) return res.status(400).json({message: 'User with same Email Id exists', success: false})
         // check phoneNumber

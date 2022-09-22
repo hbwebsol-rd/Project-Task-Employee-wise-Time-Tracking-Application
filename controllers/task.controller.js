@@ -55,6 +55,7 @@ module.exports.addTaskDropdown=async(req, res)=>{
     try {
         // access employees and projects
         const pipeline=[
+            { $limit: 1 },
             { $lookup: {
                     from: "projects",
                     localField: "all",
@@ -68,7 +69,7 @@ module.exports.addTaskDropdown=async(req, res)=>{
                     as: "employees"
                 } },
                 // systematic response
-            {$project: {name: 1, 
+            {$project: {_id: 0, 
                         projects: {$map: 
                             {input: "$projects", as: "projects", in: 
                                 {projectId: "$$projects._id", projectName: "$$projects.name"}}}, 

@@ -7,12 +7,14 @@ const config=require('config')
 
 // Register super user
 router.post('/', [ 
-    check('name'), check('role'), check('email'), check('password'), check('phoneNumber'),
+    check('gender'), check('name'), check('role'), check('email'), check('password'), check('phoneNumber'),
 ], async(req, res)=>{
-    const {name, role, email, password, phoneNumber}=req.body
+    const {gender, name, role, email, password, phoneNumber}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check role
     if(!role) errors.push("role is required")
     else if(role&&typeof role === 'string') errors.push("role must be a number") 
@@ -35,7 +37,7 @@ router.post('/', [
         const existingUser=await userModel.findOne({email})
         if(existingUser) return res.status(400).json({message: 'User already Registered', success: false})
         // create new user
-        const newUser=new userModel({name, role, email, password, phoneNumber})
+        const newUser=new userModel({gender, name, role, email, password, phoneNumber})
         // password hash
         const salt=await bcrypt.genSalt(10)
         newUser.password=await bcrypt.hash(password, salt)
