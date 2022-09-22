@@ -12,8 +12,9 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import Logo from "../image/worklog.png";
 
 const Sidebar = () => {
-  const role = useSelector((state) => state.role);
+  const role = useSelector((state) => state.login.role);
   const classes = useStyles();
+
   return (
     <div className={classes.sidebarRoot}>
       <Link to="/home">
@@ -43,7 +44,7 @@ const Sidebar = () => {
             <Typography className={classes.sidebarLabel}>TASKS</Typography>
           </Link>
         </ListItem>
-        {role !== 1 ? (
+        {role === 1 ? (
           <div>
             <ListItem>
               <Link to="/projects" className={classes.sidebarList}>
@@ -69,16 +70,14 @@ const Sidebar = () => {
                 </Typography>
               </Link>
             </ListItem>
-            <ListItem>
-              <Link to="/reports" className={classes.sidebarList}>
-                <AssessmentIcon />
-                <Typography className={classes.sidebarLabel}>
-                  REPORTS
-                </Typography>
-              </Link>
-            </ListItem>
           </div>
         ) : null}
+        <ListItem>
+          <Link to="/reports" className={classes.sidebarList}>
+            <AssessmentIcon />
+            <Typography className={classes.sidebarLabel}>REPORTS</Typography>
+          </Link>
+        </ListItem>
         <footer className={classes.version}>
           <Typography
             sx={{
@@ -105,5 +104,4 @@ const Sidebar = () => {
     </div>
   );
 };
-export default Sidebar
-
+export default Sidebar;
