@@ -30,7 +30,7 @@ const login = (state = initialState, action) => {
             }
         }
         case LOGOUT: {
-            cookie.remove('token')
+            cookie.remove('token',{ path: '/' })
             return {
                 ...state,
                 loading: false,

@@ -190,17 +190,22 @@ const useStyles = makeStyles({
     fontSize: "16px !important",
   },
   taskBox: {
-    margin: "10px !important",
+    margin: "30px 0 !important",
+    padding:'5px 0 30px',
     maxWidth: "60rem",
     textTransform: "capitalize",
+    backgroundColor:'#F3F1FF',
+    borderRadius:'20px',
+    boxShadow: '0px 0px 15px #F5F5F5'
   },
   taskHead: {
-    margin: "40px 0 20px 0 !important",
+    margin: "20px 15px !important",
     fontWeight: "800 !important",
     color: "#3525B5",
   },
   taskTitle: {
     fontWeight: "800 !important",
+    marginLeft:'15px !important',
     fontSize: "16px !important",
     "@media(max-width: 650px)": {
       fontSize: "13px !important",
@@ -208,6 +213,7 @@ const useStyles = makeStyles({
   },
   taskClient: {
     color: "#767676",
+    marginLeft:'15px !important',
     fontWeight: "600 !important",
     fontSize: "14px !important",
   },
@@ -225,7 +231,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     width: "100%",
-    marginTop: "8rem",
+    marginTop: "6rem",
   },
   titleContainer: {
     display: "flex",
