@@ -26,7 +26,7 @@ module.exports=(app)=>{
     app.patch('/api/user/login/resetPassword', [Auth.resetPassword, [check('password').isLength({min: 8}), check('confirmPassword').isLength({min: 8})]], User.resetPassword)
     
     // User update profile
-    app.patch('/api/user/updateProfile', [Auth.superUser, [check('email').isEmail(), check('phoneNumber').isEmpty().isNumeric().isLength({min: 8})]], User.updateProfile)
+    app.patch('/api/user/updateProfile', [Auth.superUser, [check('name').isEmail(), check('email').isEmail(), check('phoneNumber').isEmpty().isNumeric().isLength({min: 8})]], User.updateProfile)
     
     // User update password
     app.patch('/api/user/updatePassword', [Auth.superUser, [check('oldPassword').isLength({min: 8}), check('password').isLength({min: 8}), check('confirmPassword').isLength({min: 8})]], User.updatePassword)

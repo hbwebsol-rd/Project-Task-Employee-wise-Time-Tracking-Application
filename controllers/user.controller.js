@@ -268,8 +268,10 @@ module.exports.resetPassword=async(req, res)=>{
 
 // update superUser profile
 module.exports.updateProfile=async(req, res)=>{
-    const {email, phoneNumber}=req.body
+    const {name, email, phoneNumber}=req.body
     const errors=[]
+    // check name
+    if(!name) errors.push("Name is required") 
     // check email
     if(!email) errors.push("Email is required") 
     else if(email&&!email.includes('@')||!email.endsWith('.com')) errors.push("Invalid Email Id")
