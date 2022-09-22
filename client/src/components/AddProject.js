@@ -59,6 +59,7 @@ const AddProject = ({ open, setOpen, classes }) => {
 
   const onSubmit = () => {
     dispatch(AddProjectAction(projectDetails));
+    reset();
     setOpen(false);
   };
 

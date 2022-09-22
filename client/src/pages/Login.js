@@ -6,11 +6,12 @@ import { useStyles } from '../views/view-css';
 import Img from '../image/login.png';
 import { LoginAction } from '../store/actions/loginActions';
 import PageLoader from '../components/PageLoader';
+import Logo from "../image/worklog.png";
 
 
 const Login = () => {
   const classes = useStyles();
-  const [loginDetail, setLoginDetails] = useState({ email: "hussainbandook01@gmail.com", password: "12345678" });
+  const [loginDetail, setLoginDetails] = useState({ email: "", password: "" });
   const [emailError, setEmailError] = useState()
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,14 +39,25 @@ const Login = () => {
       <PageLoader loading={loading} />
       <div style={{ backgroundImage: `url(${Img})` }}>
         <Box className={classes.loginImageBox}>
+        <Box
+            component="img"
+            sx={{
+              height: 50,
+              objectFit: "contain",
+              margin: "15px",
+              mt: "25px",
+              mb: "4rem",
+            }}
+            alt="The house from the offer."
+            src={`${Logo}`}
+          />
           <Typography className={classes.loginTextItem}>GET {<br />} STARTED !</Typography>
-          <Typography className={classes.loginTitle}>WORKLOG</Typography>
         </Box>
       </div>
       <div className={classes.loginForm} >
         <Box className={classes.loginRoot}>
           <Typography className={classes.title}>
-            Sign in
+            {admin? 'Admin LogIn': 'Employee LogIn'}
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
@@ -58,6 +70,7 @@ const Login = () => {
               id="email"
               label="Email Address"
               value={loginDetail.email}
+              className={classes.loginInput}
               onChange={(e) => {
                 setLoginDetails({
                   ...loginDetail,
@@ -86,7 +99,7 @@ const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2, backgroundColor: '#3525b5' }}
             >
-              Sign In
+              Log In
             </Button>
             <Grid container>
               <Grid item xs>
