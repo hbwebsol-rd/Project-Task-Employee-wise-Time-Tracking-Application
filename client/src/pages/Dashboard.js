@@ -7,47 +7,70 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import { useStyles } from "../views/view-css";
 import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
-import { GetAllDashboardAction } from "../store/actions/dashboardActions";
+import { GetAllDashboardAction, GetEmployeeDashboardAction } from "../store/actions/dashboardActions";
 import PageLoader from "../components/PageLoader";
 import useWindowSize from "../utils/useWindowSize";
+import { EmployeeTasksAction } from "../store/actions/taskActions";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { width }= useWindowSize
   const count = useSelector((state) => state.dashboard.count);
   const tasks = useSelector((state) => state.dashboard.todayTask);
+  const employeeTask = useSelector((state) => state.dashboard.employeeTask);
   const loading = useSelector((state) => state.dashboard.loading);
   const role = useSelector((state) => state.login.role);
-
   const classes = useStyles();
-  const [todayTask, setTodayTask] = useState(tasks);
+  const [todayTask, setTodayTask] = useState([]);
   useEffect(() => {
     if (role == 1) {
       dispatch(GetAllDashboardAction());
     } else {
-      //dispatch()
+      dispatch(GetEmployeeDashboardAction())
     }
   }, []);
 
   useEffect(() => {
-    {
-      tasks &&
-        tasks.forEach((task) => {
-          task.color = "#67D1FF";
-
-          if (task.status === "completed") {
-            task.color = "#67EA52";
-          }
-          if (task.status === "active") {
-            task.color = "#FF9E67";
-          }
-          if (task.status === "pending") {
-            task.color = "#FF6767";
-          }
-        });
+    
+    {if(role==1){
+      setTodayTask(tasks);
+      {
+        tasks &&
+          tasks.forEach((task) => {
+            task.color = "#67D1FF";
+  
+            if (task.status === "completed") {
+              task.color = "#67EA52";
+            }
+            if (task.status === "active") {
+              task.color = "#FF9E67";
+            }
+            if (task.status === "pending") {
+              task.color = "#FF6767";
+            }
+          });
+      }
+    }else{
+      setTodayTask(employeeTask)
+      {
+        employeeTask &&
+          employeeTask.forEach((task) => {
+            task.color = "#67D1FF";
+  
+            if (task.status === "completed") {
+              task.color = "#67EA52";
+            }
+            if (task.status === "active") {
+              task.color = "#FF9E67";
+            }
+            if (task.status === "pending") {
+              task.color = "#FF6767";
+            }
+          });
+      }
     }
-    setTodayTask(tasks);
-  }, [tasks]);
+  }
+  }, [tasks, employeeTask]);
 
   return (
     <>

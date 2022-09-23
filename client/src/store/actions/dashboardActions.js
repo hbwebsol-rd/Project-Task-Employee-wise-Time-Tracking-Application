@@ -42,3 +42,40 @@ export const GetAllDashboardAction = () => (dispatch) => {
       });
     });
 };
+
+export const GetEmployeeDashboardAction = () => (dispatch) => {
+  dispatch({
+    type: DASHBOARD_LOADER,
+  });
+
+  GetFetch("employee/dashboard")
+    .then((response) => {
+      var data = response.data;
+      let { message } = response.data;
+      if (response.status === 200) {
+        dispatch({
+          type: FETCH_DASHBOARD_SUCCESS,
+          payload: data || [],
+        });
+      } else {
+        dispatch({
+          type: DASHBOARD_ACTION_FAIL,
+        });
+        swal({
+          title: message || "Something went wrong. Please try again later.",
+          icon: "error",
+        });
+      }
+    })
+    .catch((error) => {
+      dispatch({
+        type: DASHBOARD_ACTION_FAIL,
+        payload: "Something went wrong. Please try again later.",
+      });
+      swal({
+        title: error.message || "Something went wrong. Please try again later.",
+        icon: "error",
+        showConfirmButton: false,
+      });
+    });
+};

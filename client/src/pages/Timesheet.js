@@ -16,28 +16,24 @@ import {
 import { TablePagination } from "@material-ui/core";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useStyles } from "../views/view-css";
-import AddProject from "../components/AddProject";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import {
   DeleteProjectAction,
-  GetAllProjectsAction,
 } from "../store/actions/projectActions";
-import UpdateProject from "../components/UpdateProject";
-import SearchIcon from "@mui/icons-material/Search";
 import ConfirmDelete from "../components/ConfirmDelete";
 import moment from "moment";
-import { NavLink } from "react-router-dom";
 import SelectDateModal from "../components/SelectDateModal";
 import AddTimesheet from "../components/AddTimesheet";
 import UpdateTimesheet from "../components/UpdateTimesheet";
+import { GetAllTimesheetAction } from "../store/actions/timesheetActions";
 
 function Projects() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.project.loading);
-  const items = useSelector((state) => state.project.projects);
+  const items = useSelector((state) => state.timesheet.timesheet);
 
   const [rows, setRows] = useState(items);
   const [page, setPage] = useState(0);
@@ -50,7 +46,7 @@ function Projects() {
   const [active, setActive] = useState("today");
 
   useEffect(() => {
-    dispatch(GetAllProjectsAction());
+    dispatch(GetAllTimesheetAction());
   }, []);
   useEffect(() => {
     setRows(items);
@@ -182,15 +178,15 @@ function Projects() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, i) => (
                   <TableRow key={row._id}>
-                    <TableCell align="left">{row.name}</TableCell>
-                    <TableCell align="left">{row.customerName}</TableCell>
+                    <TableCell align="left">{row.projectName}</TableCell>
+                    <TableCell align="left">{row.taskName}</TableCell>
                     <TableCell align="left">
-                      {moment(`${row.start}`).format("Do MMMM YYYY")}
+                      {moment(`${row.created_date}`).format("Do MMMM YYYY")}
                     </TableCell>
                     <TableCell align="left">
-                      {moment(`${row.end}`).format("Do MMMM YYYY")}
+                      {row.timeOnTask}
                     </TableCell>
-                    <TableCell align="left">{row.technology}</TableCell>
+                    <TableCell align="left">No Notes found</TableCell>
                     <TableCell align="center">
                       <IconButton
                         aria-label="edit"

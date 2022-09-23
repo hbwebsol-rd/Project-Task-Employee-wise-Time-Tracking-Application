@@ -21,6 +21,7 @@ import {
   const Updatetask = ({ open, setOpen, row, classes }) => {
     const employeeData = useSelector((state) => state.employee.employees);
     const projectData = useSelector((state) => state.project.projects);
+    const role = useSelector((state) => state.login.role);
     const dispatch = useDispatch();
   
     const [employees, setEmployees] = useState(employeeData);
@@ -28,8 +29,10 @@ import {
     const [taskDetails, setTaskDetails] = useState({ })
   
     useEffect(() => {
-      dispatch(GetAllEmployeesAction());
+      { if(role==1){
+        dispatch(GetAllEmployeesAction());
       dispatch(GetAllProjectsAction());
+      }}
     }, []);
 
     useEffect(()=> {

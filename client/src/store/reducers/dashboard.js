@@ -5,7 +5,8 @@ const initialState = {
     error: null,
     updated: false,
     count:[],
-    todayTask:[]
+    todayTask:[],
+    employeeTask:[]
 }
 
 const dashboard = (state = initialState, action) => {
@@ -28,7 +29,8 @@ const dashboard = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 count: action.payload.data.count,
-                todayTask: action.payload.data.todayTasks
+                todayTask: action.payload.data.todayTasks,
+                employeeTask:action.payload.data
             };
         }
         default: {

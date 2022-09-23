@@ -55,7 +55,6 @@ export const EmployeeTasksAction = () => (dispatch) => {
     .then((response) => {
       var data = response.data;
       let { message } = response.data;
-      console.log(data);
       if (response.status === 200) {
         dispatch({
           type: EMPLOYEE_TASKS_FETCHED_SUCCESSFULLY,
