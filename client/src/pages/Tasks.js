@@ -30,13 +30,13 @@ import TaskPopUp from "../components/TaskPopUp";
 import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 import SearchIcon from "@mui/icons-material/Search";
 import ConfirmDelete from "../components/ConfirmDelete";
-import moment from "moment/moment";
 
 function Tasks() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.task.loading);
   const items = useSelector((state) => state.task.tasks);
+  const role = useSelector((state) => state.login.role);
 
   const [rows, setRows] = useState(items);
   const [page, setPage] = useState(0);
@@ -174,7 +174,7 @@ function Tasks() {
             Add Task
           </Button>
         </div>
-        <Table className={classes.table} aria-label="caption table" >
+        <Table className={classes.table} aria-label="caption table">
           <TableHead className={classes.tableHead}>
             <TableRow>
               <TableCell align="left" className={classes.tableCell}>
@@ -208,7 +208,7 @@ function Tasks() {
               <Loading />
             </TableCell>
           ) : (
-            <TableBody className={classes.tableBody}>
+            <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, i) => (
@@ -230,20 +230,24 @@ function Tasks() {
                       >
                         <EditIcon />
                       </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        style={{ color: "#FF6161" }}
-                        onClick={() => handleDeleteConfirm(row)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="view"
-                        style={{ color: "#67D1FF" }}
-                        onClick={() => setPop(true)}
-                      >
-                        <PlagiarismIcon />
-                      </IconButton>
+                      {role == 1 && (
+                        <>
+                          <IconButton
+                            aria-label="delete"
+                            style={{ color: "#FF6161" }}
+                            onClick={() => handleDeleteConfirm(row)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="view"
+                            style={{ color: "#67D1FF" }}
+                            onClick={() => setPop(true)}
+                          >
+                            <PlagiarismIcon />
+                          </IconButton>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -264,16 +268,3 @@ function Tasks() {
   );
 }
 export default Tasks;
-
-// const StatusType = ({ row, name }) => {
-//     if (row[name] === 'Completed') {
-//         return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#67EA52', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>Completed</Typography>
-//     }
-//     if (row[name] === 'Pending') {
-//         return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#FF6767', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>Pending</Typography>
-//     }
-//     if (row[name] === 'In Progress') {
-//         return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#FF9E67', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>In Progress</Typography>
-//     }
-//     return <Typography>{row[name]}</Typography>
-// }
