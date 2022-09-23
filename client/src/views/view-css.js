@@ -41,9 +41,9 @@ const useStyles = makeStyles({
     fontSize: "50px !important",
     fontWeight: "600 !important",
     color: "#ffffff",
-    margin:'30px !important',
-    marginTop:'40% !important',
-    letterSpacing:'0.25em !important',
+    margin: "30px !important",
+    marginTop: "40% !important",
+    letterSpacing: "0.25em !important",
     "@media(max-width: 1450px)": {
       fontSize: "40px !important",
     },
@@ -68,10 +68,10 @@ const useStyles = makeStyles({
       width: "300px",
     },
   },
-  loginInput:{
+  loginInput: {
     "& .MuiFilledInput-root": {
-      background: "#ffffff"
-    }
+      background: "#ffffff",
+    },
   },
 
   resetTitle: {
@@ -84,11 +84,12 @@ const useStyles = makeStyles({
   headerRoot: {
     width: "90%",
     height: "3rem",
-    margin: "0 40px",
+    margin: "0 18px",
     display: "flex",
     backgroundColor: "#ffffff",
     position: "fixed",
-    padding: "30px 0",
+    padding: "30px 22px",
+    borderRadius:"10px",
     zIndex: "1299 !important",
     "@media(max-width: 1650px)": {
       width: "85%",
@@ -191,12 +192,12 @@ const useStyles = makeStyles({
   },
   taskBox: {
     margin: "30px 0 !important",
-    padding:'5px 0 30px',
+    padding: "5px 0 30px",
     maxWidth: "60rem",
     textTransform: "capitalize",
-    backgroundColor:'#F3F1FF',
-    borderRadius:'20px',
-    boxShadow: '0px 0px 15px #F5F5F5'
+    backgroundColor: "#F3F1FF",
+    borderRadius: "20px",
+    boxShadow: "0px 0px 15px #F5F5F5",
   },
   taskHead: {
     margin: "20px 15px !important",
@@ -205,7 +206,7 @@ const useStyles = makeStyles({
   },
   taskTitle: {
     fontWeight: "800 !important",
-    marginLeft:'15px !important',
+    marginLeft: "15px !important",
     fontSize: "16px !important",
     "@media(max-width: 650px)": {
       fontSize: "13px !important",
@@ -213,7 +214,7 @@ const useStyles = makeStyles({
   },
   taskClient: {
     color: "#767676",
-    marginLeft:'15px !important',
+    marginLeft: "15px !important",
     fontWeight: "600 !important",
     fontSize: "14px !important",
   },
@@ -225,7 +226,6 @@ const useStyles = makeStyles({
     fontSize: "12px !important",
     textAlign: "center",
   },
-
   pageRoot: {
     display: "flex",
     flexDirection: "column",
@@ -237,6 +237,7 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "space-between",
     margin: "2rem",
+    minWidth: "1100px",
   },
   tableHeadContainer: {
     display: "flex",
@@ -258,18 +259,10 @@ const useStyles = makeStyles({
   },
   tableContainer: {
     width: "95% !important",
-    maxHeight:'600px',
     textTransform: "capitalize",
-    "@media(max-width: 1350px)": {
-      width: "85% !important",
-      overflowX: "auto !important",
-    },
   },
   table: {
-    minWidth: "1000px",
-  },
-  tableBody:{
-    
+    minWidth: "1200px",
   },
   tableHead: {
     backgroundColor: "#F5F3FF",
@@ -404,6 +397,28 @@ const useStyles = makeStyles({
   editProfileLabel: {
     width: "10rem",
     fontWeight: "700 !important",
+  },
+
+  tablesheetButtons: {
+    marginRight: "30px",
+    width: "180px",
+    height: "40px",
+    color: "#3525B5",
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #3525B5",
+    borderRadius: "30px",
+    "&:hover": {
+      background: "#F0EEFF",
+    },
+  },
+  activeButton: {
+    marginRight: "30px",
+    width: "180px",
+    height: "40px",
+    border: "1px solid #3525B5",
+    borderRadius: "30px",
+    backgroundColor: "#3525B5",
+    color: "#ffffff",
   },
 
   footer: {

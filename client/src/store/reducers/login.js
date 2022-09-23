@@ -3,7 +3,7 @@ import { LOGIN, LOGIN_FAIL, LOGIN_LOADER, LOGOUT } from "../actions/loginActions
 
 const initialState = {
     token: '',
-    role: 1,
+    role: '',
     loggedIn: false,
     loading: false,
     error: null,
@@ -13,6 +13,11 @@ if (cookie.load("token")) {
     initialState.token = cookie.load("token");
     initialState.loggedIn = true
 }
+
+if (cookie.load("role")) {
+    initialState.role = cookie.load("role");
+  }
+  console.log(initialState)
 const login = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN_LOADER: {
@@ -22,6 +27,7 @@ const login = (state = initialState, action) => {
             }
         }
         case LOGIN: {
+            cookie.save("role", action.payload.role, { path: "/" });
             return {
                 ...state,
                 loading: false,

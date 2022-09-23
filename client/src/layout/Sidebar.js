@@ -14,10 +14,10 @@ import Logo from "../image/worklog.png";
 const Sidebar = () => {
   const value = useSelector((state) => state.login.role);
   const classes = useStyles();
-  const[role, setRole] = useState(value);
-  useEffect(()=> {
-    setRole(value)
-  }, [value])
+  const [role, setRole] = useState(value);
+  useEffect(() => {
+    setRole(value);
+  }, [value]);
   return (
     <div className={classes.sidebarRoot}>
       <Link to="/home">
@@ -47,7 +47,7 @@ const Sidebar = () => {
             <Typography className={classes.sidebarLabel}>TASKS</Typography>
           </Link>
         </ListItem>
-        {role === 1 ? (
+        {role == 1 ? (
           <div>
             <ListItem>
               <Link to="/projects" className={classes.sidebarList}>
@@ -79,6 +79,12 @@ const Sidebar = () => {
           <Link to="/reports" className={classes.sidebarList}>
             <AssessmentIcon />
             <Typography className={classes.sidebarLabel}>REPORTS</Typography>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link to="/timesheet" className={classes.sidebarList}>
+            <AssessmentIcon />
+            <Typography className={classes.sidebarLabel}>TIMESHEET</Typography>
           </Link>
         </ListItem>
         <footer className={classes.version}>

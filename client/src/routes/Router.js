@@ -16,6 +16,7 @@ import Profile from "../pages/Profile";
 import Reports from "../pages/Reports";
 import { useSelector } from "react-redux";
 import Footer from "../layout/Footer";
+import Timesheet from "../pages/Timesheet";
 
 const Router = () => {
   const login = useSelector((state) => state.login.loggedIn);
@@ -38,6 +39,7 @@ const Router = () => {
               <Route path="/clients" element={<Client />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/tasks" element={<Tasks />} />
+              <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>

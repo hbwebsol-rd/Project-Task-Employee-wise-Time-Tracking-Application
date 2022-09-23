@@ -22,7 +22,7 @@ const Dashboard = () => {
   const classes = useStyles();
   const [todayTask, setTodayTask] = useState(tasks);
   useEffect(() => {
-    if (role === 1) {
+    if (role == 1) {
       dispatch(GetAllDashboardAction());
     } else {
       //dispatch()
@@ -54,7 +54,7 @@ const Dashboard = () => {
       <div className={classes.dashboardRoot}>
         <PageLoader loading={loading} />
 
-        {role === 1 ? (
+        {role == 1 ? (
           <Grid className={classes.gridBox} container>
             <Grid item>
               <Card
