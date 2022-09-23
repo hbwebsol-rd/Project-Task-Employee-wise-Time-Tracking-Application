@@ -18,7 +18,7 @@ export const GetAllTimesheetAction = () => (dispatch) => {
     type: TIMESHEET_LOADER,
   });
 
-  GetFetch("getEmployees")
+  GetFetch("getEmployeeTimeSheet")
     .then((response) => {
       var data = response.data.data;
       let { message } = response.data;

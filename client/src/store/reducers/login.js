@@ -17,7 +17,6 @@ if (cookie.load("token")) {
 if (cookie.load("role")) {
     initialState.role = cookie.load("role");
   }
-  console.log(initialState)
 const login = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN_LOADER: {

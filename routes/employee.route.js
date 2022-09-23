@@ -1,6 +1,7 @@
 const {check}=require('express-validator')
 const Auth=require('../middleware/auth.middleware')
 const Employee=require('../controllers/employee.controller')
+const Task=require('../controllers/task.controller')
 
 module.exports=(app)=>{
 
@@ -39,6 +40,9 @@ module.exports=(app)=>{
 
     // delete employee by superuser
     app.delete('/api/deleteEmployee/:employee_id', Auth.superUser, Employee.deleteEmployee)
+
+    // employee timesheet
+    app.get('/api/getEmployeeTimeSheet', Task.getTasks)
 
 }
 

@@ -21,6 +21,7 @@ import * as yup from "yup";
 const AddTask = ({ open, setOpen, classes }) => {
   const employeeData = useSelector((state) => state.employee.employees);
   const projectData = useSelector((state) => state.project.projects);
+  const role = useSelector((state) => state.login.role);
   const dispatch = useDispatch();
 
   const [employees, setEmployees] = useState(employeeData);
@@ -34,8 +35,10 @@ const AddTask = ({ open, setOpen, classes }) => {
   });
 
   useEffect(() => {
-    dispatch(GetAllEmployeesAction());
+    { if(role==1){
+      dispatch(GetAllEmployeesAction());
     dispatch(GetAllProjectsAction());
+    }}
   }, []);
 
   useEffect(() => {

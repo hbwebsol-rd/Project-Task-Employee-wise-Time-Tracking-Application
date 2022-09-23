@@ -9,6 +9,7 @@ import { useStyles } from "../views/view-css";
 import BadgeIcon from "@mui/icons-material/Badge";
 import GroupsIcon from "@mui/icons-material/Groups";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import Logo from "../image/worklog.png";
 
 const Sidebar = () => {
@@ -83,7 +84,7 @@ const Sidebar = () => {
         </ListItem>
         <ListItem>
           <Link to="/timesheet" className={classes.sidebarList}>
-            <AssessmentIcon />
+            <PendingActionsIcon />
             <Typography className={classes.sidebarLabel}>TIMESHEET</Typography>
           </Link>
         </ListItem>

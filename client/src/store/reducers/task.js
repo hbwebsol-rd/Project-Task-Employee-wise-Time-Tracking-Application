@@ -48,7 +48,7 @@ const task = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false,
-                employeeTasks: action.payload.data
+                tasks: action.payload.data
             };
         }
 

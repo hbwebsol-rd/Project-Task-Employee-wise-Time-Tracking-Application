@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import {
   DeleteTaskAction,
+  EmployeeTasksAction,
   GetAllTasksAction,
 } from "../store/actions/taskActions";
 import UpdateTask from "../components/UpdateTask";
@@ -48,7 +49,13 @@ function Tasks() {
   const [deleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
-    dispatch(GetAllTasksAction());
+    {
+      if (role == 1) {
+        dispatch(GetAllTasksAction());
+      } else {
+        dispatch(EmployeeTasksAction())
+      }
+    }
   }, []);
   useEffect(() => {
     setRows(items);
@@ -169,10 +176,11 @@ function Tasks() {
               ),
             }}
           />
+          {role == 1 && 
           <Button className={classes.addButton} onClick={() => setOpen(true)}>
             {<ControlPointIcon fontSize="small" sx={{ mr: "5px" }} />}
             Add Task
-          </Button>
+          </Button>}
         </div>
         <Table className={classes.table} aria-label="caption table">
           <TableHead className={classes.tableHead}>
