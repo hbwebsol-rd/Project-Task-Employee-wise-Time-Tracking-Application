@@ -69,11 +69,12 @@ function Projects() {
 
   return (
     <div className={classes.pageRoot}>
-      <AddProject open={open} setOpen={setOpen} classes={classes} />
+      <AddProject open={open} setOpen={setOpen} rows={rows} classes={classes} />
       <UpdateProject
         open={updateModal}
         setOpen={setUpdateModal}
         row={updateRow}
+        rows={rows}
         classes={classes}
       />
       <ConfirmDelete

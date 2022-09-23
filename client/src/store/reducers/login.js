@@ -3,7 +3,7 @@ import { LOGIN, LOGIN_FAIL, LOGIN_LOADER, LOGOUT } from "../actions/loginActions
 
 const initialState = {
     token: '',
-    role: '',
+    role: 1,
     loggedIn: false,
     loading: false,
     error: null,

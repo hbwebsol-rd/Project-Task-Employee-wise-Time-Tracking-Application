@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
@@ -13,6 +13,7 @@ const Login = () => {
   const classes = useStyles();
   const [loginDetail, setLoginDetails] = useState({ email: "", password: "" });
   const [emailError, setEmailError] = useState()
+  const [passwordError, setPasswordError] = useState()
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loading= useSelector(state => state.login.loading)
@@ -27,6 +28,10 @@ const Login = () => {
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(loginDetail.email)
     ) {
       setEmailError('Invalid email address')
+    }else if(!loginDetail.password){
+      setPasswordError('Password Required')
+    }else if(loginDetail.password<8){
+      setPasswordError('Password must have atleast 8 characters')
     }
     else {
       dispatch(LoginAction({ email: loginDetail.email, password: loginDetail.password, role: admin ? 1 : 2 }))
@@ -81,6 +86,8 @@ const Login = () => {
             <TextField
               margin="normal"
               name='password'
+              error = {passwordError ? true : false}
+              helperText= {passwordError ? passwordError : null}
               required
               fullWidth
               label="Password"

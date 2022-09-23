@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux/es/exports";
 import { Box, List, ListItem, Typography } from "@mui/material";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
@@ -12,9 +12,12 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import Logo from "../image/worklog.png";
 
 const Sidebar = () => {
-  const role = useSelector((state) => state.login.role);
+  const value = useSelector((state) => state.login.role);
   const classes = useStyles();
-
+  const[role, setRole] = useState(value);
+  useEffect(()=> {
+    setRole(value)
+  }, [value])
   return (
     <div className={classes.sidebarRoot}>
       <Link to="/home">
