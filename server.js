@@ -24,7 +24,7 @@ require("./routes/export.route")(app);
         res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
     });
 } else {
-    app.get("/", (req, res) => res.send(`Worklog is running on port: ${port}`));
+    app.get("/", (req, res) => res.send(`Logzy is running on port: ${port}`));
 };
 
 
