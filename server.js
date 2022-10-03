@@ -30,7 +30,7 @@ require("./routes/export.route")(app);
 
 mongoose.connect(db, ()=>{
     app.listen(port, ()=>{
-        console.log(`Server established at port ${port}, DB Connected`)
+        console.log(`Server established at port ${port}, DB Connected successfully`)
     })
 });
 
