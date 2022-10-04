@@ -62,8 +62,8 @@ module.exports.getEmployeeTasks=async(req, res)=>{
         const search=req.query.search||""
         const nsort=sort==="ascending"?1:-1
         const pipeline=[
-            {$sort: {created_date: nsort} },
-            {$match: {employeeId: mongoose.Types.ObjectId(`${req.userInfo.id}`), 
+            {$sort: {taskName: nsort} },
+            {$match: {employeeId: req.userInfo.id, 
                       $or: [{projectName: {$regex: search, $options: "i"}}, 
                             {status: {$regex: search, $options: "i"}}, 
                             {priority: {$regex: search, $options: "i"}}, 
