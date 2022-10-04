@@ -6,11 +6,18 @@ const mongoose=require('mongoose')
 module.exports.getProjects=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=10, sort}=req.query
+        const {page=1, limit=1000, sort}=req.query
         const search=req.query.search||""
-        const nsort=sort==="desc"?-1:1
+        const nsort=sort==="ascending"?1:-1
         const pipeline=[
-            {$sort: {name: nsort}},
+            {$sort: {created_date: nsort}},
+            {$lookup: {
+                from: "customers",
+                localField: "customerId",
+                foreignField: "_id",
+                as: "customerName"
+            }},
+            {$set: {customerName: {$arrayElemAt: ["$customerName.name", 0]}}},
             {$match: {$or: [{name: {$regex: search, $options: "i"}}, 
                             {technology: {$regex: search, $options: "i"}}, 
                             {customerName: {$regex: search, $options: "i"}} ]}},
@@ -69,10 +76,10 @@ module.exports.createProject=async(req, res)=>{
         const existingProject=await projectModel.findOne({name})
         if(existingProject) return res.status(200).json({message: 'Project already exists', success: false})
         // customer exists in customer database
-        const cId=await customerModel.findById({_id: customerId})
-        if(!cId) return res.status(400).json({message: "No such customer found", success: false})
+        const existingCustomer=await customerModel.findById({_id: customerId})
+        if(!existingCustomer) return res.status(400).json({message: "No such customer found", success: false})
         // create new project
-        const newProject=await projectModel({name, customerName: cId.name, customerId, technology, start, end})
+        const newProject=await projectModel({name, customerId, technology, start, end})
         // save new project
         await newProject.save()
         res.status(200).json({message: 'Project added successfully', success: true})
@@ -111,8 +118,7 @@ module.exports.updateProject=async(req, res)=>{
         const existingCustomer=await customerModel.findById({_id: customerId})
         if(!existingCustomer) return res.status(200).json({message: 'No customer found', success: false})
         // update project details
-        const projectFields={customerName: existingCustomer.name}
-        const updateProject=await projectModel.findByIdAndUpdate({_id: req.params.project_id}, {$set: projectFields, ...req.body})
+        const updateProject=await projectModel.findByIdAndUpdate({_id: req.params.project_id}, {...req.body})
         // save project details
         await updateProject.save()
         res.status(200).json({message: 'Project updated successfully', success: true})

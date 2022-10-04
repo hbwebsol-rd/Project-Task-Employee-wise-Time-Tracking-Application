@@ -13,12 +13,12 @@ const config=require('config')
 module.exports.getEmployees=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=10, sort}=req.query
+        const {page=1, limit=1000, sort}=req.query
         const search=req.query.search||""
-        const nsort=sort==="desc"?-1:1
+        const nsort=sort==="ascending"?1:-1
         const pipeline=[
             {$project: {password: 0}},
-            {$sort: {name: nsort}},
+            {$sort: {created_date: nsort}},
             {$match: {$or: [{name: {$regex: search, $options: "i"}}, 
                             {designation: {$regex: search, $options: "i"}},
                             {email: {$regex: search, $options: "i"}}]}},
@@ -58,12 +58,12 @@ module.exports.getEmployeeProfile=async(req, res)=>{
 module.exports.getEmployeeTasks=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=10, sort}=req.query
+        const {page=1, limit=1000, sort}=req.query
         const search=req.query.search||""
-        const nsort=sort==="desc"?-1:1
+        const nsort=sort==="ascending"?1:-1
         const pipeline=[
-            {$sort: {taskName: nsort} },
-            {$match: {employeeName: req.userInfo.name, 
+            {$sort: {created_date: nsort} },
+            {$match: {employeeId: mongoose.Types.ObjectId(`${req.userInfo.id}`), 
                       $or: [{projectName: {$regex: search, $options: "i"}}, 
                             {status: {$regex: search, $options: "i"}}, 
                             {priority: {$regex: search, $options: "i"}}, 
@@ -89,7 +89,7 @@ module.exports.getEmployeeDashboard=async(req, res)=>{
     try {
         // check existing tasks
         const todayTasks=[]
-        const existingTasks=await taskModel.find({employeeName: req.userInfo.name})
+        const existingTasks=await taskModel.find({employeeId: req.userInfo.id})
         if(!existingTasks.length>0) return res.status(400).json({message: 'No tasks found', success: false})
         existingTasks.map(task=>{
             if(task.created_date.toLocaleDateString()===new Date().toLocaleDateString()) todayTasks.push(task)
@@ -124,10 +124,13 @@ module.exports.getEmployee=async(req, res)=>{
 // SUPERUSER
 // create a new employee
 module.exports.createEmployee=async(req, res)=>{
-    const {name, email, password, designation}=req.body
+    const {gender, name, password, designation}=req.body
+    let {email}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -140,11 +143,12 @@ module.exports.createEmployee=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
 
     try {
+        email=email.toLowerCase()
         // check existing employee
         const existingEmployee=await employeeModel.findOne({email})
         if(existingEmployee) return res.status(400).json({message: 'Employee already exists', success: false})
         // create new employee
-        const newEmployee=await employeeModel({name, email, role: 2, password, designation})
+        const newEmployee=await employeeModel({gender, name, email, role: 2, password, designation})
         // password hash
         const salt=await bcrypt.genSalt(10)
         newEmployee.password=await bcrypt.hash(password, salt)
@@ -295,10 +299,13 @@ module.exports.updateTaskStatus=async(req, res)=>{
 // SUPERUSER
 // update employee info
 module.exports.updateEmployee=async(req, res)=>{
-    const {name, designation, email}=req.body
+    const {gender, name, designation}=req.body
+    let {email}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -308,6 +315,47 @@ module.exports.updateEmployee=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
     
     try {
+        email=email.toLowerCase()
+        // check url employee id
+        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
+        // check existing employee
+        const existingEmployee=await employeeModel.findById(req.params.employee_id)
+        if(!existingEmployee) return res.status(400).json({message: 'No employee found', success: false})
+        // check email
+        const existingEmployeeEmail=await employeeModel.findOne({email})
+        if(existingEmployeeEmail) if(existingEmployee.id!==existingEmployeeEmail.id) return res.status(400).json({message: 'Employee with same Email Id exists', success: false})
+        // update employee details
+        const updateEmployee=await employeeModel.findByIdAndUpdate({_id: req.params.employee_id}, {...req.body})
+        // save employee details
+        await updateEmployee.save()
+        res.status(200).json({message: 'Employee updated successfully', success: true})
+
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).json({message: 'Server Error', success: false})
+    }
+}
+
+// EMPLOYEE
+// update employee info
+module.exports.employeeUpdateProfile=async(req, res)=>{
+    const {gender, name, designation}=req.body
+    let {email}=req.body
+    const errors=[]
+    // check name
+    if(!name) errors.push("name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
+    // check designation
+    if(!designation) errors.push("designation is required") 
+    // check email
+    if(!email) errors.push("Email Id is required") 
+    else if(email&&!email.includes('@')&&!email.endsWith('.com')) errors.push("Invalid Email Id") 
+    // display errors
+    if(errors.length>0) return res.status(400).json({errors: errors, success: false})
+    
+    try {
+        email=email.toLowerCase()
         // check url employee id
         if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
         // check existing employee

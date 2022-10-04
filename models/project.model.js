@@ -6,10 +6,6 @@ const projectSchema=mongoose.Schema({
         required: true,
         unique: true
     },
-    customerName: {
-        type: String,
-        ref: 'customer.model'
-    },
     customerId: {
         type: mongoose.Types.ObjectId,
         ref: 'customer.model'
