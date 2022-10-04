@@ -91,17 +91,17 @@ const useStyles = makeStyles({
     padding: "30px 22px",
     borderRadius:"10px",
     zIndex: "1299 !important",
-    "@media(max-width: 1650px)": {
+    "@media(max-width: 1765px)": {
       width: "85%",
     },
-    "@media(max-width: 1228px)": {
+    "@media(max-width: 1348px)": {
       width: "80%",
     },
-    "@media(max-width: 1000px)": {
+    "@media(max-width: 1040px)": {
       width: "75%",
       height: "1rem",
     },
-    "@media(max-width: 800px)": {
+    "@media(max-width: 860px)": {
       width: "70%",
     },
   },
