@@ -105,7 +105,7 @@ module.exports.getExports=async(req, res)=>{
             worksheet.getRow(1).eachCell(cell=>{
                 cell.font={bold: true}
             })
-            console.log("excel")
+            // console.log("excel")
             const data=await workbook.xlsx.writeFile('../Worklog.xlsx')
         } catch (err) {
             console.error(err)

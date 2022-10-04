@@ -5,11 +5,11 @@ const customerModel=require('../models/customer.model')
 module.exports.getCustomers=async(req ,res)=>{
     try {
         // filters
-        const {page=1, limit=10, sort}=req.query
+        const {page=1, limit=1000, sort}=req.query
         const search=req.query.search||""
-        const nsort=sort==="desc"?-1:1
+        const nsort=sort==="ascending"?1:-1
         const pipeline=[
-            {$sort: {name: nsort}},
+            {$sort: {created_date: nsort}},
             {$match: {$or: [{name: {$regex: search, $options: "i"}}, {email: {$regex: search, $options: "i"}}]}},
             {$skip: (page-1)*parseInt(limit)},
             {$limit: parseInt(limit)},
@@ -45,10 +45,13 @@ module.exports.getCustomer=async(req, res)=>{
 
 // create new customer
 module.exports.createCustomer=async(req, res)=>{
-    const {name, email}=req.body
+    const {gender, name}=req.body
+    let {email}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("name is required")
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check email
     if(!email) errors.push("email is required") 
     else if(email&&!email.includes('@')||!email.endsWith('.com')) errors.push("Invalid Email Id") 
@@ -56,11 +59,12 @@ module.exports.createCustomer=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
 
     try {
+        email=email.toLowerCase()
         // check existing employee
         const existingCustomer=await customerModel.findOne({email})
         if(existingCustomer) return res.status(200).json({message: 'Customer already exists', success: false})
         // create new customer
-        const newCustomer=await customerModel({name, email})
+        const newCustomer=await customerModel({name, gender, email})
         // save customer
         await newCustomer.save()
         res.status(200).json({message: 'Customer added successfully', success: true})
@@ -73,10 +77,13 @@ module.exports.createCustomer=async(req, res)=>{
 
 // update customer info
 module.exports.updateCustomer=async(req, res)=>{
-    const {name, email}=req.body
+    const {gender, name}=req.body
+    let {email}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("name is required")
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check email
     if(!email) errors.push("email is required") 
     else if(email&&!email.includes('@')||!email.endsWith('.com')) errors.push("Invalid Email Id") 
@@ -84,6 +91,7 @@ module.exports.updateCustomer=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
 
     try {
+        email=email.toLowerCase()
         // check url customer di
         if(!mongoose.Types.ObjectId.isValid(req.params.customer_id)) return res.status(400).json({message: 'Invalid Customer Id', success: false})
         // check existing customer

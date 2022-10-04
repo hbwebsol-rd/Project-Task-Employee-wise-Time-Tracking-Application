@@ -11,10 +11,10 @@ module.exports=(app)=>{
     app.get('/api/getCustomer/:customer_id', Auth.superUser, Customer.getCustomer)
 
     // create new customer
-    app.post('/api/addCustomer', [Auth.superUser, [check('name'), check('email')]], Customer.createCustomer)
+    app.post('/api/addCustomer', [Auth.superUser, [check('gender'), check('name'), check('email')]], Customer.createCustomer)
 
     // update customer info
-    app.patch('/api/updateCustomer/:customer_id', [Auth.superUser, [check('name'), check('email')]], Customer.updateCustomer)
+    app.patch('/api/updateCustomer/:customer_id', [Auth.superUser, [check('gender'), check('name'), check('email')]], Customer.updateCustomer)
 
     // delete customer
     app.delete('/api/deleteCustomer/:customer_id', Auth.superUser, Customer.deleteCustomer)

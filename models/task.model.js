@@ -1,25 +1,17 @@
 const mongoose=require('mongoose')
 
 const taskSchema=mongoose.Schema({
-    projectName: {
+    taskName: {
         type: String,
-        ref: 'project.model'
+        required: true
     },
     projectId: {
         type: mongoose.Types.ObjectId,
         ref: 'project.model'
     },
-    employeeName: {
-        type: String,
-        ref: 'employee.model'
-    },
     employeeId: {
         type: mongoose.Types.ObjectId,
         ref: 'employee.model'
-    },
-    taskName: {
-        type: String,
-        required: true
     },
     priority: {
         type: String,

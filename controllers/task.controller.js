@@ -10,11 +10,25 @@ const config=require('config')
 module.exports.getTasks=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=10, sort}=req.query
+        const {page=1, limit=1000, sort}=req.query
         const search=req.query.search||""
-        const nsort=sort==="desc"?-1:1
+        const nsort=sort==="ascending"?1:-1
         const pipeline=[
-            {$sort: {taskName: nsort}},
+            {$sort: {created_date: nsort}},
+            {$lookup: {
+                from: "projects",
+                localField: "projectId",
+                foreignField: "_id",
+                as: "projectName"
+            }},
+            {$set: {projectName: {$arrayElemAt: ["$projectName.name", 0]}}},
+            {$lookup: {
+                from: "employees",
+                localField: "employeeId",
+                foreignField: "_id",
+                as: "employeeName"
+            }},
+            {$set: {employeeName: {$arrayElemAt: ["$employeeName.name", 0]}}},
             {$match: { $or: [ {taskName: {$regex: search, $options: "i"}}, 
                               {projectName: {$regex: search, $options: "i"}}, 
                               {employeeName: {$regex: search, $options: "i"}}]}},
@@ -55,6 +69,7 @@ module.exports.addTaskDropdown=async(req, res)=>{
     try {
         // access employees and projects
         const pipeline=[
+            { $limit: 1 },
             { $lookup: {
                     from: "projects",
                     localField: "all",
@@ -68,7 +83,7 @@ module.exports.addTaskDropdown=async(req, res)=>{
                     as: "employees"
                 } },
                 // systematic response
-            {$project: {name: 1, 
+            {$project: {_id: 0, 
                         projects: {$map: 
                             {input: "$projects", as: "projects", in: 
                                 {projectId: "$$projects._id", projectName: "$$projects.name"}}}, 
@@ -106,18 +121,18 @@ module.exports.createTask=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
     
     try {
-        // check existing project in project database by name 
+        // check existing project in project database by id 
         const existingProject=await projectModel.findById({_id: projectId})
-        if(!existingProject) return res.status(200).json({message: 'No project found with that respective ID', success: false})
-        // check existing employee in employee database by name
+        if(!existingProject) return res.status(404).json({message: 'No project found with that respective ID', success: false})
+        // check existing employee in employee database by id
         const existingEmployee=await employeeModel.findById({_id: employeeId})
-        if(!existingEmployee) return res.status(200).json({message: 'No employee found with that respective ID', success: false})
+        if(!existingEmployee) return res.status(404).json({message: 'No employee found with that respective ID', success: false})
         // check if project and task name is same
         const existingTask=await taskModel.find({taskName: req.body.taskName})
-        const existingTaskProjectNames=existingTask.map(data=>data.projectName)
-        for(let i=0;i<existingTaskProjectNames.length;i++) if(existingProject.name===existingTaskProjectNames[i]) return res.status(200).json({message: 'Task already assigned', success: false})  
-        // create new task
-        const taskFields={taskName, priority, status, timeOnTask: 0, projectName: existingProject.name, employeeName: existingEmployee.name, employeeId, projectId}
+        const existingTaskProjectIds=existingTask.map(data=>data.projectId)
+        for(let i=0;i<existingTaskProjectIds.length;i++) if(existingProject._id===existingTaskProjectIds[i]) return res.status(404).json({message: 'Task already assigned', success: false})  
+        // create new tasks
+        const taskFields={taskName, priority, status, timeOnTask: 0, projectId, employeeId}
         let newTask=new taskModel(taskFields)
         // save new task
         await newTask.save()
@@ -188,7 +203,7 @@ module.exports.updateTask=async(req, res)=>{
         const existingEmployee=await employeeModel.findById({_id: employeeId})
         if(!existingEmployee) return res.status(200).json({message: 'No employee found with that respective ID', success: false})
         // update task details
-        const taskFields={projectName: existingProject.name, employeeName: existingEmployee.name, timeOnTask: 0}
+        const taskFields={projectId, employeeId, timeOnTask: 0}
         const updateTask=await taskModel.findByIdAndUpdate({_id: req.params.task_id}, {$set: taskFields, ...req.body})
         // save task details
         await updateTask.save()
