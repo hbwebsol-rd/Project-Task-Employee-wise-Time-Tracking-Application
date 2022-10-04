@@ -13,7 +13,7 @@ const config=require('config')
 module.exports.getEmployees=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=1000, sort}=req.query
+        const {page=1, limit=100000, sort}=req.query
         const search=req.query.search||""
         const nsort=sort==="ascending"?1:-1
         const pipeline=[
@@ -58,7 +58,7 @@ module.exports.getEmployeeProfile=async(req, res)=>{
 module.exports.getEmployeeTasks=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=1000, sort}=req.query
+        const {page=1, limit=100000, sort}=req.query
         const search=req.query.search||""
         const nsort=sort==="ascending"?1:-1
         const pipeline=[
@@ -131,6 +131,8 @@ module.exports.createEmployee=async(req, res)=>{
     if(!name) errors.push("name is required") 
     // check gender
     if(!gender) errors.push("gender is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -144,11 +146,12 @@ module.exports.createEmployee=async(req, res)=>{
 
     try {
         email=email.toLowerCase()
+        email=email.toLowerCase()
         // check existing employee
         const existingEmployee=await employeeModel.findOne({email})
         if(existingEmployee) return res.status(400).json({message: 'Employee already exists', success: false})
         // create new employee
-        const newEmployee=await employeeModel({gender, name, email, role: 2, password, designation})
+        const newEmployee=await employeeModel({gender, gender, name, email, role: 2, password, designation})
         // password hash
         const salt=await bcrypt.genSalt(10)
         newEmployee.password=await bcrypt.hash(password, salt)
@@ -346,6 +349,8 @@ module.exports.employeeUpdateProfile=async(req, res)=>{
     if(!name) errors.push("name is required") 
     // check gender
     if(!gender) errors.push("gender is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -355,6 +360,7 @@ module.exports.employeeUpdateProfile=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
     
     try {
+        email=email.toLowerCase()
         email=email.toLowerCase()
         // check url employee id
         if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
