@@ -8,6 +8,7 @@ module.exports = {
     // field messages
     FieldReq: ":field is Required",
     FieldInvalid: "Invalid :field",
+    IDInvalid: "Invalid ID",
     // data messages
     DataNotFound: ":data Not Found",
     DataIDNotFound: "No :data found with that respective ID",

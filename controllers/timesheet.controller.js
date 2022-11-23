@@ -249,7 +249,7 @@ module.exports.getCustomTimesheets=async(req, res)=>{
 
 // add timesheet
 module.exports.createTimesheet=async(req, res)=>{
-    const {taskId, date, startTime, endTime}=req.body
+    const {taskId, date, startTime, endTime, note}=req.body
     // const error=[]
     // check taskId
     if(!taskId) return res.json({message: "TaskId is a compulsory field", success: false})
@@ -269,16 +269,19 @@ module.exports.createTimesheet=async(req, res)=>{
         if(req.userInfo.id!==existingTask.employeeId.toString()) return res.status(404).json(ResponseMsg("FieldNotFoundInData", "Employee", "Task", false))
         // convert input dd-mm-yyyy to output mm-dd-yyyy format
         const newDate = convertDate(date)
+        // check if future date
+        const currentDate = new Date()
+        if(newDate.toLocaleDateString() > currentDate.toLocaleDateString()) return res.status(404).json(ResponseMsg("FieldInvalid", "Date", null, false))
         // task start and end time conversion
         const taskStartTime = convertTime(startTime, newDate)
         const taskEndTime = convertTime(endTime, newDate)
         // check time validity
         if(checkTimeValidity(taskStartTime, taskEndTime)) return res.status(404).json(ResponseMsg("InvalidTime", null, null, false))
         // check if user enters same timesheet
-        const sameTimesheet=await timeSheetModel.findOne({$and: [{taskId: taskId}, {date: newDate}, {startTime: taskStartTime}, {endTime: taskEndTime}]})
+        const sameTimesheet=await timeSheetModel.findOne({$and: [{taskId: taskId}, {date: newDate}, {startTime: taskStartTime}, {endTime: taskEndTime}, {employeeId: req.userInfo.id}]})
         if(sameTimesheet) return res.status(404).json(ResponseMsg("DataExists", null, "Timesheet", false))
-        // check time collidation
-        const sameDateTimesheet = await timeSheetModel.find({date: newDate})
+        // check time collision
+        const sameDateTimesheet = await timeSheetModel.find({date: newDate, employeeId: req.userInfo.id})
         if(sameDateTimesheet.length>0){
             let sameData=false
             sameDateTimesheet.map(timesheet=>{
@@ -288,13 +291,70 @@ module.exports.createTimesheet=async(req, res)=>{
             if(sameData) return res.status(404).json(ResponseMsg("TimeCollision", null, "Timesheet", false))
         }
         // prepare new timesheet
-        const newTimesheet=await timeSheetModel({employeeId: req.userInfo.id, taskId, date: newDate, startTime: taskStartTime, endTime: taskEndTime})
+        const newTimesheet=await timeSheetModel({employeeId: req.userInfo.id, taskId, date: newDate, startTime: taskStartTime, endTime: taskEndTime, note})
         // save timesheet
         await newTimesheet.save() 
         res.status(200).json(ResponseMsg("AddSuccess", null, "Timesheet", false))
+        
+    } catch (err) {
+        console.error(err.message)
+        return res.status(500).json({message: "Server Error", success: false})
+    }
+}
+
+// update timesheet
+module.exports.updateTimesheet=async(req, res)=>{
+    const {taskId, date, startTime, endTime, note}=req.body
+    // const error=[]
+    // check taskId
+    if(!taskId) return res.json({message: "TaskId is a compulsory field", success: false})
+    else if(taskId&&!mongoose.Types.ObjectId.isValid(taskId)) return res.json({message: "Invalid TaskId", success: false})
+    // chek date
+    if(!date) return res.json({message: "Date is a compulsory field", success: false})
+    // check startTime
+    if(!startTime) return res.json({message: "StartTime is a compulsory field", success: false})
+    // check endTime
+    if(!endTime) return res.json({message: "EndTime is a compulsory field", success: false})
+
+    try {
+        // check id in url
+        if(!mongoose.Types.ObjectId.isValid(req.params.timesheet_id)) return res.status(400).json(ResponseMsg("IDInvalid", null, null, false))
+        // check existing timesheet in database
+        const existingTimesheet=await timeSheetModel.findById({_id: req.params.timesheet_id})
+        if(!existingTimesheet) return res.status(404).json(ResponseMsg("DataIDNotFound", null, "Timesheet", false))
+        // check existing task in database
+        const existingTask=await taskModel.findById({_id: taskId})
+        if(!existingTask) return res.status(404).json(ResponseMsg("DataIDNotFound", null, "Task", false))
+        // convert input dd-mm-yyyy to output mm-dd-yyyy format
+        const newDate = convertDate(date)
+        // check if future date
+        const currentDate = new Date()
+        if(newDate.toLocaleDateString() > currentDate.toLocaleDateString()) return res.status(404).json(ResponseMsg("FieldInvalid", "Date", null, false))
+        // task start and end time conversion
+        const taskStartTime = convertTime(startTime, newDate)
+        const taskEndTime = convertTime(endTime, newDate)
+        // check time validity
+        if(checkTimeValidity(taskStartTime, taskEndTime)) return res.status(404).json(ResponseMsg("InvalidTime", null, null, false))
+        // check time collision
+        const sameDateTimesheet = await timeSheetModel.find({date: newDate, employeeId: req.userInfo.id})
+        if(sameDateTimesheet.length>0){
+            let sameData=false
+            sameDateTimesheet.map(timesheet=>{
+                if(checkTimeCollision(taskStartTime, timesheet.startTime, timesheet.endTime)) sameData=true 
+                if(checkTimeCollision(taskEndTime, timesheet.startTime, timesheet.endTime)) sameData=true 
+            })
+            if(sameData) return res.status(404).json(ResponseMsg("TimeCollision", null, "Timesheet", false))
+        }
+        // update timesheet
+        console.log(newDate)
+        const updateTimesheet=await timeSheetModel.findByIdAndUpdate({_id: req.params.timesheet_id}, {taskId, date: newDate, startTime: taskStartTime, endTime: taskEndTime, note})
+        // save timesheet
+        await updateTimesheet.save() 
+        res.status(200).json(ResponseMsg("UpdateSuccess", null, "Timesheet", false))
 
     } catch (err) {
         console.error(err.message)
+        // console.log(err)
         return res.status(500).json({message: "Server Error", success: false})
     }
 }
