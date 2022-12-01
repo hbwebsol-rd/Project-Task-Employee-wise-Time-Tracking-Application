@@ -1,5 +1,6 @@
 const mongoose=require('mongoose')
 const customerModel=require('../models/customer.model')
+const {ResponseMsg} = require('../config/helpers')
 
 // retrieve info of all customers
 module.exports.getCustomers=async(req ,res)=>{
@@ -16,13 +17,13 @@ module.exports.getCustomers=async(req ,res)=>{
         ]
         // check existing customers and pagination
         const existingCustomers=await customerModel.aggregate(pipeline)
-        if(!existingCustomers.length>0) return res.status(200).json({message: 'No customers found', success: false})
+        if(!existingCustomers.length>0) return res.status(404).json(ResponseMsg("DataNotFound", "", "Customers", false))
         // display all customers
         res.status(200).json({success: true, total: existingCustomers.length, data: existingCustomers.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -30,16 +31,16 @@ module.exports.getCustomers=async(req ,res)=>{
 module.exports.getCustomer=async(req, res)=>{
     try {
         // check url customer id
-        if(!mongoose.Types.ObjectId.isValid(req.params.customer_id)) return res.status(400).json({message: 'Invalid Customer Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.customer_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "CustomerID", "", false))
         // check existing customer
         const existingCustomer=await customerModel.findById(req.params.customer_id)
-        if(!existingCustomer) return res.status(200).json({message: 'No customer found', success: false})
+        if(!existingCustomer) return res.status(404).json(ResponseMsg("DataNotFound", "", "Customer", false))
         // display customer details
         res.status(200).json({success: true, data: existingCustomer})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -62,16 +63,16 @@ module.exports.createCustomer=async(req, res)=>{
         email=email.toLowerCase()
         // check existing employee
         const existingCustomer=await customerModel.findOne({email})
-        if(existingCustomer) return res.status(200).json({message: 'Customer already exists', success: false})
+        if(existingCustomer) return res.status(404).json(ResponseMsg("DataExists", "", "Customer", false))
         // create new customer
         const newCustomer=await customerModel({name, gender, email})
         // save customer
         await newCustomer.save()
-        res.status(200).json({message: 'Customer added successfully', success: true})
+        res.status(200).json(ResponseMsg("AddSuccess", "", "Customer", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -93,22 +94,22 @@ module.exports.updateCustomer=async(req, res)=>{
     try {
         email=email.toLowerCase()
         // check url customer di
-        if(!mongoose.Types.ObjectId.isValid(req.params.customer_id)) return res.status(400).json({message: 'Invalid Customer Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.customer_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "CustomerID", "", false))
         // check existing customer
         const existingCustomer=await customerModel.findById(req.params.customer_id)
-        if(!existingCustomer) return res.status(200).json({message: 'No customer found', success: false})
+        if(!existingCustomer) return res.status(404).json(ResponseMsg("DataNotFound", "", "Customer", false))
         // check email
         const existingCustomerEmail=await customerModel.findOne({email})
-        if(existingCustomerEmail) if(existingCustomer.id!==existingCustomerEmail.id) return res.status(400).json({message: 'Customer with same Email Id exists', success: false})
+        if(existingCustomerEmail) if(existingCustomer.id!==existingCustomerEmail.id) return res.status(400).json(ResponseMsg("DataWithFieldExists", "EmailID", "Customer", false))
         // update customer details
         const updateCustomer=await customerModel.findByIdAndUpdate({_id: req.params.customer_id}, {...req.body})
         // save customer details
         await updateCustomer.save()
-        res.status(200).json({message: 'Customer updated successfully', success: true})
+        res.status(200).json(ResponseMsg("UpdateSuccss", "", "Customer", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -116,14 +117,14 @@ module.exports.updateCustomer=async(req, res)=>{
 module.exports.deleteCustomer=async(req, res)=>{
     try {
         // check url customer id
-        if(!mongoose.Types.ObjectId.isValid(req.params.customer_id)) return res.status(400).json({message: 'Invalid Customer Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.customer_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "CustomerID", "", false))
         // check existing customer and remove
         const existingCustomer=await customerModel.findByIdAndRemove(req.params.customer_id)
-        if(!existingCustomer) return res.status(200).json({message: 'No customer found', success: false})
-        res.status(200).json({message: 'Customer Removed Successfully', success: true})
+        if(!existingCustomer) return res.status(404).json(ResponseMsg("DataNotFound", "", "Customer", true))
+        res.status(200).json(ResponseMsg("DeleteSuccess", "", "Customer", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }

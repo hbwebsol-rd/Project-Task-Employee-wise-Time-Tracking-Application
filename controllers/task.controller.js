@@ -5,6 +5,7 @@ const customerModel = require('../models/customer.model')
 const mongoose=require('mongoose')
 const nodemailer=require('nodemailer')
 const config=require('config')
+const {ResponseMsg} = require('../config/helpers')
 
 // get data for all tasks
 module.exports.getTasks=async(req, res)=>{
@@ -37,13 +38,13 @@ module.exports.getTasks=async(req, res)=>{
         ]
         // check existing tasks
         const existingTasks=await taskModel.aggregate(pipeline)
-        if(!existingTasks.length>0) return res.status(404).json({message: 'No tasks found', success: false})
+        if(!existingTasks.length>0) return res.status(404).json(ResponseMsg("DataNotFound", "", "Tasks", false))
         // display all tasks
         res.status(200).json({success: true, data: existingTasks.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -51,16 +52,16 @@ module.exports.getTasks=async(req, res)=>{
 module.exports.getTask=async(req, res)=>{
     try {
         // check url task id
-        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json({message: 'Invalid Task Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "TaskID", "", false))
         // check existing task
         const existingTask=await taskModel.findById(req.params.task_id)
-        if(!existingTask) return res.status(200).json({message: 'No task found', success: false})
+        if(!existingTask) return res.status(404).json(ResponseMsg("DataNotFound", "", "Task", false))
         // display task
         res.status(200).json({success: true, data: existingTask})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -97,7 +98,7 @@ module.exports.addTaskDropdown=async(req, res)=>{
         res.status(200).json({success: true, data: existingCustomers.map(data=>data)})
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -123,14 +124,14 @@ module.exports.createTask=async(req, res)=>{
     try {
         // check existing project in project database by id 
         const existingProject=await projectModel.findById({_id: projectId})
-        if(!existingProject) return res.status(404).json({message: 'No project found with that respective ID', success: false})
+        if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Project", false))
         // check existing employee in employee database by id
         const existingEmployee=await employeeModel.findById({_id: employeeId})
-        if(!existingEmployee) return res.status(404).json({message: 'No employee found with that respective ID', success: false})
+        if(!existingEmployee) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Employee", false))
         // check if project and task name is same
         const existingTask=await taskModel.find({taskName: req.body.taskName})
         const existingTaskProjectIds=existingTask.map(data=>data.projectId)
-        for(let i=0;i<existingTaskProjectIds.length;i++) if(existingProject._id===existingTaskProjectIds[i]) return res.status(404).json({message: 'Task already assigned', success: false})  
+        for(let i=0;i<existingTaskProjectIds.length;i++) if(existingProject._id===existingTaskProjectIds[i]) return res.status(404).json(ResponseMsg("DataExists", "", "Task", false))  
         // create new tasks
         const taskFields={taskName, priority, status, timeOnTask: 0, projectId, employeeId}
         let newTask=new taskModel(taskFields)
@@ -163,11 +164,11 @@ module.exports.createTask=async(req, res)=>{
             if(err) throw err
             res.status(200).json({Info: info.response})
         })
-        res.status(200).json({message: 'Task added successfully', success: true})
+        res.status(200).json(ResponseMsg("AddSuccess", "", "Task", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -192,26 +193,26 @@ module.exports.updateTask=async(req, res)=>{
 
     try {
         // check url task id
-        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json({message: 'Invalid Task Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "TaskID", "", false))
         // check is task exists
         const task=await taskModel.findById(req.params.task_id)
-        if(!task) return res.status(200).json({message: 'No task found', success: false})
+        if(!task) return res.status(404).json(ResponseMsg("DataNotFound", "", "Task", false))
         // check existing project in project database by id 
         const existingProject=await projectModel.findById({_id: projectId})
-        if(!existingProject) return res.status(200).json({message: 'No project found with that respective ID', success: false})
+        if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Project", false))
         // check existing employee in employee database by id
         const existingEmployee=await employeeModel.findById({_id: employeeId})
-        if(!existingEmployee) return res.status(200).json({message: 'No employee found with that respective ID', success: false})
+        if(!existingEmployee) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Employee", false))
         // update task details
         const taskFields={projectId, employeeId, timeOnTask: 0}
         const updateTask=await taskModel.findByIdAndUpdate({_id: req.params.task_id}, {$set: taskFields, ...req.body})
         // save task details
         await updateTask.save()
-        res.status(200).json({message: 'Task updated successfully', success: true})
+        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Task", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -219,14 +220,14 @@ module.exports.updateTask=async(req, res)=>{
 module.exports.deleteTask=async(req, res)=>{
     try {
         // check url task id
-        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json({message: 'Invalid Task Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "TaskID", "", false))
         // check existing task and remove
         const task=await taskModel.findByIdAndRemove(req.params.task_id)
-        if(!task) return res.status(200).json({message: 'No task found', success: false})
-        res.status(200).json({message: 'Task Removed Successfully', success: true})
+        if(!task) return res.status(404).json(ResponseMsg("DataNotFound", "", "Task", false))
+        res.status(200).json(ResponseMsg("DeleteSuccess", "", "Task", true))
         
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }

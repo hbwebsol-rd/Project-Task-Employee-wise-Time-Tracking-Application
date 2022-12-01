@@ -1,6 +1,7 @@
 const projectModel=require('../models/project.model')
 const customerModel=require('../models/customer.model')
 const mongoose=require('mongoose')
+const { ResponseMsg } = require('../config/helpers')
 
 // retrieve data of all projects
 module.exports.getProjects=async(req, res)=>{
@@ -26,13 +27,13 @@ module.exports.getProjects=async(req, res)=>{
         ]
         // check existing projects
         const existingProjects=await projectModel.aggregate(pipeline)
-        if(!existingProjects.length>0) return res.status(200).json({message: 'No projects found', success: false})
+        if(!existingProjects.length>0) return res.status(404).json(ResponseMsg("DataNotFound", "", "Projects", false))
         // display all projects
         res.status(200).json({success: true, data: existingProjects.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -40,16 +41,16 @@ module.exports.getProjects=async(req, res)=>{
 module.exports.getProject=async(req, res)=>{
     try {
         // check url project id
-        if(!mongoose.Types.ObjectId.isValid(req.params.project_id)) return res.status(400).json({message: 'Invalid Project Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.project_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "ProjectID", "", false))
         // check existing project
         const existingProject=await projectModel.findById(req.params.project_id)
-        if(!existingProject) return res.status(200).json({message: 'No project found', success: false})
+        if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFound", "", "Project", false))
         // display project
         res.status(200).json({success: true, data: existingProject})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -74,19 +75,19 @@ module.exports.createProject=async(req, res)=>{
     try {
         // check existing project
         const existingProject=await projectModel.findOne({name})
-        if(existingProject) return res.status(200).json({message: 'Project already exists', success: false})
+        if(existingProject) return res.status(404).json(ResponseMsg("DataExists", "", "Project", false))
         // customer exists in customer database
         const existingCustomer=await customerModel.findById({_id: customerId})
-        if(!existingCustomer) return res.status(400).json({message: "No such customer found", success: false})
+        if(!existingCustomer) return res.status(400).json(ResponseMsg("DataNotFound", "", "Customer", false))
         // create new project
         const newProject=await projectModel({name, customerId, technology, start, end})
         // save new project
         await newProject.save()
-        res.status(200).json({message: 'Project added successfully', success: true})
+        res.status(200).json(ResponseMsg("AddSuccess", "", "Project", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
  
@@ -110,22 +111,22 @@ module.exports.updateProject=async(req, res)=>{
 
     try {
         // check url project id
-        if(!mongoose.Types.ObjectId.isValid(req.params.project_id)) return res.status(400).json({message: 'Invalid Project Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.project_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "ProjectID", "", false))
         // check existing project
         const existingProject=await projectModel.findById(req.params.project_id)
-        if(!existingProject) return res.status(200).json({message: 'No project found', success: false})
+        if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFound", "", "Project", false))
         // check existing customer
         const existingCustomer=await customerModel.findById({_id: customerId})
-        if(!existingCustomer) return res.status(200).json({message: 'No customer found', success: false})
+        if(!existingCustomer) return res.status(404).json(ResponseMsg("DataNotFound", "", "Customer", false))
         // update project details
         const updateProject=await projectModel.findByIdAndUpdate({_id: req.params.project_id}, {...req.body})
         // save project details
         await updateProject.save()
-        res.status(200).json({message: 'Project updated successfully', success: true})
+        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Project", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -133,14 +134,14 @@ module.exports.updateProject=async(req, res)=>{
 module.exports.deleteProject=async(req, res)=>{
     try {
         // check url project id
-        if(!mongoose.Types.ObjectId.isValid(req.params.project_id)) return res.status(400).json({message: 'Invalid Project Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.project_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "ProjectID", "", false))
         // check existing project and remove
         const existingProject=await projectModel.findByIdAndRemove(req.params.project_id)
-        if(!existingProject) return res.status(200).json({message: 'No project found', success: false})
-        res.status(200).json({message: 'Project Removed Successfully', success: true})
+        if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFound", "", "Project", false))
+        res.status(200).json(ResponseMsg("DeleteSuccess", "", "Project", true))
         
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
