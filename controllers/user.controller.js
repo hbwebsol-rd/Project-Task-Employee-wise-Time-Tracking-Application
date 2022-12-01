@@ -276,7 +276,7 @@ module.exports.resetPassword=async(req, res)=>{
 // update superUser profile
 module.exports.updateProfile=async(req, res)=>{
     const {gender, name, phoneNumber}=req.body
-    let email=req.body
+    let {email}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("Name is required") 

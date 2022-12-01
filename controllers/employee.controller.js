@@ -349,8 +349,6 @@ module.exports.employeeUpdateProfile=async(req, res)=>{
     if(!name) errors.push("name is required") 
     // check gender
     if(!gender) errors.push("gender is required") 
-    // check gender
-    if(!gender) errors.push("gender is required") 
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -360,7 +358,6 @@ module.exports.employeeUpdateProfile=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
     
     try {
-        email=email.toLowerCase()
         email=email.toLowerCase()
         // check url employee id
         if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
