@@ -5,7 +5,11 @@ const customerModel = require('../models/customer.model')
 const mongoose=require('mongoose')
 const nodemailer=require('nodemailer')
 const config=require('config')
-const {ResponseMsg} = require('../config/helpers')
+const {ResponseMsg, capitalize} = require('../config/helpers')
+
+// global variables
+const priorityList = ['Low', 'Medium', 'High']
+const statusList = ['Done', 'In Progress', 'Open', 'Pending']
 
 // get data for all tasks
 module.exports.getTasks=async(req, res)=>{
@@ -40,7 +44,7 @@ module.exports.getTasks=async(req, res)=>{
         const existingTasks=await taskModel.aggregate(pipeline)
         if(!existingTasks.length>0) return res.status(404).json(ResponseMsg("DataNotFound", "", "Tasks", false))
         // display all tasks
-        res.status(200).json({success: true, data: existingTasks.map(data=>data)})
+        res.status(200).json({success: true, count: existingTasks.length, data: existingTasks.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -104,7 +108,9 @@ module.exports.addTaskDropdown=async(req, res)=>{
 
 // create new task
 module.exports.createTask=async(req, res)=>{
-    const {taskName, employeeId, projectId, priority, status}=req.body
+    let {taskName, employeeId, projectId, priority, status}=req.body
+    priority = capitalize(priority)
+    status = capitalize(status)
     const errors=[]
     // check task name
     if(!taskName) errors.push('Task name is required')
@@ -128,42 +134,45 @@ module.exports.createTask=async(req, res)=>{
         // check existing employee in employee database by id
         const existingEmployee=await employeeModel.findById({_id: employeeId})
         if(!existingEmployee) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Employee", false))
+        // check if priority matches priorityList
+        if(!priorityList.includes(priority)) return res.status(404).json(ResponseMsg("FieldInvalid", "Priority", "", false))
+        // check if status matches statusList
+        if(!statusList.includes(status)) return res.status(404).json(ResponseMsg("FieldInvalid", "Status", "", false))
         // check if project and task name is same
-        const existingTask=await taskModel.find({taskName: req.body.taskName})
-        const existingTaskProjectIds=existingTask.map(data=>data.projectId)
-        for(let i=0;i<existingTaskProjectIds.length;i++) if(existingProject._id===existingTaskProjectIds[i]) return res.status(404).json(ResponseMsg("DataExists", "", "Task", false))  
+        const existingTask=await taskModel.find({taskName, projectId})
+        if(existingTask.length > 0) return res.status(404).json(ResponseMsg("DataExists", "", "Task", false))  
         // create new tasks
         const taskFields={taskName, priority, status, timeOnTask: 0, projectId, employeeId}
         let newTask=new taskModel(taskFields)
         // save new task
         await newTask.save()
         // Send mail using nodemailer
-        const transporter=nodemailer.createTransport({
-            service: 'smtp@gmail.com',
-            port: 465,
-            secure: true,
-            requireTLS: true,
-            auth: {
-                user: `${config.get('superUserm')}`,
-                pass: `${config.get('superUserp')}`
-            }
-        })
+        // const transporter=nodemailer.createTransport({
+        //     service: 'smtp@gmail.com',
+        //     port: 465,
+        //     secure: true,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: `${config.get('superUserm')}`,
+        //         pass: `${config.get('superUserp')}`
+        //     }
+        // })
         // mail content
-        const mailOptions={
-            from: `${config.get('superUserm')} ${req.userInfo.name}`,
-            to: `${existingEmployee.email}`,
-            subject: `New Task Assigned!`,
-            html: `<p>${req.userInfo.name} <b>assigned</b> this task to you</p>
-                    <hr>
-                    <p>${taskName}</p>
-                    <h4 style="color: #82b0fd;">With utmost responsibility, you have been assigned ${existingProject.name} as your ${taskName}.</h4>
-                    <hr>`
-        }
+        // const mailOptions={
+        //     from: `${config.get('superUserm')} ${req.userInfo.name}`,
+        //     to: `${existingEmployee.email}`,
+        //     subject: `New Task Assigned!`,
+        //     html: `<p>${req.userInfo.name} <b>assigned</b> this task to you</p>
+        //             <hr>
+        //             <p>${taskName}</p>
+        //             <h4 style="color: #82b0fd;">With utmost responsibility, you have been assigned ${existingProject.name} as your ${taskName}.</h4>
+        //             <hr>`
+        // }
         // mail send
-        transporter.sendMail(mailOptions, (err, info)=>{
-            if(err) throw err
-            res.status(200).json({Info: info.response})
-        })
+        // transporter.sendMail(mailOptions, (err, info)=>{
+        //     if(err) throw err
+        //     res.status(200).json({Info: info.response})
+        // })
         res.status(200).json(ResponseMsg("AddSuccess", "", "Task", true))
 
     } catch (err) {
@@ -174,7 +183,9 @@ module.exports.createTask=async(req, res)=>{
 
 // update task details
 module.exports.updateTask=async(req, res)=>{
-    const {taskName, employeeId, projectId, priority, status}=req.body
+    let {taskName, employeeId, projectId, priority, status}=req.body
+    priority = capitalize(priority)
+    status = capitalize(status)
     const errors=[]
     // check task name
     if(!taskName) errors.push('Task name is required')
@@ -203,9 +214,16 @@ module.exports.updateTask=async(req, res)=>{
         // check existing employee in employee database by id
         const existingEmployee=await employeeModel.findById({_id: employeeId})
         if(!existingEmployee) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Employee", false))
+        // check if priority matches priorityList
+        if(!priorityList.includes(priority)) return res.status(404).json(ResponseMsg("FieldInvalid", "Priority", "", false))
+        // check if status matches statusList
+        if(!statusList.includes(status)) return res.status(404).json(ResponseMsg("FieldInvalid", "Status", "", false))
+        // check existingTask
+        const existingTask=await taskModel.find({taskName, projectId})
+        if(existingTask.length > 1) return res.status(404).json(ResponseMsg("DataExists", "", "Task", false)) 
         // update task details
-        const taskFields={projectId, employeeId, timeOnTask: 0}
-        const updateTask=await taskModel.findByIdAndUpdate({_id: req.params.task_id}, {$set: taskFields, ...req.body})
+        const taskFields={taskName, priority, status, timeOnTask: 0, projectId, employeeId}
+        const updateTask=await taskModel.findByIdAndUpdate({_id: req.params.task_id}, {$set: taskFields})
         // save task details
         await updateTask.save()
         res.status(200).json(ResponseMsg("UpdateSuccess", "", "Task", true))

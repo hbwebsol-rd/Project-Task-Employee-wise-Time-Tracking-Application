@@ -76,6 +76,17 @@ const ResponseMsg = (type, field, data, boolean) => {
     }
 };
 
+///////////////////////////////////////  STRING HELPERS  ////////////////////////////////////////////
+const capitalize = (word)=>{
+    let capitalizedWord = []
+    let wordList = word.split(" ")
+    wordList.map(word=>{
+        capitalizedWord.push(word.charAt(0).toUpperCase() + word.substring(1).toLowerCase())
+    })
+    capitalizedWord = capitalizedWord.join(" ")
+    return capitalizedWord
+}
+
 //////////////////////////////////////////  EXPORTS  /////////////////////////////////////////
 module.exports = {
     convertDate: convertDate,
@@ -83,5 +94,6 @@ module.exports = {
     checkDateValidity: checkDateValidity,
     checkTimeCollision: checkTimeCollision,
     checkTimeValidity: checkTimeValidity,
-    ResponseMsg: ResponseMsg
+    ResponseMsg: ResponseMsg,
+    capitalize: capitalize
 }

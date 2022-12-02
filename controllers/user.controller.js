@@ -59,7 +59,7 @@ module.exports.getUsers=async(req, res)=>{
         const existingUsers=await userModel.aggregate(pipeline)
         if(!existingUsers.length>0) return res.status(404).json(ResponseMsg("DataNotFound", "", "Tasks", false))
         // display all users
-        res.status(200).json({success: true, data: existingUsers.map(data=>data)})
+        res.status(200).json({success: true, count: existingUsers.length, data: existingUsers.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -176,28 +176,28 @@ module.exports.forgotPassword=async(req, res)=>{
         jwt.sign(payload, config.get('jwtToken'), {expiresIn: 36000}, (err, token)=>{
             if(err) throw err
             // send mail using nodemailer
-            const transporter=nodemailer.createTransport({
-                service: 'smtp@gmail.com',
-                port: 465,
-                secure: true,
-                requireTLS: true,
-                auth: {
-                    user: `${config.get('superUserm')}`,
-                    pass: `${config.get('superUserp')}`
-                }
-            })
+            // const transporter=nodemailer.createTransport({
+            //     service: 'smtp@gmail.com',
+            //     port: 465,
+            //     secure: true,
+            //     requireTLS: true,
+            //     auth: {
+            //         user: `${config.get('superUserm')}`,
+            //         pass: `${config.get('superUserp')}`
+            //     }
+            // })
             // mail contents
-            const mailOptions={
-                from: `${config.get('superUserm')}`,
-                to: `${existingEmail.email}`,
-                subject: 'Forget Password!',
-                html: mailTemplate.forgotPassword(existingEmail.email)
-            }
+            // const mailOptions={
+            //     from: `${config.get('superUserm')}`,
+            //     to: `${existingEmail.email}`,
+            //     subject: 'Forget Password!',
+            //     html: mailTemplate.forgotPassword(existingEmail.email)
+            // }
             // send mail
-            transporter.sendMail(mailOptions, (err, info)=>{
-                if(err) throw err
-                res.status(200).json({Info: info.response})
-            })
+            // transporter.sendMail(mailOptions, (err, info)=>{
+            //     if(err) throw err
+            //     res.status(200).json({Info: info.response})
+            // })
             res.status(200).json({token})
         })
         
@@ -240,33 +240,33 @@ module.exports.resetPassword=async(req, res)=>{
         // save password
         await resetPassword.save()
         // send mail using nodemailer
-        const transporter=nodemailer.createTransport({
-            service: 'smpt@gmail.com',
-            port: 465,
-            secure: true,
-            requireTLS: true,
-            auth: {
-                user: `${config.get('superUserm')}`,
-                pass: `${config.get('superUserp')}`
-            }
-        })
+        // const transporter=nodemailer.createTransport({
+        //     service: 'smpt@gmail.com',
+        //     port: 465,
+        //     secure: true,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: `${config.get('superUserm')}`,
+        //         pass: `${config.get('superUserp')}`
+        //     }
+        // })
         // send mail contents
-        const mailOptions={
-            from: `${config.get('superUserm')}`,
-            to: `${existingUser.email}`,
-            subject: `Reset Password!`,
-            html: `<p>Your password has been reset<br></p>
-                    <hr>
-                    <p>Your request of password for account:<br>${existingUser.email} has been met.</p>
-                    <h4 style="color: #82b0fd;">Re-login with new password at: http://localhost:3002/api/login</h4>
-                    <hr>`
-        }
+        // const mailOptions={
+        //     from: `${config.get('superUserm')}`,
+        //     to: `${existingUser.email}`,
+        //     subject: `Reset Password!`,
+        //     html: `<p>Your password has been reset<br></p>
+        //             <hr>
+        //             <p>Your request of password for account:<br>${existingUser.email} has been met.</p>
+        //             <h4 style="color: #82b0fd;">Re-login with new password at: http://localhost:3002/api/login</h4>
+        //             <hr>`
+        // }
         // send mail
-        transporter.sendMail(mailOptions, (err, info)=>{
-            if(err) throw err
-            res.status(200).json({Info: info.response})
-        })
-        res.status(200).json(ResponseMsg("UpdateSuccess", "Password", "", true)) 
+        // transporter.sendMail(mailOptions, (err, info)=>{
+        //     if(err) throw err
+        //     res.status(200).json({Info: info.response})
+        // })
+        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Password", true)) 
 
     } catch (err) {
         console.err(err.message)

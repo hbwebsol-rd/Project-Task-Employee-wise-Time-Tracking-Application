@@ -15,10 +15,14 @@ const taskSchema=mongoose.Schema({
     },
     priority: {
         type: String,
+        enum: ['Low', 'Medium', 'High'],
+        default: 'Low',
         required: true
     },
     status: {
         type: String,
+        enum: ['Done', 'In Progress', 'Open', 'Pending'],
+        default: 'Open',
         required: true
     },
     totalTime: [{

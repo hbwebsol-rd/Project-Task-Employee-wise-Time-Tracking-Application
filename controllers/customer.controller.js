@@ -19,7 +19,7 @@ module.exports.getCustomers=async(req ,res)=>{
         const existingCustomers=await customerModel.aggregate(pipeline)
         if(!existingCustomers.length>0) return res.status(404).json(ResponseMsg("DataNotFound", "", "Customers", false))
         // display all customers
-        res.status(200).json({success: true, total: existingCustomers.length, data: existingCustomers.map(data=>data)})
+        res.status(200).json({success: true, count: existingCustomers.length, data: existingCustomers.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -105,7 +105,7 @@ module.exports.updateCustomer=async(req, res)=>{
         const updateCustomer=await customerModel.findByIdAndUpdate({_id: req.params.customer_id}, {...req.body})
         // save customer details
         await updateCustomer.save()
-        res.status(200).json(ResponseMsg("UpdateSuccss", "", "Customer", true))
+        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Customer", true))
 
     } catch (err) {
         console.error(err.message)

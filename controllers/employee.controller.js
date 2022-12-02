@@ -7,7 +7,11 @@ const bcrypt=require('bcryptjs')
 const jwt=require('jsonwebtoken')
 const lodash=require('lodash')
 const config=require('config')
-const {ResponseMsg} = require('../config/helpers')
+const {ResponseMsg, capitalize} = require('../config/helpers')
+
+// global variables
+const priorityList = ['Low', 'Medium', 'High']
+const statusList = ['Done', 'In Progress', 'Open', 'Pending']
 
 // SUPERUSER
 // retrieve data for all employees
@@ -30,7 +34,7 @@ module.exports.getEmployees=async(req, res)=>{
         const existingEmployees=await employeeModel.aggregate(pipeline)
         if(!existingEmployees.length>0) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employees", false))
         // display all employees
-        res.status(200).json({success: true, data: existingEmployees.map(data=>data)})
+        res.status(200).json({success: true, count: existingEmployees.length, data: existingEmployees.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -76,7 +80,7 @@ module.exports.getEmployeeTasks=async(req, res)=>{
         const existingTasks=await taskModel.aggregate(pipeline)
         if(!existingTasks.length>0) return res.status(400).json(ResponseMsg("DataNotFound", "", "Tasks", false))
         // display employee tasks
-        res.status(200).json({success: true, data: existingTasks.map(data=>data)})
+        res.status(200).json({success: true, count: existingTasks.length, data: existingTasks.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -131,9 +135,7 @@ module.exports.createEmployee=async(req, res)=>{
     // check name
     if(!name) errors.push("name is required") 
     // check gender
-    if(!gender) errors.push("gender is required") 
-    // check gender
-    if(!gender) errors.push("gender is required") 
+    if(!gender) errors.push("gender is required")
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -147,7 +149,6 @@ module.exports.createEmployee=async(req, res)=>{
 
     try {
         email=email.toLowerCase()
-        email=email.toLowerCase()
         // check existing employee
         const existingEmployee=await employeeModel.findOne({email})
         if(existingEmployee) return res.status(400).json(ResponseMsg("DataExists", "", "Employee", false))
@@ -159,32 +160,32 @@ module.exports.createEmployee=async(req, res)=>{
         // save new employee
         await newEmployee.save()
         // send mail using nodemailer
-        const tranporter=nodemailer.createTransport({
-            service: 'smtp@gmail.com',
-            port: 465,
-            secure: true,
-            requireTLS: true,
-            auth: {
-                user: `${config.get('superUserm')}`,
-                pass: `${config.get('superUserp')}`
-            }
-        })
+        // const tranporter=nodemailer.createTransport({
+        //     service: 'smtp@gmail.com',
+        //     port: 465,
+        //     secure: true,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: `${config.get('superUserm')}`,
+        //         pass: `${config.get('superUserp')}`
+        //     }
+        // })
         // mail contents
-        const mailOptions={
-            from: `${config.get('superUserm')}`,
-            to: `${req.body.email}`,
-            subject: `Welcome to the Team!`,
-            html: `<p>Thank you for registering with us</p>
-                    <hr>
-                    <h3>Your Login Details are:</h3>
-                    <h4 style="color: #82b0fd;">Email ID: <u>${req.body.email}</u><br>Password: <u>${req.body.password}</u></h4>
-                    <hr>`
-        }
+        // const mailOptions={
+        //     from: `${config.get('superUserm')}`,
+        //     to: `${req.body.email}`,
+        //     subject: `Welcome to the Team!`,
+        //     html: `<p>Thank you for registering with us</p>
+        //             <hr>
+        //             <h3>Your Login Details are:</h3>
+        //             <h4 style="color: #82b0fd;">Email ID: <u>${req.body.email}</u><br>Password: <u>${req.body.password}</u></h4>
+        //             <hr>`
+        // }
         // send mail
-        tranporter.sendMail(mailOptions, (err, info)=>{
-            if(err) throw err
-            res.status(200).json({Info: info.response})
-        })
+        // tranporter.sendMail(mailOptions, (err, info)=>{
+        //     if(err) throw err
+        //     res.status(200).json({Info: info.response})
+        // })
 
         res.status(200).json(ResponseMsg("AddSuccess", "", "Employee", true))
 
@@ -246,7 +247,8 @@ module.exports.addTotalTime=async(req, res)=>{
 // EMPLOYEE
 // update status of task by employee
 module.exports.updateTaskStatus=async(req, res)=>{
-    const status=req.body.status
+    let status=req.body.status
+    status = capitalize(status)
     const errors=[]
     // check designation
     if(!status) errors.push("Status value is required") 
@@ -259,40 +261,43 @@ module.exports.updateTaskStatus=async(req, res)=>{
         // check existing task
         const existingTask=await taskModel.findById(req.params.task_id)
         if(!existingTask) return res.status(400).json(ResponseMsg("DataNotFound", "", "Task", false))
+        // check if status matches statusList
+        if(!statusList.includes(status)) return res.status(404).json(ResponseMsg("FieldInvalid", "Status", "", false))
         // update task status
-        const updateTaskStatus=await taskModel.findByIdAndUpdate(req.params.task_id, {...req.body})
+        const taskFields = {status}
+        const updateTaskStatus=await taskModel.findByIdAndUpdate(req.params.task_id, {$set: taskFields})
         // save task status
         await updateTaskStatus.save()
         // send mail using nodemailer
-        const transporter=nodemailer.createTransport({
-            service: 'smtp@gmail.com',
-            port: 465,
-            secyre: true,
-            requireTLS: true,
-            auth: {
-                user: `${config.get('superUserm')}`,
-                pass: `${config.get('superUserp')}`
-            }
-        })
+        // const transporter=nodemailer.createTransport({
+        //     service: 'smtp@gmail.com',
+        //     port: 465,
+        //     secyre: true,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: `${config.get('superUserm')}`,
+        //         pass: `${config.get('superUserp')}`
+        //     }
+        // })
         // mail contents
-        const employeeInfo=await employeeModel.findOne({name: existingTask.employeeName})
-        const projectInfo=await projectModel.findOne({name: existingTask.projectName})
-        const mailOptions={
-            from: `${config.get('superUserm')} ${employeeInfo.name}`,
-            to: `${config.get('superUserm')}`,
-            subject: 'Status Update',
-            html: `<p>There has been a <b>status update</b> by ${employeeInfo.name}/${employeeInfo.email}</p>
-                    <hr>
-                    <p>${employeeInfo.name}</p>
-                    <h4 style="color: #82b0fd;">Project <u>${projectInfo.name}</u> has been updated from <u style="color: red;">${existingTask.status}</u> to <u style="color: green;">${req.body.status}</u>.</h4>
-                    <hr>`
-        }
+        // const employeeInfo=await employeeModel.findOne({name: existingTask.employeeName})
+        // const projectInfo=await projectModel.findOne({name: existingTask.projectName})
+        // const mailOptions={
+        //     from: `${config.get('superUserm')} ${employeeInfo.name}`,
+        //     to: `${config.get('superUserm')}`,
+        //     subject: 'Status Update',
+        //     html: `<p>There has been a <b>status update</b> by ${employeeInfo.name}/${employeeInfo.email}</p>
+        //             <hr>
+        //             <p>${employeeInfo.name}</p>
+        //             <h4 style="color: #82b0fd;">Project <u>${projectInfo.name}</u> has been updated from <u style="color: red;">${existingTask.status}</u> to <u style="color: green;">${req.body.status}</u>.</h4>
+        //             <hr>`
+        // }
         // send mail
-        if(req.body.status==="Done") transporter.sendMail(mailOptions, (err, info)=>{
-            if(err) throw err
-            res.status(200).json({Info: info.response}) 
-        })
-        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Task Status", true)) 
+        // if(req.body.status==="Done") transporter.sendMail(mailOptions, (err, info)=>{
+        //     if(err) throw err
+        //     res.status(200).json({Info: info.response}) 
+        // })
+        // res.status(200).json(ResponseMsg("UpdateSuccess", "", "Task Status", true)) 
 
     } catch (err) {
         console.error(err.message)
@@ -361,15 +366,15 @@ module.exports.employeeUpdateProfile=async(req, res)=>{
     try {
         email=email.toLowerCase()
         // check url employee id
-        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
+        if(!mongoose.Types.ObjectId.isValid(req.userInfo.id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
         // check existing employee
-        const existingEmployee=await employeeModel.findById(req.params.employee_id)
+        const existingEmployee=await employeeModel.findById(req.userInfo.id)
         if(!existingEmployee) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employee", false))
         // check email
         const existingEmployeeEmail=await employeeModel.findOne({email})
         if(existingEmployeeEmail) if(existingEmployee.id!==existingEmployeeEmail.id) return res.status(400).json(ResponseMsg("DataWithFieldExists", "EmailID", "Employee", false))
         // update employee details
-        const updateEmployee=await employeeModel.findByIdAndUpdate({_id: req.params.employee_id}, {...req.body})
+        const updateEmployee=await employeeModel.findByIdAndUpdate({_id: req.userInfo.id}, {...req.body})
         // save employee details
         await updateEmployee.save()
         res.status(200).json(ResponseMsg("UpdateSuccess", "", "Profile", true))

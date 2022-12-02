@@ -29,7 +29,7 @@ module.exports.getProjects=async(req, res)=>{
         const existingProjects=await projectModel.aggregate(pipeline)
         if(!existingProjects.length>0) return res.status(404).json(ResponseMsg("DataNotFound", "", "Projects", false))
         // display all projects
-        res.status(200).json({success: true, data: existingProjects.map(data=>data)})
+        res.status(200).json({success: true, count: existingProjects.length, data: existingProjects.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -73,12 +73,12 @@ module.exports.createProject=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
 
     try {
+        // check if customer exists in customer database
+        const existingCustomer=await customerModel.findById({_id: customerId})
+        if(!existingCustomer) return res.status(400).json(ResponseMsg("DataNotFoundWithID", "", "Customer", false))
         // check existing project
         const existingProject=await projectModel.findOne({name})
         if(existingProject) return res.status(404).json(ResponseMsg("DataExists", "", "Project", false))
-        // customer exists in customer database
-        const existingCustomer=await customerModel.findById({_id: customerId})
-        if(!existingCustomer) return res.status(400).json(ResponseMsg("DataNotFound", "", "Customer", false))
         // create new project
         const newProject=await projectModel({name, customerId, technology, start, end})
         // save new project
@@ -114,10 +114,13 @@ module.exports.updateProject=async(req, res)=>{
         if(!mongoose.Types.ObjectId.isValid(req.params.project_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "ProjectID", "", false))
         // check existing project
         const existingProject=await projectModel.findById(req.params.project_id)
-        if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFound", "", "Project", false))
+        if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Project", false))
         // check existing customer
         const existingCustomer=await customerModel.findById({_id: customerId})
-        if(!existingCustomer) return res.status(404).json(ResponseMsg("DataNotFound", "", "Customer", false))
+        if(!existingCustomer) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Customer", false))
+        // check if project with same name exists
+        const sameProject = await projectModel.findOne({name})
+        if(sameProject) return res.status(404).json(ResponseMsg("DataExists", "", "Project", false))
         // update project details
         const updateProject=await projectModel.findByIdAndUpdate({_id: req.params.project_id}, {...req.body})
         // save project details
