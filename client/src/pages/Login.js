@@ -62,7 +62,7 @@ const Login = () => {
       <div className={classes.loginForm} >
         <Box className={classes.loginRoot}>
           <Typography className={classes.title}>
-            {admin? 'Admin LogIn': 'Employee LogIn'}
+            {admin? 'Admin Login': 'Employee Login'}
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
