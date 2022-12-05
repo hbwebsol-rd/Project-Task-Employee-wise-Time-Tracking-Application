@@ -1,7 +1,6 @@
 const Messages = require('./messages')
 
 ///////////////////////////////////////  TIMESHEET HELPERS  //////////////////////////////////////////
-
 // extract hours and minites 
 const convertTime=(time, date)=>{
     const hours=time.slice(0,2)
@@ -49,13 +48,10 @@ const checkTimeCollision=(currentTime, prevStartTime, prevEndTime)=>{
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////  MESSAGE SENT  ////////////////////////////////////////////
-
+////////////////////////////////////////  RESPONSES  /////////////////////////////////////////////
 const ResponseMsg = (type, field, data, boolean) => {
-    if(data!==null){
-        if(field!==null){
+    if(data!==""){
+        if(field!==""){
             let message = Messages[type].replace(":field", field)
             return {
                 message: message.replace(":data", data),
@@ -67,7 +63,7 @@ const ResponseMsg = (type, field, data, boolean) => {
                 success: boolean,
             };
         }
-    }else if(field!==null){
+    }else if(field!==""){
         return {
             message: Messages[type].replace(":field", field),
             success: boolean,
@@ -80,12 +76,24 @@ const ResponseMsg = (type, field, data, boolean) => {
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////  STRING HELPERS  ////////////////////////////////////////////
+const capitalize = (word)=>{
+    let capitalizedWord = []
+    let wordList = word.split(" ")
+    wordList.map(word=>{
+        capitalizedWord.push(word.charAt(0).toUpperCase() + word.substring(1).toLowerCase())
+    })
+    capitalizedWord = capitalizedWord.join(" ")
+    return capitalizedWord
+}
+
+//////////////////////////////////////////  EXPORTS  /////////////////////////////////////////
 module.exports = {
     convertDate: convertDate,
     convertTime: convertTime,
     checkDateValidity: checkDateValidity,
     checkTimeCollision: checkTimeCollision,
     checkTimeValidity: checkTimeValidity,
-    ResponseMsg: ResponseMsg
+    ResponseMsg: ResponseMsg,
+    capitalize: capitalize
 }

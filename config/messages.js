@@ -1,22 +1,25 @@
 module.exports = {
     // token messages
     TokenNotFound: "No Token, Authorization Denied" ,
-    WrongToken: "Authorization Denied", 
+    AuthDenied: "Authorization Denied", 
     InvalidToken: "Invalid Token String",
+    // id messages
+    InvalidID: "Invalid ID",
     // server messages
     ServerError: "Server Error",
     // field messages
-    FieldReq: ":field is Required",
+    FieldRequired: ":field is Required",
     FieldInvalid: "Invalid :field",
+    FieldNotFound: ":field Not Found",
     // data messages
     DataNotFound: ":data Not Found",
-    DataIDNotFound: "No :data found with that respective ID",
+    DataNotFoundWithID: "No :data found with that respective ID",
     DataExists: ":data Already Exists",
-    PreExistData: ":data with same :field Exists",
+    DataWithFieldExists: ":data with same :field Exists",
     FieldNotFoundInData: ":field not found with that respective :data",
     // password messages
     OldNewPasswordMatch: "New password cannot be same as old password",
-    ConfirmPasswordNotMatch: "Password does not match",
+    PasswordNotMatch: "Password does not match",
     // success messages
     UpdateSuccess: ":data Updated Successfully",
     AddSuccess: ":data Added Successfully",

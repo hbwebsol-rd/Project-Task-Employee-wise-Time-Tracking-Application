@@ -27,7 +27,7 @@ module.exports=(app)=>{
     app.patch('/api/employee/task/addTotalTime/:task_id', [Auth.employee, [check('from'), check('to')]], Employee.addTotalTime)
 
     // update status of task by employee
-    app.patch('/api/employee/task/updateStatus/:task_id', [Auth.employee, [check('status')]], Employee.updateTaskStatus)
+    app.patch('/api/employee/updateTaskStatus/:task_id', [Auth.employee, [check('status')]], Employee.updateTaskStatus)
 
     // update employee by superuser
     app.patch('/api/updateEmployee/:employee_id', [Auth.superUser, [check('gender'), check('name'), check('email'), check('designation')]], Employee.updateEmployee)

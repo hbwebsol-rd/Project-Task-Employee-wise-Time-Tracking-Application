@@ -20,10 +20,10 @@ module.exports=(app)=>{
     app.post('/api/user/login', [check('email').isEmail(), check('password').isLength({min: 8})], User.loginUser)
 
     // User/Employee forgot password
-    app.post('/api/user/login/forgotPassword', [check('email').isEmail()], User.forgotPassword)
+    app.post('/api/user/forgotPassword', [check('email').isEmail()], User.forgotPassword)
 
     // User/Employee reset password
-    app.patch('/api/user/login/resetPassword', [Auth.multiAccess, [check('password').isLength({min: 8}), check('confirmPassword').isLength({min: 8})]], User.resetPassword)
+    app.patch('/api/user/resetPassword', [Auth.multiAccess, [check('password').isLength({min: 8}), check('confirmPassword').isLength({min: 8})]], User.resetPassword)
     
     // User update profile
     app.patch('/api/user/updateProfile', [Auth.superUser, [check('gender'), check('name').isEmail(), check('email').isEmail(), check('phoneNumber').isEmpty().isNumeric().isLength({min: 8})]], User.updateProfile)
