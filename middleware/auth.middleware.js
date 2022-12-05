@@ -31,7 +31,7 @@ module.exports.employee=(req, res, next)=>{
     }
 }
 
-module.exports.resetPassword=(req, res, next)=>{
+module.exports.multiAccess=(req, res, next)=>{
     try {
         const token=req.header('x-auth-token')
         if(!token) return res.status(400).json({message: 'No Token, Authorization Denied'})

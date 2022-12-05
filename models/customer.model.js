@@ -9,6 +9,10 @@ const customerSchema=new mongoose.Schema({
         required: true,
         unique: true
     },
+    gender: {
+        type: String,
+        required: true
+    },
     created_date: {
         type: Date,
         default: Date.now

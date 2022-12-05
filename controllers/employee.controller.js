@@ -7,18 +7,23 @@ const bcrypt=require('bcryptjs')
 const jwt=require('jsonwebtoken')
 const lodash=require('lodash')
 const config=require('config')
+const {ResponseMsg, capitalize} = require('../config/helpers')
+
+// global variables
+const priorityList = ['Low', 'Medium', 'High']
+const statusList = ['Done', 'In Progress', 'Open', 'Pending']
 
 // SUPERUSER
 // retrieve data for all employees
 module.exports.getEmployees=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=10, sort}=req.query
+        const {page=1, limit=100000, sort}=req.query
         const search=req.query.search||""
-        const nsort=sort==="desc"?-1:1
+        const nsort=sort==="ascending"?1:-1
         const pipeline=[
             {$project: {password: 0}},
-            {$sort: {name: nsort}},
+            {$sort: {created_date: nsort}},
             {$match: {$or: [{name: {$regex: search, $options: "i"}}, 
                             {designation: {$regex: search, $options: "i"}},
                             {email: {$regex: search, $options: "i"}}]}},
@@ -27,13 +32,13 @@ module.exports.getEmployees=async(req, res)=>{
         ]
         // check existing employees
         const existingEmployees=await employeeModel.aggregate(pipeline)
-        if(!existingEmployees.length>0) return res.status(400).json({message: 'No employees found', success: false})
+        if(!existingEmployees.length>0) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employees", false))
         // display all employees
-        res.status(200).json({success: true, data: existingEmployees.map(data=>data)})
+        res.status(200).json({success: true, count: existingEmployees.length, data: existingEmployees.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -43,13 +48,13 @@ module.exports.getEmployeeProfile=async(req, res)=>{
     try {
         // check existing employee
         const existingEmployee=await employeeModel.findById({_id: req.userInfo.id}).select('-password')
-        if(!existingEmployee) return res.status(400).json({message: 'Profile not found', success: false})
+        if(!existingEmployee) return res.status(400).json(ResponseMsg("DataNotFound", "", "Profile", false))
         // display employee
         res.status(200).json({success: true, data: existingEmployee})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -58,12 +63,12 @@ module.exports.getEmployeeProfile=async(req, res)=>{
 module.exports.getEmployeeTasks=async(req, res)=>{
     try {
         // filters
-        const {page=1, limit=10, sort}=req.query
+        const {page=1, limit=100000, sort}=req.query
         const search=req.query.search||""
-        const nsort=sort==="desc"?-1:1
+        const nsort=sort==="ascending"?1:-1
         const pipeline=[
-            {$sort: {taskName: nsort} },
-            {$match: {employeeName: req.userInfo.name, 
+            {$sort: {created_date: nsort}},
+            {$match: {employeeId: mongoose.Types.ObjectId(req.userInfo.id), 
                       $or: [{projectName: {$regex: search, $options: "i"}}, 
                             {status: {$regex: search, $options: "i"}}, 
                             {priority: {$regex: search, $options: "i"}}, 
@@ -73,13 +78,13 @@ module.exports.getEmployeeTasks=async(req, res)=>{
         ]
         // check existing tasks
         const existingTasks=await taskModel.aggregate(pipeline)
-        if(!existingTasks.length>0) return res.status(400).json({message: 'No tasks found', success: false})
+        if(!existingTasks.length>0) return res.status(400).json(ResponseMsg("DataNotFound", "", "Tasks", false))
         // display employee tasks
-        res.status(200).json({success: true, data: existingTasks.map(data=>data)})
+        res.status(200).json({success: true, count: existingTasks.length, data: existingTasks.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -89,8 +94,8 @@ module.exports.getEmployeeDashboard=async(req, res)=>{
     try {
         // check existing tasks
         const todayTasks=[]
-        const existingTasks=await taskModel.find({employeeName: req.userInfo.name})
-        if(!existingTasks.length>0) return res.status(400).json({message: 'No tasks found', success: false})
+        const existingTasks=await taskModel.find({employeeId: req.userInfo.id})
+        if(!existingTasks.length>0) return res.status(400).json(ResponseMsg("DataNotFound", "", "Tasks", false))
         existingTasks.map(task=>{
             if(task.created_date.toLocaleDateString()===new Date().toLocaleDateString()) todayTasks.push(task)
         })
@@ -99,7 +104,7 @@ module.exports.getEmployeeDashboard=async(req, res)=>{
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -108,26 +113,29 @@ module.exports.getEmployeeDashboard=async(req, res)=>{
 module.exports.getEmployee=async(req, res)=>{
     try {
         // check url employee id
-        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
         // check existing employee
         const existingEmployee=await employeeModel.findById(req.params.employee_id).select('-password')
-        if(!existingEmployee) return res.status(400).json({message: 'No employee found', success: false})
+        if(!existingEmployee) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employee", false))
         // display employee details
         res.status(200).json({success: true, data: existingEmployee})
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
 // SUPERUSER
 // create a new employee
 module.exports.createEmployee=async(req, res)=>{
-    const {name, email, password, designation}=req.body
+    const {gender, name, password, designation}=req.body
+    let {email}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required")
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -140,49 +148,50 @@ module.exports.createEmployee=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
 
     try {
+        email=email.toLowerCase()
         // check existing employee
         const existingEmployee=await employeeModel.findOne({email})
-        if(existingEmployee) return res.status(400).json({message: 'Employee already exists', success: false})
+        if(existingEmployee) return res.status(400).json(ResponseMsg("DataExists", "", "Employee", false))
         // create new employee
-        const newEmployee=await employeeModel({name, email, role: 2, password, designation})
+        const newEmployee=await employeeModel({gender, gender, name, email, role: 2, password, designation})
         // password hash
         const salt=await bcrypt.genSalt(10)
         newEmployee.password=await bcrypt.hash(password, salt)
         // save new employee
         await newEmployee.save()
         // send mail using nodemailer
-        const tranporter=nodemailer.createTransport({
-            service: 'smtp@gmail.com',
-            port: 465,
-            secure: true,
-            requireTLS: true,
-            auth: {
-                user: `${config.get('superUserm')}`,
-                pass: `${config.get('superUserp')}`
-            }
-        })
+        // const tranporter=nodemailer.createTransport({
+        //     service: 'smtp@gmail.com',
+        //     port: 465,
+        //     secure: true,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: `${config.get('superUserm')}`,
+        //         pass: `${config.get('superUserp')}`
+        //     }
+        // })
         // mail contents
-        const mailOptions={
-            from: `${config.get('superUserm')}`,
-            to: `${req.body.email}`,
-            subject: `Welcome to the Team!`,
-            html: `<p>Thank you for registering with us</p>
-                    <hr>
-                    <h3>Your Login Details are:</h3>
-                    <h4 style="color: #82b0fd;">Email ID: <u>${req.body.email}</u><br>Password: <u>${req.body.password}</u></h4>
-                    <hr>`
-        }
+        // const mailOptions={
+        //     from: `${config.get('superUserm')}`,
+        //     to: `${req.body.email}`,
+        //     subject: `Welcome to the Team!`,
+        //     html: `<p>Thank you for registering with us</p>
+        //             <hr>
+        //             <h3>Your Login Details are:</h3>
+        //             <h4 style="color: #82b0fd;">Email ID: <u>${req.body.email}</u><br>Password: <u>${req.body.password}</u></h4>
+        //             <hr>`
+        // }
         // send mail
-        tranporter.sendMail(mailOptions, (err, info)=>{
-            if(err) throw err
-            res.status(200).json({Info: info.response})
-        })
+        // tranporter.sendMail(mailOptions, (err, info)=>{
+        //     if(err) throw err
+        //     res.status(200).json({Info: info.response})
+        // })
 
-        res.status(200).json({message: 'Employee added successfully', success: true})
+        res.status(200).json(ResponseMsg("AddSuccess", "", "Employee", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -200,10 +209,10 @@ module.exports.addTotalTime=async(req, res)=>{
 
     try {
         // check url task id
-        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
         // check existing task
         const existingTask=await taskModel.findById({_id: req.params.task_id})
-        if(!existingTask) return res.status(400).json({message: 'No task found', success: false})
+        if(!existingTask) return res.status(400).json(ResponseMsg("DataNotFound", "", "Task", false))
         while(existingTask.totalTime.length>0){
             const y=(existingTask.totalTime[0].from.getFullYear()===new Date().getFullYear())
             const m=(existingTask.totalTime[0].from.getMonth()+1===new Date().getMonth()+1)
@@ -227,18 +236,19 @@ module.exports.addTotalTime=async(req, res)=>{
         existingTask.timeOnTask=lodash.sum(grandTotal)
         // re-save updated task
         await existingTask.save()
-        res.status(200).json({message: 'Total time added successfully', success: true})
+        res.status(200).json(ResponseMsg("AddSuccess", "", "Time", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
 // EMPLOYEE
 // update status of task by employee
 module.exports.updateTaskStatus=async(req, res)=>{
-    const status=req.body.status
+    let status=req.body.status
+    status = capitalize(status)
     const errors=[]
     // check designation
     if(!status) errors.push("Status value is required") 
@@ -247,58 +257,64 @@ module.exports.updateTaskStatus=async(req, res)=>{
 
     try {
         // check url task id
-        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
         // check existing task
         const existingTask=await taskModel.findById(req.params.task_id)
-        if(!existingTask) return res.status(400).json({message: 'Task not found', success: false})
+        if(!existingTask) return res.status(400).json(ResponseMsg("DataNotFound", "", "Task", false))
+        // check if status matches statusList
+        if(!statusList.includes(status)) return res.status(404).json(ResponseMsg("FieldInvalid", "Status", "", false))
         // update task status
-        const updateTaskStatus=await taskModel.findByIdAndUpdate(req.params.task_id, {...req.body})
+        const taskFields = {status}
+        const updateTaskStatus=await taskModel.findByIdAndUpdate(req.params.task_id, {$set: taskFields})
         // save task status
         await updateTaskStatus.save()
         // send mail using nodemailer
-        const transporter=nodemailer.createTransport({
-            service: 'smtp@gmail.com',
-            port: 465,
-            secyre: true,
-            requireTLS: true,
-            auth: {
-                user: `${config.get('superUserm')}`,
-                pass: `${config.get('superUserp')}`
-            }
-        })
+        // const transporter=nodemailer.createTransport({
+        //     service: 'smtp@gmail.com',
+        //     port: 465,
+        //     secyre: true,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: `${config.get('superUserm')}`,
+        //         pass: `${config.get('superUserp')}`
+        //     }
+        // })
         // mail contents
-        const employeeInfo=await employeeModel.findOne({name: existingTask.employeeName})
-        const projectInfo=await projectModel.findOne({name: existingTask.projectName})
-        const mailOptions={
-            from: `${config.get('superUserm')} ${employeeInfo.name}`,
-            to: `${config.get('superUserm')}`,
-            subject: 'Status Update',
-            html: `<p>There has been a <b>status update</b> by ${employeeInfo.name}/${employeeInfo.email}</p>
-                    <hr>
-                    <p>${employeeInfo.name}</p>
-                    <h4 style="color: #82b0fd;">Project <u>${projectInfo.name}</u> has been updated from <u style="color: red;">${existingTask.status}</u> to <u style="color: green;">${req.body.status}</u>.</h4>
-                    <hr>`
-        }
+        // const employeeInfo=await employeeModel.findOne({name: existingTask.employeeName})
+        // const projectInfo=await projectModel.findOne({name: existingTask.projectName})
+        // const mailOptions={
+        //     from: `${config.get('superUserm')} ${employeeInfo.name}`,
+        //     to: `${config.get('superUserm')}`,
+        //     subject: 'Status Update',
+        //     html: `<p>There has been a <b>status update</b> by ${employeeInfo.name}/${employeeInfo.email}</p>
+        //             <hr>
+        //             <p>${employeeInfo.name}</p>
+        //             <h4 style="color: #82b0fd;">Project <u>${projectInfo.name}</u> has been updated from <u style="color: red;">${existingTask.status}</u> to <u style="color: green;">${req.body.status}</u>.</h4>
+        //             <hr>`
+        // }
         // send mail
-        if(req.body.status==="Done") transporter.sendMail(mailOptions, (err, info)=>{
-            if(err) throw err
-            res.status(200).json({Info: info.response}) 
-        })
-        res.status(200).json({message: 'Status updated successfully', success: true}) 
+        // if(req.body.status==="Done") transporter.sendMail(mailOptions, (err, info)=>{
+        //     if(err) throw err
+        //     res.status(200).json({Info: info.response}) 
+        // })
+        // res.status(200).json(ResponseMsg("UpdateSuccess", "", "Task Status", true)) 
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
 // SUPERUSER
 // update employee info
 module.exports.updateEmployee=async(req, res)=>{
-    const {name, designation, email}=req.body
+    const {gender, name, designation}=req.body
+    let {email}=req.body
     const errors=[]
     // check name
     if(!name) errors.push("name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
     // check designation
     if(!designation) errors.push("designation is required") 
     // check email
@@ -308,23 +324,64 @@ module.exports.updateEmployee=async(req, res)=>{
     if(errors.length>0) return res.status(400).json({errors: errors, success: false})
     
     try {
+        email=email.toLowerCase()
         // check url employee id
-        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
         // check existing employee
         const existingEmployee=await employeeModel.findById(req.params.employee_id)
-        if(!existingEmployee) return res.status(400).json({message: 'No employee found', success: false})
+        if(!existingEmployee) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employee", false))
         // check email
         const existingEmployeeEmail=await employeeModel.findOne({email})
-        if(existingEmployeeEmail) if(existingEmployee.id!==existingEmployeeEmail.id) return res.status(400).json({message: 'Employee with same Email Id exists', success: false})
+        if(existingEmployeeEmail) if(existingEmployee.id!==existingEmployeeEmail.id) return res.status(400).json(ResponseMsg("DataWithFieldExists", "EmailID", "Employee", false))
         // update employee details
         const updateEmployee=await employeeModel.findByIdAndUpdate({_id: req.params.employee_id}, {...req.body})
         // save employee details
         await updateEmployee.save()
-        res.status(200).json({message: 'Employee updated successfully', success: true})
+        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Employee", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
+    }
+}
+
+// EMPLOYEE
+// update employee info
+module.exports.employeeUpdateProfile=async(req, res)=>{
+    const {gender, name, designation}=req.body
+    let {email}=req.body
+    const errors=[]
+    // check name
+    if(!name) errors.push("name is required") 
+    // check gender
+    if(!gender) errors.push("gender is required") 
+    // check designation
+    if(!designation) errors.push("designation is required") 
+    // check email
+    if(!email) errors.push("Email Id is required") 
+    else if(email&&!email.includes('@')&&!email.endsWith('.com')) errors.push("Invalid Email Id") 
+    // display errors
+    if(errors.length>0) return res.status(400).json({errors: errors, success: false})
+    
+    try {
+        email=email.toLowerCase()
+        // check url employee id
+        if(!mongoose.Types.ObjectId.isValid(req.userInfo.id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
+        // check existing employee
+        const existingEmployee=await employeeModel.findById(req.userInfo.id)
+        if(!existingEmployee) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employee", false))
+        // check email
+        const existingEmployeeEmail=await employeeModel.findOne({email})
+        if(existingEmployeeEmail) if(existingEmployee.id!==existingEmployeeEmail.id) return res.status(400).json(ResponseMsg("DataWithFieldExists", "EmailID", "Employee", false))
+        // update employee details
+        const updateEmployee=await employeeModel.findByIdAndUpdate({_id: req.userInfo.id}, {...req.body})
+        // save employee details
+        await updateEmployee.save()
+        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Profile", true))
+
+    } catch (err) {
+        console.error(err.message)
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -348,12 +405,12 @@ module.exports.employeeUpdatePassword=async(req, res)=>{
     try {
         // check existing employee
         const existingEmployee=await employeeModel.findById({_id: req.userInfo.id})
-        if(!existingEmployee) return res.status(400).json({message: 'No employee found', success: true}) 
+        if(!existingEmployee) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employee", false)) 
         // password updation of employee
         const isMatch=await bcrypt.compare(oldPassword, existingEmployee.password)
-        if(!isMatch) return res.status(400).json({message: 'Old password incorrect', success: false}) 
-        if(password===oldPassword) return res.status(400).json({message: 'New password cannot be same as old password', success: false}) 
-        if(password!==confirmPassword) return res.status(400).json({message: 'Password does not match', success: false}) 
+        if(!isMatch) return res.status(400).json(ResponseMsg("FieldInvalid", "Old Password", "", false)) 
+        if(password===oldPassword) return res.status(400).json(ResponseMsg("OldNewPasswordMatch", "", "", false)) 
+        if(password!==confirmPassword) return res.status(400).json(ResponseMsg("PasswordNotMatch", "", "", false)) 
         // update employee password
         const updateEmployee=await employeeModel.findByIdAndUpdate({_id: req.userInfo.id}, {...req.body})
         // password hash
@@ -361,11 +418,11 @@ module.exports.employeeUpdatePassword=async(req, res)=>{
         updateEmployee.password=await bcrypt.hash(password, salt)
         // save employee password
         await updateEmployee.save()
-        res.status(200).json({message: 'Password updated successfully', success: true}) 
+        res.status(200).json(ResponseMsg("UpdateSuccess", "", "Password", true)) 
         
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }
 
@@ -374,14 +431,14 @@ module.exports.employeeUpdatePassword=async(req, res)=>{
 module.exports.deleteEmployee=async(req, res)=>{
     try {
         // check url employee id
-        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json({message: 'Invalid Employee Id', success: false})
+        if(!mongoose.Types.ObjectId.isValid(req.params.employee_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "EmployeeID", "", false))
         // check existing employee and remove
         const existingEmployee=await employeeModel.findByIdAndRemove(req.params.employee_id)
-        if(!existingEmployee) return res.status(400).json({message: 'No employee found', success: false})
-        res.status(200).json({message: 'Employee Removed Successfully', success: true})
+        if(!existingEmployee) return res.status(400).json(ResponseMsg("DataNotFound", "", "Employee", false))
+        res.status(200).json(ResponseMsg("DeleteSuccess", "", "Employee", true))
 
     } catch (err) {
         console.error(err.message)
-        res.status(500).json({message: 'Server Error', success: false})
+        res.status(500).json(ResponseMsg("ServerError", "", "", false))
     }
 }

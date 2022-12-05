@@ -17,6 +17,7 @@ require("./routes/project.route")(app);
 require("./routes/employee.route")(app);
 require("./routes/task.route")(app);
 require("./routes/export.route")(app);
+require("./routes/timesheet.route")(app);
     
     if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "client", "build")));
