@@ -24,7 +24,7 @@ const AddEmployee = ({ open, setOpen, classes }) => {
         .email("Invalid email address")
         .required("Email required"),
       designation: yup.string().required("Designation Required"),
-      password: yup.string().required("Password Required"),
+      password: yup.string().required("Password Required").min(8, "Password length should be at least 8 characters"),
     })
     .required("required");
 
@@ -39,6 +39,7 @@ const AddEmployee = ({ open, setOpen, classes }) => {
 
   const onSubmit = () => {
     dispatch(AddEmployeeAction(employeeDetails));
+    reset();
     setOpen(false);
   };
 

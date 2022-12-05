@@ -12,15 +12,19 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { UpdateProfile } from "../store/actions/profileActions";
 
 const EditProfile = ({ open, setOpen, user, classes }) => {
-  const [userDetails, setUserDetails] = useState({ });
+  const dispatch = useDispatch();
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     setUserDetails({
       name: user.name,
       email: user.email,
-      phone: user.phoneNumber,
+      phoneNumber: user.phoneNumber,
+      gender: ' '
     });
   }, [user]);
 
@@ -31,8 +35,7 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
         .string()
         .email("Invalid email address")
         .required("Email required"),
-      designation: yup.string().required("Designation Required"),
-      phone: yup.string().required("Phone Required"),
+      phoneNumber: yup.string().required("Phone Required"),
       gender: yup.string().required("Gender Required"),
     })
     .required("required");
@@ -41,14 +44,14 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // setOpen(false);
+  const onSubmit = () => {
+    dispatch(UpdateProfile(userDetails))
+    setOpen(false);
   };
 
   function handleClose() {
@@ -85,10 +88,10 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
             autoFocus
             className={classes.inputField}
             onChange={(e) => {
-                setUserDetails({
-                  ...userDetails,
-                  [e.target.name]: e.target.value,
-                })
+              setUserDetails({
+                ...userDetails,
+                [e.target.name]: e.target.value,
+              });
             }}
           />
           <TextField
@@ -104,10 +107,10 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
             autoFocus
             className={classes.inputField}
             onChange={(e) => {
-                setUserDetails({
-                  ...userDetails,
-                  [e.target.name]: e.target.value,
-                })
+              setUserDetails({
+                ...userDetails,
+                [e.target.name]: e.target.value,
+              });
             }}
           />
           <TextField
@@ -115,22 +118,22 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
             required
             label="Phone Number"
             name="phone"
-            value={userDetails.phone}
+            value={userDetails.phoneNumber}
             autoComplete="phone"
-            helperText={errors.phone && errors.phone.message}
-            error={errors.phone && errors.phone.message}
-            {...register("phone")}
+            helperText={errors.phoneNumber && errors.phoneNumber.message}
+            error={errors.phoneNumber && errors.phoneNumber.message}
+            {...register("phoneNumber")}
             autoFocus
             className={classes.inputField}
             onChange={(e) => {
-                setUserDetails({
-                  ...userDetails,
-                  [e.target.name]: e.target.value,
-                })
+              setUserDetails({
+                ...userDetails,
+                [e.target.name]: e.target.value,
+              });
             }}
           />
           <FormControl className={classes.inputField}>
-            <InputLabel size="large" id="status-label">
+            <InputLabel id="status-label">
               Gender
             </InputLabel>
             <Select
@@ -149,7 +152,6 @@ const EditProfile = ({ open, setOpen, user, classes }) => {
             >
               <MenuItem value="male">Male</MenuItem>
               <MenuItem value="female">Female</MenuItem>
-              <MenuItem value="other">Other</MenuItem>
             </Select>
           </FormControl>
           <div>

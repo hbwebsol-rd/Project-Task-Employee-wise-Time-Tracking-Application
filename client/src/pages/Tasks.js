@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import {
   DeleteTaskAction,
+  EmployeeTasksAction,
   GetAllTasksAction,
 } from "../store/actions/taskActions";
 import UpdateTask from "../components/UpdateTask";
@@ -30,13 +31,13 @@ import TaskPopUp from "../components/TaskPopUp";
 import PlagiarismIcon from "@mui/icons-material/Plagiarism";
 import SearchIcon from "@mui/icons-material/Search";
 import ConfirmDelete from "../components/ConfirmDelete";
-import moment from "moment/moment";
 
 function Tasks() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.task.loading);
   const items = useSelector((state) => state.task.tasks);
+  const role = useSelector((state) => state.login.role);
 
   const [rows, setRows] = useState(items);
   const [page, setPage] = useState(0);
@@ -48,7 +49,13 @@ function Tasks() {
   const [deleteModal, setDeleteModal] = useState(false);
 
   useEffect(() => {
-    dispatch(GetAllTasksAction());
+    {
+      if (role == 1) {
+        dispatch(GetAllTasksAction());
+      } else {
+        dispatch(EmployeeTasksAction())
+      }
+    }
   }, []);
   useEffect(() => {
     setRows(items);
@@ -169,10 +176,11 @@ function Tasks() {
               ),
             }}
           />
+          {role == 1 && 
           <Button className={classes.addButton} onClick={() => setOpen(true)}>
             {<ControlPointIcon fontSize="small" sx={{ mr: "5px" }} />}
             Add Task
-          </Button>
+          </Button>}
         </div>
         <Table className={classes.table} aria-label="caption table">
           <TableHead className={classes.tableHead}>
@@ -230,20 +238,24 @@ function Tasks() {
                       >
                         <EditIcon />
                       </IconButton>
-                      <IconButton
-                        aria-label="delete"
-                        style={{ color: "#FF6161" }}
-                        onClick={() => handleDeleteConfirm(row)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="view"
-                        style={{ color: "#67D1FF" }}
-                        onClick={() => setPop(true)}
-                      >
-                        <PlagiarismIcon />
-                      </IconButton>
+                      {role == 1 && (
+                        <>
+                          <IconButton
+                            aria-label="delete"
+                            style={{ color: "#FF6161" }}
+                            onClick={() => handleDeleteConfirm(row)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                          <IconButton
+                            aria-label="view"
+                            style={{ color: "#67D1FF" }}
+                            onClick={() => setPop(true)}
+                          >
+                            <PlagiarismIcon />
+                          </IconButton>
+                        </>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -264,16 +276,3 @@ function Tasks() {
   );
 }
 export default Tasks;
-
-// const StatusType = ({ row, name }) => {
-//     if (row[name] === 'Completed') {
-//         return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#67EA52', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>Completed</Typography>
-//     }
-//     if (row[name] === 'Pending') {
-//         return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#FF6767', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>Pending</Typography>
-//     }
-//     if (row[name] === 'In Progress') {
-//         return <Typography sx={{ width: '110px', py: '2px', frontSize: '2px', backgroundColor: '#FF9E67', color: '#ffffff', textAlign: 'center', borderRadius: '10px' }}>In Progress</Typography>
-//     }
-//     return <Typography>{row[name]}</Typography>
-// }

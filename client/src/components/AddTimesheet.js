@@ -16,9 +16,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AddProjectAction } from "../store/actions/projectActions";
 
-const AddProject = ({ open, setOpen,rows, classes }) => {
+const AddTimesheet = ({ open, setOpen, rows, classes }) => {
   const dispatch = useDispatch();
-  const [projectDetails, setProjectDetails] = useState({
+  const [timesheetDetails, setTimesheetDetails] = useState({
     name: "",
     customerId: "",
     technology: "",
@@ -45,7 +45,7 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
   });
 
   const onSubmit = () => {
-    dispatch(AddProjectAction(projectDetails));
+    dispatch(AddProjectAction(timesheetDetails));
     reset();
     setOpen(false);
   };
@@ -69,7 +69,7 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
           className={classes.formRoot}
         >
           <div style={{ width: "100%" }}>
-            <Typography className={classes.formTitle}>Add Project</Typography>
+            <Typography className={classes.formTitle}>Add Timesheet</Typography>
           </div>
           <TextField
             margin="normal"
@@ -83,39 +83,17 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
             error={errors.name && errors.name.message}
             {...register("name")}
             onChange={(e) => {
-              setProjectDetails({
-                ...projectDetails,
+              setTimesheetDetails({
+                ...timesheetDetails,
                 [e.target.name]: e.target.value,
               });
             }}
           />
-          <FormControl className={classes.inputField}>
-            <InputLabel id="priority-label">Select Client</InputLabel>
-            <Select
-              labelId="priority-label"
-              name="customerId"
-              id="select"
-              label="Select client"
-              helperText={errors.customerId && errors.customerId.message}
-              error={errors.customerId && errors.customerId.message}
-              {...register("customerId")}
-              onChange={(e) => {
-                setProjectDetails({
-                  ...projectDetails,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            >
-              {rows.map((client, i) => {
-                return <MenuItem key={i} value={client.customerId}>{client.customerName}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
           <TextField
             margin="normal"
             required
-            name="technology"
-            label="Technology"
+            name="taskName"
+            label="Enter Task Name"
             autoComplete="name"
             autoFocus
             className={classes.inputField}
@@ -123,18 +101,37 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
             error={errors.technology && errors.technology.message}
             {...register("technology")}
             onChange={(e) => {
-              setProjectDetails({
-                ...projectDetails,
+              setTimesheetDetails({
+                ...timesheetDetails,
+                [e.target.name]: e.target.value,
+              });
+            }}
+          />
+          <TextField
+            id="date"
+            type="date"
+            name="date"
+            label="Date"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            className={classes.inputField}
+            helperText={errors.date && errors.date.message}
+            error={errors.date && errors.date.message}
+            {...register("date")}
+            onChange={(e) => {
+              setTimesheetDetails({
+                ...timesheetDetails,
                 [e.target.name]: e.target.value,
               });
             }}
           />
           <Stack direction="row" spacing={2}>
-            <TextField
-              id="date"
-              type="date"
+          <TextField
+              type="time"
               name="start"
-              label="Start date"
+              label="From"
               variant="outlined"
               InputLabelProps={{
                 shrink: true,
@@ -144,17 +141,16 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
               error={errors.start && errors.start.message}
               {...register("start")}
               onChange={(e) => {
-                setProjectDetails({
-                  ...projectDetails,
+                setTimesheetDetails({
+                  ...timesheetDetails,
                   [e.target.name]: e.target.value,
                 });
               }}
             />
             <TextField
-              id="date"
-              type="date"
+              type="time"
               name="end"
-              label="End date"
+              label="To"
               variant="outlined"
               InputLabelProps={{
                 shrink: true,
@@ -164,13 +160,32 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
               error={errors.end && errors.end.message}
               {...register("end")}
               onChange={(e) => {
-                setProjectDetails({
-                  ...projectDetails,
+                setTimesheetDetails({
+                  ...timesheetDetails,
                   [e.target.name]: e.target.value,
                 });
               }}
             />
           </Stack>
+
+          <TextField
+            margin="normal"
+            required
+            name="note"
+            label="Enter Note"
+            autoComplete="name"
+            autoFocus
+            className={classes.inputField}
+            helperText={errors.technology && errors.technology.message}
+            error={errors.technology && errors.technology.message}
+            {...register("technology")}
+            onChange={(e) => {
+              setTimesheetDetails({
+                ...timesheetDetails,
+                [e.target.name]: e.target.value,
+              });
+            }}
+          />
           <div>
             <Button
               sx={{ color: "#FF6161", border: "#FF6767" }}
@@ -193,4 +208,4 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
   );
 };
 
-export default AddProject;
+export default AddTimesheet;

@@ -6,88 +6,119 @@ import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { useStyles } from "../views/view-css";
 import Card from "../components/Card";
-import useWindowSize from "../utils/useWindowSize";
 import { useDispatch, useSelector } from "react-redux";
-import { GetAllDashboardAction } from "../store/actions/dashboardActions";
-import { GetAllTasksAction } from "../store/actions/taskActions";
+import { GetAllDashboardAction, GetEmployeeDashboardAction } from "../store/actions/dashboardActions";
 import PageLoader from "../components/PageLoader";
+import useWindowSize from "../utils/useWindowSize";
+import { EmployeeTasksAction } from "../store/actions/taskActions";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const { width }= useWindowSize
   const count = useSelector((state) => state.dashboard.count);
   const tasks = useSelector((state) => state.dashboard.todayTask);
+  const employeeTask = useSelector((state) => state.dashboard.employeeTask);
   const loading = useSelector((state) => state.dashboard.loading);
-
-  const { width } = useWindowSize();
+  const role = useSelector((state) => state.login.role);
   const classes = useStyles();
-  const [todayTask, setTodayTask] = useState(tasks);
-
+  const [todayTask, setTodayTask] = useState([]);
   useEffect(() => {
-    dispatch(GetAllDashboardAction());
-    dispatch(GetAllTasksAction());
+    if (role == 1) {
+      dispatch(GetAllDashboardAction());
+    } else {
+      dispatch(GetEmployeeDashboardAction())
+    }
   }, []);
 
   useEffect(() => {
-    {
-      tasks &&
-        tasks.forEach((task) => {
-          task.color = "#67D1FF";
-
-          if (task.status === "Done") {
-            task.color = "#67EA52";
-          }
-          if (task.status === "Completed") {
-            task.color = "#FF9E67";
-          }
-          if (task.status === "work not started") {
-            task.color = "#FF6767";
-          }
-        });
+    
+    {if(role==1){
+      setTodayTask(tasks);
+      {
+        tasks &&
+          tasks.forEach((task) => {
+            task.color = "#67D1FF";
+  
+            if (task.status === "completed") {
+              task.color = "#67EA52";
+            }
+            if (task.status === "active") {
+              task.color = "#FF9E67";
+            }
+            if (task.status === "pending") {
+              task.color = "#FF6767";
+            }
+          });
+      }
+    }else{
+      setTodayTask(employeeTask)
+      {
+        employeeTask &&
+          employeeTask.forEach((task) => {
+            task.color = "#67D1FF";
+  
+            if (task.status === "completed") {
+              task.color = "#67EA52";
+            }
+            if (task.status === "active") {
+              task.color = "#FF9E67";
+            }
+            if (task.status === "pending") {
+              task.color = "#FF6767";
+            }
+          });
+      }
     }
-    setTodayTask(tasks);
-  }, [tasks]);
+  }
+  }, [tasks, employeeTask]);
 
   return (
     <>
       <div className={classes.dashboardRoot}>
         <PageLoader loading={loading} />
 
-        <Grid className={classes.gridBox} container  >
-          <Grid item >
-            <Card count={count.employees} label='EMPLOYEES COUNT' icon={<BadgeIcon className={classes.dashboardIcons} />} classes={classes} />
+        {role == 1 ? (
+          <Grid className={classes.gridBox} container>
+            <Grid item>
+              <Card
+                count={count.employees}
+                label="EMPLOYEES COUNT"
+                icon={<BadgeIcon className={classes.dashboardIcons} />}
+                classes={classes}
+              />
+            </Grid>
+            <Grid item>
+              <Card
+                count={count.projects}
+                label="PROJECT COUNT"
+                icon={<DevicesOtherIcon className={classes.dashboardIcons} />}
+                classes={classes}
+              />
+            </Grid>
+            <Grid item>
+              <Card
+                count={count.tasks}
+                label="TASK COUNT"
+                icon={<GradingIcon className={classes.dashboardIcons} />}
+                classes={classes}
+              />
+            </Grid>
+            <Grid item>
+              <Card
+                count={count.customers}
+                label="CLIENT COUNT"
+                icon={<GroupsIcon className={classes.dashboardIcons} />}
+                classes={classes}
+              />
+            </Grid>
           </Grid>
-          <Grid item>
-            <Card
-              count={count.projects}
-              label="PROJECT COUNT"
-              icon={<DevicesOtherIcon className={classes.dashboardIcons} />}
-              classes={classes}
-            />
-          </Grid>
-          <Grid item>
-            <Card
-              count={count.tasks}
-              label="TASK COUNT"
-              icon={<GradingIcon className={classes.dashboardIcons} />}
-              classes={classes}
-            />
-          </Grid>
-          <Grid item>
-            <Card
-              count={count.customers}
-              label="CLIENT COUNT"
-              icon={<GroupsIcon className={classes.dashboardIcons} />}
-              classes={classes}
-            />
-          </Grid>
-        </Grid>
+        ) : null}
         <Box className={classes.taskBox}>
           <Typography className={classes.taskHead}>Today's Task</Typography>
           <Grid container spacing={4}>
-            {todayTask === null ? (
+            {todayTask.length === 0 ? (
               <Typography
-                className={classes.taskTitle}
-                sx={{ margin: "30px", color: "#FF6161" }}
+                sx={{ margin: "20px",ml:'50px',fontSize: "16px",fontWeight: "800", color: "#FF6161" }}
               >
                 No task Found.!!
               </Typography>
@@ -95,7 +126,7 @@ const Dashboard = () => {
               todayTask.map((task, i) => {
                 return (
                   <>
-                    <Grid item xs={8}>
+                    <Grid item xs={ width>900 ? 9: 8}>
                       <Typography className={classes.taskTitle}>
                         {task.taskName}
                       </Typography>
@@ -103,7 +134,7 @@ const Dashboard = () => {
                         {task.projectName}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                       <Typography
                         className={classes.status}
                         backgroundColor={task.color}

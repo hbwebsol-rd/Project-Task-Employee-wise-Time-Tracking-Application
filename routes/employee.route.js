@@ -41,5 +41,8 @@ module.exports=(app)=>{
     // delete employee by superuser
     app.delete('/api/deleteEmployee/:employee_id', Auth.superUser, Employee.deleteEmployee)
 
+    // employee timesheet
+    app.get('/api/getEmployeeTimeSheet', Task.getTasks)
+
 }
 

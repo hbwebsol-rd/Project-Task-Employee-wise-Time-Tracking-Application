@@ -1,8 +1,5 @@
 import {
   Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
   Modal,
   Select,
   Stack,
@@ -16,7 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AddProjectAction } from "../store/actions/projectActions";
 
-const AddProject = ({ open, setOpen,rows, classes }) => {
+const SelectDateModal = ({ open, setOpen, classes }) => {
   const dispatch = useDispatch();
   const [projectDetails, setProjectDetails] = useState({
     name: "",
@@ -27,9 +24,6 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
   });
   const schema = yup
     .object({
-      name: yup.string().required("Name Required"),
-      technology: yup.string().required("Technology required"),
-      customerId: yup.string().required("Client Required"),
       start: yup.string().required("Date Required"),
       end: yup.string().required("Date Required"),
     })
@@ -69,72 +63,14 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
           className={classes.formRoot}
         >
           <div style={{ width: "100%" }}>
-            <Typography className={classes.formTitle}>Add Project</Typography>
+            <Typography className={classes.formTitle}>Select Dates</Typography>
           </div>
-          <TextField
-            margin="normal"
-            required
-            label="Enter Project Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-            className={classes.inputField}
-            helperText={errors.name && errors.name.message}
-            error={errors.name && errors.name.message}
-            {...register("name")}
-            onChange={(e) => {
-              setProjectDetails({
-                ...projectDetails,
-                [e.target.name]: e.target.value,
-              });
-            }}
-          />
-          <FormControl className={classes.inputField}>
-            <InputLabel id="priority-label">Select Client</InputLabel>
-            <Select
-              labelId="priority-label"
-              name="customerId"
-              id="select"
-              label="Select client"
-              helperText={errors.customerId && errors.customerId.message}
-              error={errors.customerId && errors.customerId.message}
-              {...register("customerId")}
-              onChange={(e) => {
-                setProjectDetails({
-                  ...projectDetails,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-            >
-              {rows.map((client, i) => {
-                return <MenuItem key={i} value={client.customerId}>{client.customerName}</MenuItem>;
-              })}
-            </Select>
-          </FormControl>
-          <TextField
-            margin="normal"
-            required
-            name="technology"
-            label="Technology"
-            autoComplete="name"
-            autoFocus
-            className={classes.inputField}
-            helperText={errors.technology && errors.technology.message}
-            error={errors.technology && errors.technology.message}
-            {...register("technology")}
-            onChange={(e) => {
-              setProjectDetails({
-                ...projectDetails,
-                [e.target.name]: e.target.value,
-              });
-            }}
-          />
           <Stack direction="row" spacing={2}>
             <TextField
               id="date"
               type="date"
               name="start"
-              label="Start date"
+              label="From"
               variant="outlined"
               InputLabelProps={{
                 shrink: true,
@@ -154,7 +90,7 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
               id="date"
               type="date"
               name="end"
-              label="End date"
+              label="To"
               variant="outlined"
               InputLabelProps={{
                 shrink: true,
@@ -184,7 +120,7 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
               type="submit"
               className={classes.formButton}
             >
-              SAVE
+              submit
             </Button>
           </div>
         </form>
@@ -193,4 +129,4 @@ const AddProject = ({ open, setOpen,rows, classes }) => {
   );
 };
 
-export default AddProject;
+export default SelectDateModal;

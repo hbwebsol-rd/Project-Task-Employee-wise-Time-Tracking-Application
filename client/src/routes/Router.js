@@ -16,6 +16,7 @@ import Profile from "../pages/Profile";
 import Reports from "../pages/Reports";
 import { useSelector } from "react-redux";
 import Footer from "../layout/Footer";
+import Timesheet from "../pages/Timesheet";
 
 const Router = () => {
   const login = useSelector((state) => state.login.loggedIn);
@@ -25,7 +26,7 @@ const Router = () => {
     <>
       {login ? (
         <div className={classes.root}>
-          <aside style={{ width: "80px" }}>
+          <aside style={{ width: "200px" }}>
             <Sidebar />
           </aside>
           <div className={classes.main}>
@@ -34,10 +35,11 @@ const Router = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/editprofile" element={<Home />} />
-              <Route path="/employee" element={<Employee />} />
-              <Route path="/client" element={<Client />} />
+              <Route path="/employees" element={<Employee />} />
+              <Route path="/clients" element={<Client />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/tasks" element={<Tasks />} />
+              <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>

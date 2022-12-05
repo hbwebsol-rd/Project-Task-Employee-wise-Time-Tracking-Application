@@ -33,6 +33,7 @@ const AddEmployee = ({ open, setOpen, classes }) => {
 
   const onSubmit = () => {
     dispatch(AddClientAction(clientDetails));
+    reset();
     setOpen(false);
   };
 

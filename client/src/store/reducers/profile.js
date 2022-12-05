@@ -1,4 +1,4 @@
-import { FETCH_PROFILE, PASSWORD_CHANGED, PROFILE_ACTION_FAIL, PROFILE_LOADER } from "../actions/profileActions";
+import { FETCH_PROFILE, PASSWORD_CHANGED, PROFILE_ACTION_FAIL, PROFILE_LOADER, PROFILE_UPDATED_SUCCESSFULLY } from "../actions/profileActions";
 
 const initialState = {
     loading: false,
@@ -27,6 +27,13 @@ const profile = (state = initialState, action) => {
                 loading: false,
                 userProfile: action.payload
             };
+        }
+        case PROFILE_UPDATED_SUCCESSFULLY: {
+          return {
+            ...state,
+            loading: false,
+            updated: true,
+          };
         }
         case PASSWORD_CHANGED: {
             return {
