@@ -14,6 +14,9 @@ const statusList = ['Done', 'In Progress', 'Open', 'Pending']
 // get data for all tasks
 module.exports.getTasks=async(req, res)=>{
     try {
+        // check if admin=1 or employee=2 login
+        const role = req.userInfo.role
+        let fetch = role === 1 ? {} : {employeeId: mongoose.Types.ObjectId(req.userInfo.id)}
         // filters
         const {page=1, limit=1000, sort}=req.query
         const search=req.query.search||""
@@ -34,9 +37,10 @@ module.exports.getTasks=async(req, res)=>{
                 as: "employeeName"
             }},
             {$set: {employeeName: {$arrayElemAt: ["$employeeName.name", 0]}}},
-            {$match: { $or: [ {taskName: {$regex: search, $options: "i"}}, 
-                              {projectName: {$regex: search, $options: "i"}}, 
-                              {employeeName: {$regex: search, $options: "i"}}]}},
+            {$match: {$and: [fetch],
+                      $or: [ {taskName: {$regex: search, $options: "i"}}, 
+                             {projectName: {$regex: search, $options: "i"}}, 
+                             {employeeName: {$regex: search, $options: "i"}}]}},
             {$skip: (page-1)*parseInt(limit)},
             {$limit: parseInt(limit)},
         ]
