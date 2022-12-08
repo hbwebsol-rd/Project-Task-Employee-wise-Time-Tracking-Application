@@ -6,7 +6,7 @@ const Task=require('../controllers/task.controller')
 module.exports=(app)=>{
 
     // get data of all tasks
-    app.get('/api/getTasks', Auth.superUser, Task.getTasks)
+    app.get('/api/getTasks', Auth.multiAccess, Task.getTasks)
 
     // get data of a single task
     app.get('/api/getTask/:task_id', Auth.superUser, Task.getTask)

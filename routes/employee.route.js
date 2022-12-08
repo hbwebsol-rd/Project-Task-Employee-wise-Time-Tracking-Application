@@ -12,7 +12,7 @@ module.exports=(app)=>{
     app.get('/api/employee/profile', Auth.employee, Employee.getEmployeeProfile)
 
     // display current employee tasks by employee
-    app.get('/api/employee/tasks', Auth.employee, Employee.getEmployeeTasks)
+    // app.get('/api/employee/tasks', Auth.employee, Employee.getEmployeeTasks)
 
     // display current employee today tasks by employee
     app.get('/api/employee/dashboard', Auth.employee, Employee.getEmployeeDashboard)
