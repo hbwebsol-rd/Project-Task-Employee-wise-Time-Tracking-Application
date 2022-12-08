@@ -2,7 +2,6 @@ const timeSheetModel=require('../models/timesheet.model')
 const taskModel=require('../models/task.model')
 const employeeModel=require('../models/employee.model')
 const mongoose=require('mongoose')
-
 const {checkDateValidity,
        checkTimeCollision,
        checkTimeValidity,
@@ -13,8 +12,9 @@ const {checkDateValidity,
 // get all timesheets
 module.exports.getTimesheets=async(req, res)=>{
     try {
-        // check if admin or employee login
+        // check if admin=1 or employee=2 login
         const role = req.userInfo.role
+        let fetch = role === 1 ? {} : {employeeId: mongoose.Types.ObjectId(req.userInfo.id)}
         // filters
         const {page=1, limit=1000, sort}=req.query
         const search=req.query.search||""
@@ -44,7 +44,8 @@ module.exports.getTimesheets=async(req, res)=>{
             }},
             {$set: {projectName: {$arrayElemAt: ["$projectName.name", 0]}}},
             {$project: {projectId: 0}},
-            {$match: {$or: [{taskName: {$regex: search, $options: "i"}},
+            {$match: {$and: [fetch],
+                      $or: [{taskName: {$regex: search, $options: "i"}},
                             {employeeName: {$regex: search, $options: "i"}},
                             {projectName: {$regex: search, $options: "i"}}]}},
             {$skip: (page-1)*parseInt(limit)},
@@ -58,7 +59,7 @@ module.exports.getTimesheets=async(req, res)=>{
         //     console.log(timesheet.date.toLocaleString(), timesheet.startTime.toLocaleString(), timesheet.endTime.toLocaleString())
         // })
         // display timesheets
-        res.status(200).json({success: true, data: existingTimesheets.map(data=>data)})
+        res.status(200).json({success: true, count: existingTimesheets.length, data: existingTimesheets.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -69,8 +70,9 @@ module.exports.getTimesheets=async(req, res)=>{
 // get todays timesheet
 module.exports.getTodayTimesheets=async(req, res)=>{
     try {
-        // check if admin or employee login
+        // check if admin=1 or employee=2 login
         const role = req.userInfo.role
+        let fetch = role === 1 ? {} : {employeeId: mongoose.Types.ObjectId(req.userInfo.id)}
         // filters
         const date=new Date()
         date.setHours(00,00,00,00)
@@ -103,6 +105,7 @@ module.exports.getTodayTimesheets=async(req, res)=>{
             {$set: {projectName: {$arrayElemAt: ["$projectName.name", 0]}}},
             {$project: {projectId: 0}},
             {$match: {date: date,
+                      $and: [fetch],
                       $or: [{taskName: {$regex: search, $options: "i"}},
                             {employeeName: {$regex: search, $options: "i"}},
                             {projectName: {$regex: search, $options: "i"}}]}},
@@ -116,7 +119,7 @@ module.exports.getTodayTimesheets=async(req, res)=>{
         //     console.log(timesheet.date.toLocaleString(), timesheet._id.toString())
         // })
         // display timesheets
-        res.status(200).json({success: true, data: existingTimesheets.map(data=>data)})
+        res.status(200).json({success: true, count: existingTimesheets.length, data: existingTimesheets.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -126,8 +129,9 @@ module.exports.getTodayTimesheets=async(req, res)=>{
 // get yesterdays timesheet
 module.exports.getYesterdayTimesheets=async(req, res)=>{
     try {
-        // check if admin or employee login
+        // check if admin=1 or employee=2 login
         const role = req.userInfo.role
+        let fetch = role === 1 ? {} : {employeeId: mongoose.Types.ObjectId(req.userInfo.id)}
         // filters
         const date=new Date()
         date.setDate(date.getDate()-1)
@@ -161,6 +165,7 @@ module.exports.getYesterdayTimesheets=async(req, res)=>{
             {$set: {projectName: {$arrayElemAt: ["$projectName.name", 0]}}},
             {$project: {projectId: 0}},
             {$match: {date: date,
+                      $and: [fetch],
                       $or: [{taskName: {$regex: search, $options: "i"}},
                             {employeeName: {$regex: search, $options: "i"}},
                             {projectName: {$regex: search, $options: "i"}}]}},
@@ -174,14 +179,14 @@ module.exports.getYesterdayTimesheets=async(req, res)=>{
         //     console.log(timesheet.date.toLocaleString(), timesheet._id.toString())
         // })
         // display timesheets
-        res.status(200).json({success: true, data: existingTimesheets.map(data=>data)})
+        res.status(200).json({success: true, count: existingTimesheets.length, data: existingTimesheets.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
     }
 }
 
-// get yesterdays timesheet
+// get custom timesheet
 module.exports.getCustomTimesheets=async(req, res)=>{
     const {startDate, endDate}=req.body
     // const error=[]
@@ -191,8 +196,9 @@ module.exports.getCustomTimesheets=async(req, res)=>{
     if(!endDate) return res.json({message: "EndDate is a compulsory field", success: false})
 
     try {
-        // check if admin or employee login
+        // check if admin=1 or employee=2 login
         const role = req.userInfo.role
+        let fetch = role === 1 ? {} : {employeeId: mongoose.Types.ObjectId(req.userInfo.id)}
         // convert input to proper date and check date validity
         const timesheetStartDate = convertDate(startDate)
         const timesheetEndDate = convertDate(endDate)
@@ -226,7 +232,7 @@ module.exports.getCustomTimesheets=async(req, res)=>{
             }},
             {$set: {projectName: {$arrayElemAt: ["$projectName.name", 0]}}},
             {$project: {projectId: 0}},
-            {$match: {$and: [{date: {$gte: timesheetStartDate}}, {date: {$lt: timesheetEndDate}}],
+            {$match: {$and: [{date: {$gte: timesheetStartDate}}, {date: {$lt: timesheetEndDate}}, fetch],
                       $or: [{taskName: {$regex: search, $options: "i"}},
                             {employeeName: {$regex: search, $options: "i"}},
                             {projectName: {$regex: search, $options: "i"}}]}},
@@ -240,7 +246,7 @@ module.exports.getCustomTimesheets=async(req, res)=>{
         //     console.log(timesheet.date.toLocaleString())
         // })
         // display timesheets
-        res.status(200).json({success: true, data: existingTimesheets.map(data=>data)})
+        res.status(200).json({success: true, count: existingTimesheets.length, data: existingTimesheets.map(data=>data)})
 
     } catch (err) {
         console.error(err.message)
@@ -271,7 +277,7 @@ module.exports.createTimesheet=async(req, res)=>{
         const newDate = convertDate(date)
         // check if future date
         const currentDate = new Date()
-        if(newDate.toLocaleDateString() > currentDate.toLocaleDateString()) return res.status(404).json(ResponseMsg("FieldInvalid", "Date", "", false))
+        if(newDate.toISOString() > currentDate.toISOString()) return res.status(404).json(ResponseMsg("FieldInvalid", "Date", "", false))
         // task start and end time conversion
         const taskStartTime = convertTime(startTime, newDate)
         const taskEndTime = convertTime(endTime, newDate)
@@ -318,18 +324,20 @@ module.exports.updateTimesheet=async(req, res)=>{
 
     try {
         // check id in url
-        if(!mongoose.Types.ObjectId.isValid(req.params.timesheet_id)) return res.status(400).json(ResponseMsg("IDInvalid", "", "", false))
+        if(!mongoose.Types.ObjectId.isValid(req.params.timesheet_id)) return res.status(400).json(ResponseMsg("InvalidID", "", "", false))
         // check existing timesheet in database
         const existingTimesheet=await timeSheetModel.findById({_id: req.params.timesheet_id})
-        if(!existingTimesheet) return res.status(404).json(ResponseMsg("DataIDNotFound", "", "Timesheet", false))
+        if(!existingTimesheet) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Timesheet", false))
         // check existing task in database
         const existingTask=await taskModel.findById({_id: taskId})
-        if(!existingTask) return res.status(404).json(ResponseMsg("DataIDNotFound", "", "Task", false))
+        if(!existingTask) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Task", false))
+        // check if employeeId by user matches employeeId in task
+        if(req.userInfo.id!==existingTask.employeeId.toString()) return res.status(404).json(ResponseMsg("FieldNotFoundInData", "Employee", "Task", false))
         // convert input dd-mm-yyyy to output mm-dd-yyyy format
         const newDate = convertDate(date)
         // check if future date
         const currentDate = new Date()
-        if(newDate.toLocaleDateString() > currentDate.toLocaleDateString()) return res.status(404).json(ResponseMsg("FieldInvalid", "Date", "", false))
+        if(newDate.toISOString() > currentDate.toISOString()) return res.status(404).json(ResponseMsg("FieldInvalid", "Date", "", false))
         // task start and end time conversion
         const taskStartTime = convertTime(startTime, newDate)
         const taskEndTime = convertTime(endTime, newDate)
@@ -346,7 +354,6 @@ module.exports.updateTimesheet=async(req, res)=>{
             if(sameData) return res.status(404).json(ResponseMsg("TimeCollision", "", "Timesheet", false))
         }
         // update timesheet
-        console.log(newDate)
         const updateTimesheet=await timeSheetModel.findByIdAndUpdate({_id: req.params.timesheet_id}, {taskId, date: newDate, startTime: taskStartTime, endTime: taskEndTime, note})
         // save timesheet
         await updateTimesheet.save() 
