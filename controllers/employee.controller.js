@@ -60,33 +60,33 @@ module.exports.getEmployeeProfile=async(req, res)=>{
 
 // EMPLOYEE
 // display employee task details
-module.exports.getEmployeeTasks=async(req, res)=>{
-    try {
-        // filters
-        const {page=1, limit=100000, sort}=req.query
-        const search=req.query.search||""
-        const nsort=sort==="ascending"?1:-1
-        const pipeline=[
-            {$sort: {created_date: nsort}},
-            {$match: {employeeId: mongoose.Types.ObjectId(req.userInfo.id), 
-                      $or: [{projectName: {$regex: search, $options: "i"}}, 
-                            {status: {$regex: search, $options: "i"}}, 
-                            {priority: {$regex: search, $options: "i"}}, 
-                            {taskName: {$regex: search, $options: "i"}}]}},
-            {$skip: (page-1)*parseInt(limit)},
-            {$limit: parseInt(limit)},
-        ]
-        // check existing tasks
-        const existingTasks=await taskModel.aggregate(pipeline)
-        if(!existingTasks.length>0) return res.status(400).json(ResponseMsg("DataNotFound", "", "Tasks", false))
-        // display employee tasks
-        res.status(200).json({success: true, count: existingTasks.length, data: existingTasks.map(data=>data)})
+// module.exports.getEmployeeTasks=async(req, res)=>{
+//     try {
+//         // filters
+//         const {page=1, limit=100000, sort}=req.query
+//         const search=req.query.search||""
+//         const nsort=sort==="ascending"?1:-1
+//         const pipeline=[
+//             {$sort: {created_date: nsort}},
+//             {$match: {employeeId: mongoose.Types.ObjectId(req.userInfo.id), 
+//                       $or: [{projectName: {$regex: search, $options: "i"}}, 
+//                             {status: {$regex: search, $options: "i"}}, 
+//                             {priority: {$regex: search, $options: "i"}}, 
+//                             {taskName: {$regex: search, $options: "i"}}]}},
+//             {$skip: (page-1)*parseInt(limit)},
+//             {$limit: parseInt(limit)},
+//         ]
+//         // check existing tasks
+//         const existingTasks=await taskModel.aggregate(pipeline)
+//         if(!existingTasks.length>0) return res.status(400).json(ResponseMsg("DataNotFound", "", "Tasks", false))
+//         // display employee tasks
+//         res.status(200).json({success: true, count: existingTasks.length, data: existingTasks.map(data=>data)})
 
-    } catch (err) {
-        console.error(err.message)
-        res.status(500).json(ResponseMsg("ServerError", "", "", false))
-    }
-}
+//     } catch (err) {
+//         console.error(err.message)
+//         res.status(500).json(ResponseMsg("ServerError", "", "", false))
+//     }
+// }
 
 // EMPLOYEE
 // display employee today tasks
