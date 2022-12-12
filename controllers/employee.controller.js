@@ -333,6 +333,12 @@ module.exports.updateEmployee=async(req, res)=>{
         // check email
         const existingEmployeeEmail=await employeeModel.findOne({email})
         if(existingEmployeeEmail) if(existingEmployee.id!==existingEmployeeEmail.id) return res.status(400).json(ResponseMsg("DataWithFieldExists", "EmailID", "Employee", false))
+        // check if employee with same email exists
+        let sameEmployee = await employeeModel.find({email})
+        sameEmployee = sameEmployee.filter(employee=>{
+            return employee._id.toString() !== req.params.employee_id.toString()
+        })
+        if(sameEmployee.length > 0) return res.status(400).json(ResponseMsg("DataExists", "", "Employee", false))
         // update employee details
         const updateEmployee=await employeeModel.findByIdAndUpdate({_id: req.params.employee_id}, {...req.body})
         // save employee details

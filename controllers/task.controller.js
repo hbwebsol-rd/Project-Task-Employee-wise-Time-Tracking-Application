@@ -210,8 +210,8 @@ module.exports.updateTask=async(req, res)=>{
         // check url task id
         if(!mongoose.Types.ObjectId.isValid(req.params.task_id)) return res.status(400).json(ResponseMsg("FieldInvalid", "TaskID", "", false))
         // check is task exists
-        const task=await taskModel.findById(req.params.task_id)
-        if(!task) return res.status(404).json(ResponseMsg("DataNotFound", "", "Task", false))
+        const existingTask=await taskModel.findById(req.params.task_id)
+        if(!existingTask) return res.status(404).json(ResponseMsg("DataNotFound", "", "Task", false))
         // check existing project in project database by id 
         const existingProject=await projectModel.findById({_id: projectId})
         if(!existingProject) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Project", false))
@@ -223,8 +223,11 @@ module.exports.updateTask=async(req, res)=>{
         // check if status matches statusList
         if(!statusList.includes(status)) return res.status(404).json(ResponseMsg("FieldInvalid", "Status", "", false))
         // check existingTask
-        const existingTask=await taskModel.find({taskName, projectId})
-        if(existingTask.length > 1) return res.status(404).json(ResponseMsg("DataExists", "", "Task", false)) 
+        let sameTask=await taskModel.find({taskName, projectId})
+        sameTask = sameTask.filter(task=>{
+            return task._id.toString() !== req.params.task_id.toString()
+        })
+        if(sameTask.length > 0) return res.status(404).json(ResponseMsg("DataExists", "", "Task", false)) 
         // update task details
         const taskFields={taskName, priority, status, timeOnTask: 0, projectId, employeeId}
         const updateTask=await taskModel.findByIdAndUpdate({_id: req.params.task_id}, {$set: taskFields})
