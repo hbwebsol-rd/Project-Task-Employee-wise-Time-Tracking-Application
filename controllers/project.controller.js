@@ -119,8 +119,11 @@ module.exports.updateProject=async(req, res)=>{
         const existingCustomer=await customerModel.findById({_id: customerId})
         if(!existingCustomer) return res.status(404).json(ResponseMsg("DataNotFoundWithID", "", "Customer", false))
         // check if project with same name exists
-        const sameProject = await projectModel.findOne({name})
-        if(sameProject) return res.status(404).json(ResponseMsg("DataExists", "", "Project", false))
+        let sameProject = await projectModel.find({name})
+        sameProject = sameProject.filter(project=>{
+            return project._id.toString() !== req.params.project_id.toString()
+        })
+        if(sameProject.length > 0) return res.status(404).json(ResponseMsg("DataExists", "", "Project", false))
         // update project details
         const updateProject=await projectModel.findByIdAndUpdate({_id: req.params.project_id}, {...req.body})
         // save project details
@@ -133,7 +136,7 @@ module.exports.updateProject=async(req, res)=>{
     }
 }
 
-// delete proeject info
+// delete project info
 module.exports.deleteProject=async(req, res)=>{
     try {
         // check url project id

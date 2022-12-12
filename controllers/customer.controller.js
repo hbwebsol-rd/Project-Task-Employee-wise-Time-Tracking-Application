@@ -101,6 +101,12 @@ module.exports.updateCustomer=async(req, res)=>{
         // check email
         const existingCustomerEmail=await customerModel.findOne({email})
         if(existingCustomerEmail) if(existingCustomer.id!==existingCustomerEmail.id) return res.status(400).json(ResponseMsg("DataWithFieldExists", "EmailID", "Customer", false))
+        // check if customer with same email exists
+        let sameCustomer = await customerModel.find({email})
+        sameCustomer = sameCustomer.filter(customer=>{
+            return customer._id.toString() !== req.params.customer_id.toString()
+        })
+        if(sameCustomer.length > 0) return res.status(400).json(ResponseMsg("DataExists", "", "Customer", false))
         // update customer details
         const updateCustomer=await customerModel.findByIdAndUpdate({_id: req.params.customer_id}, {...req.body})
         // save customer details
